@@ -2,7 +2,6 @@ package com.group7.sys.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.util.Date;
@@ -12,10 +11,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * <p>
- * 
- * </p>
- *
  * @author Robin
  * @since 2020-06-02
  */
@@ -25,76 +20,50 @@ import lombok.experimental.Accessors;
 @TableName("sys_user")
 public class User implements Serializable {
 
-    private static final long serialVersionUID=1L;
+  private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+  @TableId(value = "id", type = IdType.AUTO)
+  private Integer id;
 
-    /**
-     * 真实姓名
-     */
-    private String name;
+  /** 真实姓名 */
+  private String name;
 
-    private String loginname;
+  private String loginname;
 
-    private String password;
+  private String password;
 
-    /**
-     * 性别.1为男，0为女
-     */
-    private Integer gender;
+  /** 性别.1为男，0为女 */
+  private Integer gender;
 
-    /**
-     * 身份证号码
-     */
-    private String idNum;
+  /** 身份证号码 */
+  private String idNum;
 
-    /**
-     * 医保卡号
-     */
-    private String medNum;
+  /** 医保卡号 */
+  private String medNum;
 
-    /**
-     * 地址
-     */
-    private String addr;
+  /** 地址 */
+  private String addr;
 
-    /**
-     * 医生的部门id
-     */
-    private String deptId;
+  /** 医生的部门id */
+  private String deptId;
 
-    /**
-     * 角色。0为管理员，1为门诊医生，2为药剂医生，3为检验医师，4为护士，5为病人
-     */
-    private Integer role;
+  /** 角色。0为管理员，1为门诊医生，2为药剂医生，3为检验医师，4为护士，5为病人 */
+  private Integer role;
 
-    /**
-     * 电话号码
-     */
-    private String phone;
+  /** 电话号码 */
+  private String phone;
 
-    /**
-     * 医生个人信息
-     */
-    private Integer info;
+  /** 医生个人信息 */
+  private Integer info;
 
-    private Date birthday;
+  private Date birthday;
 
-    /**
-     * 病人工作
-     */
-    private String job;
+  /** 病人工作 */
+  private String job;
 
-    /**
-     * 1为可用，0为不可用
-     */
-    private Integer available;
+  /** 1为可用，0为不可用 */
+  private Integer available;
 
-    /**
-     * 医生职称
-     */
-    private String jobTitle;
-
-
+  /** 医生职称 */
+  private String jobTitle;
 }

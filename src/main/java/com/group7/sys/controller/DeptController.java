@@ -1,6 +1,5 @@
 package com.group7.sys.controller;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -19,9 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>
- *  前端控制器
- * </p>
+ * 前端控制器
  *
  * @author Robin
  * @since 2020-06-02
@@ -30,43 +27,40 @@ import java.util.List;
 @RequestMapping("/dept")
 public class DeptController {
 
-    @Autowired
-    private DeptService deptService;
+  @Autowired private DeptService deptService;
 
-    /**
-     * 部门页面控制器
-     * @return
-     */
-    @RequestMapping("loadDeptManagerLeftTreeJson")
-    public DataGridView loadDeptManagerLeftTreeJson(){
-        List<Dept> list =this.deptService.list();
-        List<TreeNode> treeNodes = new ArrayList<>();
-        for (Dept dept:list){
-            Boolean spread = dept.getOpen()==1?true:false;
-            treeNodes.add(new TreeNode(dept.getId(),dept.getPid(),dept.getName(),spread));
-        }
-        return new DataGridView(treeNodes);
-
-
+  /**
+   * 部门页面控制器
+   *
+   * @return
+   */
+  @RequestMapping("loadDeptManagerLeftTreeJson")
+  public DataGridView loadDeptManagerLeftTreeJson() {
+    List<Dept> list = this.deptService.list();
+    List<TreeNode> treeNodes = new ArrayList<>();
+    for (Dept dept : list) {
+      Boolean spread = dept.getOpen() == 1 ? true : false;
+      treeNodes.add(new TreeNode(dept.getId(), dept.getPid(), dept.getName(), spread));
     }
+    return new DataGridView(treeNodes);
+  }
 
-    @RequestMapping("loadAllDept")
-    public DataGridView loadAllDept(DeptVo deptVo){
-        IPage<Dept> page = new Page<>(deptVo.getPage(),deptVo.getLimit());
-        QueryWrapper<Dept> queryWrapper = new QueryWrapper<>();
-        //输入给定查询条件，默认无
-        queryWrapper.like(StringUtils.isNotBlank(deptVo.getName()),"name",deptVo.getName());
-        queryWrapper.like(StringUtils.isNotBlank(deptVo.getAddress()),"address",deptVo.getAddress());
-        queryWrapper.like(StringUtils.isNotBlank(deptVo.getRemark()),"remark",deptVo.getRemark());
-        queryWrapper.orderByDesc("ordernum");//排序依据
-        queryWrapper.eq(deptVo.getId()!=null,"id",deptVo.getId()).or().eq(deptVo.getId()!=null,"pid",deptVo.getId());
+  @RequestMapping("loadAllDept")
+  public DataGridView loadAllDept(DeptVo deptVo) {
+    IPage<Dept> page = new Page<>(deptVo.getPage(), deptVo.getLimit());
+    QueryWrapper<Dept> queryWrapper = new QueryWrapper<>();
+    // 输入给定查询条件，默认无
+    queryWrapper.like(StringUtils.isNotBlank(deptVo.getName()), "name", deptVo.getName());
+    queryWrapper.like(StringUtils.isNotBlank(deptVo.getAddress()), "address", deptVo.getAddress());
+    queryWrapper.like(StringUtils.isNotBlank(deptVo.getRemark()), "remark", deptVo.getRemark());
+    queryWrapper.orderByDesc("ordernum"); // 排序依据
+    queryWrapper
+        .eq(deptVo.getId() != null, "id", deptVo.getId())
+        .or()
+        .eq(deptVo.getId() != null, "pid", deptVo.getId());
 
-        this.deptService.page(page,queryWrapper);
+    this.deptService.page(page, queryWrapper);
 
-        return new DataGridView(page.getTotal(),page.getRecords());
-    }
-
-
-
+    return new DataGridView(page.getTotal(), page.getRecords());
+  }
 }
-

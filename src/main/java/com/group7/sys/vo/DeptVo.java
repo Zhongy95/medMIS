@@ -8,16 +8,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class DeptVo extends Dept {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    private Integer Page=1;
+  private Integer Page = 1;
 
-
-
-    private Integer limit=10;
-
-
-
-
-
+  private Integer limit = 10;
 }

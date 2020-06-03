@@ -4,13 +4,9 @@ import com.group7.sys.entity.Dept;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * <p>
- *  服务类
- * </p>
+ * 服务类
  *
  * @author Robin
  * @since 2020-06-02
  */
-public interface DeptService extends IService<Dept> {
-
-}
+public interface DeptService extends IService<Dept> {}

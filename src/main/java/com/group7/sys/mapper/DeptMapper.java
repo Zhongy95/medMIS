@@ -4,13 +4,9 @@ import com.group7.sys.entity.Dept;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * <p>
- *  Mapper 接口
- * </p>
+ * Mapper 接口
  *
  * @author Robin
  * @since 2020-06-02
  */
-public interface DeptMapper extends BaseMapper<Dept> {
-
-}
+public interface DeptMapper extends BaseMapper<Dept> {}

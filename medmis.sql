@@ -189,7 +189,7 @@ create table sys_user
     job_title char(100)     null comment '医生职称',
     constraint sys_user_id_uindex
         unique (id)
-);
+)  charset = utf8;
 
 alter table sys_user
     add primary key (id);

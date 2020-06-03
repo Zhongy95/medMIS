@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html class="registerHtml" lang="en"xmlns:th="http://www.thymeleaf.com">
+<head>
+	<meta charset="utf-8">
+	<title>登录--MIS后台管理系统</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="icon" href="/resources/favicon.ico">
+	<link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="/resources/css/public.css" media="all" />
+</head>
+<body class="SignBody">
+
+<!--	<form class="layui-form">-->
+<!--		<div class="login_face"><img src="/resources/images/face.jpg" class="userAvatar"></div>-->
+<!--		<div class="layui-form-item input-item">-->
+<!--			<label for="loginname">用户名</label>-->
+<!--			<input type="text" placeholder="请输入用户名" autocomplete="off" id="loginname" name="loginname" class="layui-input" lay-verify="required">-->
+<!--		</div>-->
+<!--		<div class="layui-form-item input-item">-->
+<!--			<label for="password">密码</label>-->
+<!--			<input type="password" placeholder="请输入密码" autocomplete="off" id="password" name="password" class="layui-input" lay-verify="required">-->
+<!--		</div>-->
+<!--&lt;!&ndash;		<div class="layui-form-item input-item" id="imgCode">&ndash;&gt;-->
+<!--&lt;!&ndash;			<label for="code">验证码</label>&ndash;&gt;-->
+<!--&lt;!&ndash;			<input type="text" placeholder="请输入验证码" autocomplete="off" id="code" class="layui-input">&ndash;&gt;-->
+<!--&lt;!&ndash;			<img src="/resources/images/code.jpg" >&ndash;&gt;-->
+<!--&lt;!&ndash;		</div>&ndash;&gt;-->
+<!--		<div class="layui-form-item">-->
+<!--			<button class="layui-btn layui-block" lay-filter="login" lay-submit>登录</button>-->
+<!--		</div>-->
+
+<!--&lt;!&ndash;		<div class="layui-form-item layui-row">&ndash;&gt;-->
+<!--&lt;!&ndash;			<a href="javascript:;" class="seraph icon-qq layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>&ndash;&gt;-->
+<!--&lt;!&ndash;			<a href="javascript:;" class="seraph icon-wechat layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>&ndash;&gt;-->
+<!--&lt;!&ndash;			<a href="javascript:;" class="seraph icon-sina layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>&ndash;&gt;-->
+<!--&lt;!&ndash;		</div>&ndash;&gt;-->
+
+
+
+<!--	</form>-->
+	<form class="layui-form" action="">
+		<div class="layui-form-item" >
+			<label class="layui-form-label">账号名</label>
+			<div class="layui-input-inline">
+				<input type="text" name="loginname" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+			</div>
+			<label class="layui-form-label">真实姓名</label>
+			<div class="layui-input-inline">
+				<input type="text" name="name" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">密码</label>
+			<div class="layui-input-inline">
+				<input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+			</div>
+			<label class="layui-form-label">确认密码</label>
+			<div class="layui-input-inline">
+				<input type="password" name="password_enter" required lay-verify="required|confirmPass"  placeholder="请输入密码" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item" >
+			<label class="layui-form-label">身份证号码</label>
+			<div class="layui-input-inline">
+				<input type="text" name="idNum" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+			</div>
+			<label class="layui-form-label">医保卡号</label>
+			<div class="layui-input-inline">
+				<input type="text" name="medNum" required  lay-verify="" placeholder="请输入标题" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+
+		<div class="layui-form-item" >
+			
+				<label class="layui-form-label">工作</label>
+				<div class="layui-input-inline">
+					<input type="text" name="job" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+				</div>
+
+
+				<label class="layui-form-label">电话号码</label>
+				<div class="layui-input-inline">
+					<input type="text" name="phone" required  lay-verify="" placeholder="请输入标题" autocomplete="off" class="layui-input">
+				</div>
+
+		</div>
+		<div class="layui-form-item" >
+			<label class="layui-form-label">地址</label>
+			<div class="layui-input-block">
+				<input type="text" name="addr" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">出生日期</label>
+				<div class="layui-input-inline">
+					<input type="text" name="birthday" id="birthday" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">性别</label>
+			<div class="layui-input-block">
+				<input type="radio" name="gender" value="1" title="男">
+				<input type="radio" name="gender" value="0" title="女" checked>
+			</div>
+		</div>
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">其他简介</label>
+			<div class="layui-input-block">
+				<textarea name="info" placeholder="请输入内容" class="layui-textarea"></textarea>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit lay-filter="sign">立即提交</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<!--	<script type="text/javascript" src="page/login/login.js"></script>-->
+	<script type="text/javascript" src="/resources/js/cache.js"></script>
+	<script type="text/javascript" >
+		layui.use(['form','layer','jquery','laydate'],function(){
+			var form = layui.form,
+					layer = parent.layer === undefined ? layui.layer : top.layer,laydate = layui.laydate
+			$ = layui.jquery;
+			//日期
+			laydate.render({
+				elem: '#birthday'
+			});
+			// $(".loginBody .seraph").click(function(){
+			// 	layer.msg("这只是做个样式，至于功能，你见过哪个后台能这样登录的？还是老老实实的找管理员去注册吧",{
+			// 		time:5000
+			// 	});
+			// })
+
+			// 校验两次密码是否一致
+			form.verify({
+				confirmPass:function(value){
+					if($('input[name=password]').val() !== value)
+						return '两次密码输入不一致！';
+				}
+			});
+
+			//登录按钮
+			form.on("submit(sign)",function(data){
+				var btn =  $(this);
+				//设置登录按钮  为不可点击
+				btn.text("注册中...").attr("disabled","disabled").addClass("layui-disabled");
+				console.log(data.field);
+				var strdate = data.field.birthday;
+				strdate =  strdate.replace(/-/g,"/");
+				console.log(strdate);
+				var Datef = new Date(strdate);
+				data.field.birthday=Datef;
+				$.post("/signup/signup",data.field,function(rs){
+					//设置登录按钮 恢复可点击   在前端防止 重复点击
+					btn.text("注册").attr("disabled",false).removeClass("layui-disabled");
+					layer.msg(rs.msg);
+					console.log(rs);
+					if(rs.code != 200){
+						layer.msg(rs.msg);
+					}else{
+						//跳转到templates/system/index/index.html页面
+						layer.msg(rs.msg);
+						location.href="/sys/toLogin";
+					}
+				});
+				return false;
+			});
+			var mainIndex;
+			var url;
+			form.on("(signin)",function (){
+						mainIndex = layer.open({
+							type:1,
+							content : $("#addOrUpdateDiv"),
+							area:['800px','550px'],
+							title:'添加公告',
+							success:function () {
+								$("#dataFrm")[0].reset();
+								//重置富文本编译器的内容为空
+								//layedit.setContent(editIndex,"");
+								url="/notice/addNotice";
+							}
+						});
+			}
+			);
+
+			//表单输入效果
+			$(".loginBody .input-item").click(function(e){
+				e.stopPropagation();
+				$(this).addClass("layui-input-focus").find(".layui-input").focus();
+			})
+			$(".loginBody .layui-form-item .layui-input").focus(function(){
+				$(this).parent().addClass("layui-input-focus");
+			})
+			$(".loginBody .layui-form-item .layui-input").blur(function(){
+				$(this).parent().removeClass("layui-input-focus");
+				if($(this).val() != ''){
+					$(this).parent().addClass("layui-input-active");
+				}else{
+					$(this).parent().removeClass("layui-input-active");
+				}
+			})
+		})
+
+	</script>
+</body>
+</html>

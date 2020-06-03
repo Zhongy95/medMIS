@@ -115,6 +115,23 @@ h2.method{ font-size:18px; line-height:45px; padding-left:5px;}
 .loginBody .seraph.icon-sina:hover{ color:#d32f2f;}
 .imgCode{ position:relative;}
 #imgCode img{ position:absolute; top:1px; right:1px; cursor:pointer;}
+/*注册*/
+.registerHtml,.SignBody{height: 100%}
+.SignBody{ background:url("../images/login_bg.jpg") no-repeat center center;}
+.SignBody form.layui-form{ padding:0 20px; width:1000px; height:600px; position:absolute; left:30%; top:30%; margin:-150px 0 0 -150px; -webkit-box-sizing:border-box;-moz-box-sizing:border-box; -o-box-sizing:border-box; box-sizing:border-box; background:#fff;-webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px; box-shadow:0 0 50px #009688;}
+.SignBody .layui-form-item{ position:relative;top:10px;}
+.SignBody .layui-form-item label{ position:relative; color:#757575;  background:#fff; font-size:14px; cursor:text;}
+.SignBody .layui-form-item.layui-input-focus label{ font-size:12px; color:#ff6700;}
+.SignBody .layui-form-item.layui-input-active label{ font-size:12px;}
+.SignBody .layui-input::-webkit-input-placeholder{color:#fff;}
+.SignBody .layui-input::-moz-placeholder{color:#fff;}
+.SignBody .layui-input:-ms-input-placeholder{color:#fff;}
+.SignBody .layui-input::placeholder{color:#fff;}
+.SignBody .layui-form-item.layui-input-focus input{ border-color:#ff6700 !important;}
+.SignBody .layui-input-focus .layui-input::-webkit-input-placeholder{color:#757575;}
+.SignBody .layui-input-focus .layui-input::-moz-placeholder{color:#757575;}
+.SignBody .layui-input-focus .layui-input:-ms-input-placeholder{color:#757575;}
+.SignBody .layui-input-focus .layui-input::placeholder{color:#757575;}
 /*用户等级*/
 .layui-table-view .layui-table span.seraph{ font-size:25px !important;}
 .vip1{ color:#994a2b;}

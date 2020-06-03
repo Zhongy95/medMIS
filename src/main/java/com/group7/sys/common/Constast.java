@@ -32,4 +32,12 @@ public interface Constast {
     public static final Integer OPEN_TRUE=1;
     public static final Integer OPEN_FALSE=0;
 
+    /*用户类型*/
+    public static final Integer ROLE_ADMIN=0;
+    public static final Integer ROLE_DOCTOR=1;
+    public static final Integer ROLE_MEDICINED_DOCTOR=2;
+    public static final Integer ROLE_EXAM_DOCTOR=3;
+    public static final Integer ROLE_NURSE=4;
+    public static final Integer ROLE_PATIENT=5;
+
 }

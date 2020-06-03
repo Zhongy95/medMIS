@@ -13,6 +13,12 @@ public class SystemController {
     public String toLogin() {
         return "system/index/login";
     }
+
+    @RequestMapping("signup")
+    public String signup() {
+        return "system/index/signup";
+    }
+
     //登陆成功，跳转到首页
     @RequestMapping("index")
     public String index() {

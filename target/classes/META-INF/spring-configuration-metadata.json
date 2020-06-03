@@ -10,7 +10,12 @@
     {
       "name": "shiro.anon-urls",
       "type": "java.lang.String[]",
-      "sourceType": "com.group7.sys.config.ShiroAutoConfiguration"
+      "description": "放行网址",
+      "sourceType": "com.group7.sys.config.ShiroAutoConfiguration",
+      "defaultValue": [
+        "\/signup.html",
+        "\/sys\/signup"
+      ]
     },
     {
       "name": "shiro.authc-ulrs",

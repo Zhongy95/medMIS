@@ -24,20 +24,54 @@
 			<label for="password">密码</label>
 			<input type="password" placeholder="请输入密码" autocomplete="off" id="password" name="password" class="layui-input" lay-verify="required">
 		</div>
-<!--		<div class="layui-form-item input-item" id="imgCode">-->
-<!--			<label for="code">验证码</label>-->
-<!--			<input type="text" placeholder="请输入验证码" autocomplete="off" id="code" class="layui-input">-->
-<!--			<img src="/resources/images/code.jpg" >-->
-<!--		</div>-->
-		<div class="layui-form-item">
-			<button class="layui-btn layui-block" lay-filter="login" lay-submit>登录</button>
-		</div>
-<!--		<div class="layui-form-item layui-row">-->
-<!--			<a href="javascript:;" class="seraph icon-qq layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>-->
-<!--			<a href="javascript:;" class="seraph icon-wechat layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>-->
-<!--			<a href="javascript:;" class="seraph icon-sina layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>-->
-<!--		</div>-->
+
+
+
+	<!--		<div class="layui-form-item input-item" id="imgCode">-->
+	<!--			<label for="code">验证码</label>-->
+	<!--			<input type="text" placeholder="请输入验证码" autocomplete="off" id="code" class="layui-input">-->
+	<!--			<img src="/resources/images/code.jpg" >-->
+	<!--		</div>-->
+	<div class="layui-form-item">
+		<button class="layui-btn layui-block" lay-filter="login" lay-submit>登录</button>
+	</div>
+	<div class="layui-form-item">
+		<button class="layui-btn layui-block" id="sign" lay-filter="sign" lay-submit>注册</button>
+	</div>
+	<div class="layui-form-item layui-row">
+		<a href="javascript:;" class="seraph icon-qq layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>
+		<a href="javascript:;" class="seraph icon-wechat layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>
+		<a href="javascript:;" class="seraph icon-sina layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>
+	</div>
 	</form>
+<!--添加和修改弹出层-->
+	<div id="addOrUpdateDiv" style="display: none;padding: 10px;margin-right: 4%">
+		<form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
+			<div class="layui-form-item">
+				<label class="layui-form-label">公告标题</label>
+				<div class="layui-input-block">
+					<input type="hidden" name="id">
+					<input type="text" name="title" lay-verify="" autocomplete="off" class="layui-input input-radius" placeholder="请输入公告标题">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">公告内容</label>
+				<div class="layui-input-block">
+					<textarea class="layui-textarea" name="content" id="content" placeholder="请输入公告内容" ></textarea>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block" style="text-align: center;padding-right: 7%">
+					<button type="button" class="layui-btn layui-btn-radius" lay-submit="" id="doSubmit">
+						<i class="layui-icon layui-icon-search layui-icon-normal"></i>提交
+					</button>
+					<button type="reset" class="layui-btn layui-btn-radius layui-btn-warm">
+						<i class="layui-icon layui-icon-refresh"></i><span>重置</span>
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
 	<script type="text/javascript" src="/resources/layui/layui.js"></script>
 <!--	<script type="text/javascript" src="page/login/login.js"></script>-->
 	<script type="text/javascript" src="/resources/js/cache.js"></script>
@@ -47,12 +81,24 @@
 					layer = parent.layer === undefined ? layui.layer : top.layer
 			$ = layui.jquery;
 
-			// $(".loginBody .seraph").click(function(){
-			// 	layer.msg("这只是做个样式，至于功能，你见过哪个后台能这样登录的？还是老老实实的找管理员去注册吧",{
-			// 		time:5000
-			// 	});
-			// })
+			$(".loginBody .seraph").click(function(){
+				layer.msg("这只是做个样式，至于功能，你见过哪个后台能这样登录的？还是老老实实的找管理员去注册吧",{
+					time:5000
+				});
+				location.href="/sys/signup";
+			})
 
+
+			form.on("submit(sign)",function(data){
+				var btn =  $(this);
+				//设置登录按钮  为不可点击
+				btn.text("跳转中...").attr("disabled","disabled").addClass("layui-disabled");
+				location.href="/sys/signup";
+			});
+
+			$("#sign").click(function () {
+				location.href="/sys/signup";
+			})
 			//登录按钮
 			form.on("submit(login)",function(data){
 				var btn =  $(this);
@@ -76,16 +122,36 @@
 					}
 				});
 				return false;
-			})
+			});
+			var mainIndex;
+			var url;
+			// form.on("signup",function(){
+			//
+			// 	mainIndex = layer.open({
+			// 		type:1,
+			// 		content : $("#addOrUpdateDiv"),
+			// 		area:['800px','550px'],
+			// 		title:'添加公告',
+			// 		success:function () {
+			// 			//$("#dataFrm")[0].reset();
+			// 			//重置富文本编译器的内容为空
+			// 			//layedit.setContent(editIndex,"");
+			// 			url="/notice/addNotice";
+			// 		}
+			// 	});
+			// })
+
 
 			//表单输入效果
 			$(".loginBody .input-item").click(function(e){
 				e.stopPropagation();
 				$(this).addClass("layui-input-focus").find(".layui-input").focus();
 			})
+
 			$(".loginBody .layui-form-item .layui-input").focus(function(){
 				$(this).parent().addClass("layui-input-focus");
 			})
+
 			$(".loginBody .layui-form-item .layui-input").blur(function(){
 				$(this).parent().removeClass("layui-input-focus");
 				if($(this).val() != ''){
@@ -94,7 +160,9 @@
 					$(this).parent().removeClass("layui-input-active");
 				}
 			})
+
 		})
+
 
 	</script>
 </body>

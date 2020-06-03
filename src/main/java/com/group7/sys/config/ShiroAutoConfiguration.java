@@ -45,8 +45,11 @@ public class ShiroAutoConfiguration {
      * 默认的登陆页面
      */
     private String loginUrl = "/index.html";
+    /**
+     * 放行网址
+     */
+    private String[] anonUrls=new String[]{"/signup.html","/sys/signup"};
 
-    private String[] anonUrls;
     private String logOutUrl;
     private String[] authcUlrs;
 
@@ -96,10 +99,17 @@ public class ShiroAutoConfiguration {
         factoryBean.setLoginUrl(loginUrl);
         Map<String, String> filterChainDefinitionMap = new HashMap<>();
         // 设置放行的路径
+
         if (anonUrls != null && anonUrls.length > 0) {
+
             for (String anon : anonUrls) {
                 filterChainDefinitionMap.put(anon, "anon");
+                System.out.println(anon);
             }
+            filterChainDefinitionMap.put("/signup.html*", "anon");
+            filterChainDefinitionMap.put("/sys/signup*", "anon");
+            filterChainDefinitionMap.put("/signup/signup*", "anon");
+
         }
         // 设置登出的路径
         if (null != logOutUrl) {

@@ -16,39 +16,36 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
-//登录控制器
+// 登录控制器
 @RestController
 @RequestMapping("login/")
 public class LoginController {
 
-    @Autowired
-    private LoginfoService loginfoService;
+  @Autowired private LoginfoService loginfoService;
 
-    @RequestMapping("login")
-    public ResultObj login(String loginname, String password){
+  @RequestMapping("login")
+  public ResultObj login(String loginname, String password) {
 
+    Subject subject = SecurityUtils.getSubject();
 
-        Subject subject = SecurityUtils.getSubject();
+    AuthenticationToken token = new UsernamePasswordToken(loginname, password);
+    try {
+      subject.login(token);
+      ActiverUser activerUser = (ActiverUser) subject.getPrincipal();
+      WebUtils.getSession().setAttribute("user", activerUser.getUser());
 
-        AuthenticationToken token = new UsernamePasswordToken(loginname,password);
-        try {
-            subject.login(token);
-            ActiverUser activerUser= (ActiverUser) subject.getPrincipal();
-            WebUtils.getSession().setAttribute("user",activerUser.getUser());
+      // 记录登录日志
+      Loginfo entity = new Loginfo();
+      entity.setLoginname(
+          activerUser.getUser().getName() + "-" + activerUser.getUser().getLoginname());
+      entity.setLoginip(WebUtils.getRequest().getRemoteAddr());
+      entity.setLogintime(new Date());
+      loginfoService.save(entity);
 
-            //记录登录日志
-            Loginfo entity =new Loginfo();
-            entity.setLoginname(activerUser.getUser().getName()+"-"+activerUser.getUser().getLoginname());
-            entity.setLoginip(WebUtils.getRequest().getRemoteAddr());
-            entity.setLogintime(new Date());
-            loginfoService.save(entity);
-
-            return ResultObj.LOGIN_SUCCESS;
-        } catch (AuthenticationException e) {
-            e.printStackTrace();
-            return ResultObj.LOGIN_ERROR_PASS;
-        }
-
+      return ResultObj.LOGIN_SUCCESS;
+    } catch (AuthenticationException e) {
+      e.printStackTrace();
+      return ResultObj.LOGIN_ERROR_PASS;
     }
-
+  }
 }

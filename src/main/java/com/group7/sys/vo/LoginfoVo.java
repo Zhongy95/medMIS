@@ -11,20 +11,17 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 public class LoginfoVo extends Loginfo {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    private Integer Page=1;
+  private Integer Page = 1;
 
-    private Integer[] ids;
+  private Integer[] ids;
 
-    private Integer limit=10;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date startTime;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date endTime;
+  private Integer limit = 10;
 
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private Date startTime;
 
-
-
-
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private Date endTime;
 }

@@ -8,23 +8,18 @@ import javax.servlet.http.HttpSession;
 
 public class WebUtils {
 
-    /**
-     * 得到request
-     */
+  /** 得到request */
+  public static HttpServletRequest getRequest() {
+    ServletRequestAttributes requestAttributes =
+        (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    HttpServletRequest request = requestAttributes.getRequest();
+    System.out.println(request);
+    return request;
+  }
 
-    public static HttpServletRequest getRequest() {
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = requestAttributes.getRequest();
-        System.out.println(request);
-        return request;
-    }
+  /** 得到session */
+  public static HttpSession getSession() {
 
-    /**
-     * 得到session
-     */
-
-    public static HttpSession getSession() {
-
-        return getRequest().getSession();
-    }
+    return getRequest().getSession();
+  }
 }

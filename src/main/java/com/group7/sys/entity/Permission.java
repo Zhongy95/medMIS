@@ -9,10 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * <p>
- * 
- * </p>
- *
  * @author Robin
  * @since 2020-06-02
  */
@@ -22,39 +18,31 @@ import lombok.experimental.Accessors;
 @TableName("sys_permission")
 public class Permission implements Serializable {
 
-    private static final long serialVersionUID=1L;
+  private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+  @TableId(value = "id", type = IdType.AUTO)
+  private Integer id;
 
-    private Integer pid;
+  private Integer pid;
 
-    /**
-     * 权限类型[menu/permission]
-     */
-    private String type;
+  /** 权限类型[menu/permission] */
+  private String type;
 
-    private String title;
+  private String title;
 
-    /**
-     * 权限编码[只有type= permission才有  user:view]
-     */
-    private String percode;
+  /** 权限编码[只有type= permission才有 user:view] */
+  private String percode;
 
-    private String icon;
+  private String icon;
 
-    private String href;
+  private String href;
 
-    private String target;
+  private String target;
 
-    private Integer open;
+  private Integer open;
 
-    private Integer ordernum;
+  private Integer ordernum;
 
-    /**
-     * 状态【0不可用1可用】
-     */
-    private Integer available;
-
-
+  /** 状态【0不可用1可用】 */
+  private Integer available;
 }

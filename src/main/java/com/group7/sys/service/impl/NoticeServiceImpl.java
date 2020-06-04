@@ -7,14 +7,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
- * <p>
- *  服务实现类
- * </p>
+ * 服务实现类
  *
  * @author Robin
  * @since 2020-06-02
  */
 @Service
-public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> implements NoticeService {
-
-}
+public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> implements NoticeService {}

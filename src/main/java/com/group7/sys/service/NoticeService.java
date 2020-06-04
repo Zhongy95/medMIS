@@ -4,13 +4,9 @@ import com.group7.sys.entity.Notice;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * <p>
- *  服务类
- * </p>
+ * 服务类
  *
  * @author Robin
  * @since 2020-06-02
  */
-public interface NoticeService extends IService<Notice> {
-
-}
+public interface NoticeService extends IService<Notice> {}

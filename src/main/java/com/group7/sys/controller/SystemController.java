@@ -27,8 +27,8 @@ public class SystemController {
     /**
      * 跳转到工作台
      */
-    @RequestMapping("deskManager")
-    public String deskManager(){
+    @RequestMapping("toDeskManager")
+    public String toDeskManager(){
         return "system/index/deskManager";
     }
 
@@ -36,8 +36,8 @@ public class SystemController {
      * 跳转到日志管理
      */
 
-    @RequestMapping("loginfoManager")
-    public String loginfoManager(){
+    @RequestMapping("toLoginfoManager")
+    public String toLoginfoManager(){
         return "system/loginfo/loginfoManager";
     }
 
@@ -45,8 +45,8 @@ public class SystemController {
      * 跳转到公告管理
      */
 
-    @RequestMapping("noticeManager")
-    public String noticeManager(){
+    @RequestMapping("toNoticeManager")
+    public String toNoticeManager(){
         return "system/notice/noticeManager";
     }
 
@@ -54,8 +54,8 @@ public class SystemController {
      * 跳转到部门管理
      */
 
-    @RequestMapping("deptManager")
-    public String deptManager(){
+    @RequestMapping("toDeptManager")
+    public String toDeptManager(){
         return "system/dept/deptManager";
     }
 
@@ -63,16 +63,16 @@ public class SystemController {
      * 跳转到部门管理-左
      */
 
-    @RequestMapping("deptLeft")
-    public String deptLeft(){
+    @RequestMapping("toDeptLeft")
+    public String toDeptLeft(){
         return "system/dept/deptLeft";
     }
     /**
      * 跳转到部门管理-右
      */
 
-    @RequestMapping("deptRight")
-    public String deptRight(){
+    @RequestMapping("toDeptRight")
+    public String toDeptRight(){
         return "system/dept/deptRight";
     }
 

@@ -100,7 +100,7 @@
         var tableIns = table.render({
             elem: "#loginfoTable",
             title: "日志数据表格",
-            url: "/loginfo/loadAllLoginfo",
+            url: "api/loginfo/loadAllLoginfo",
             toolbar: "#loginfoToolBar",
             page: true,
 
@@ -159,7 +159,7 @@
                         }
                         else{ids += "&ids=" + item.id;}
                     })
-                    $.post("/loginfo/batchDeleteLoginfo",ids, function(res){
+                    $.post("api/loginfo/batchDeleteLoginfo",ids, function(res){
                         if (res.code==200){
                             tableIns.reload();
                         }
@@ -179,7 +179,7 @@
         //删除
         function deleteInfo(data) {
             layer.confirm('你确定要删除这条数据吗？',{icon: 3,title:'提示'},function (index) {
-                $.post("/loginfo/deleteLoginfo",{id:data.id},function (res) {
+                $.post("api/loginfo/deleteLoginfo",{id:data.id},function (res) {
                     if (res.code==200){
                         tableIns.reload({
                             where:"",

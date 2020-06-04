@@ -46,7 +46,7 @@ public class ShiroAutoConfiguration {
     /**
      * 放行网址
      */
-    private String[] anonUrls=new String[]{"/signup.html","/sys/signup"};
+    private String[] anonUrls=new String[]{"/signup.html","api/sys/signup"};
 
     private String logOutUrl;
     private String[] authcUlrs;
@@ -103,8 +103,8 @@ public class ShiroAutoConfiguration {
                 System.out.println(anon);
             }
             filterChainDefinitionMap.put("/signup.html*", "anon");
-            filterChainDefinitionMap.put("/sys/signup*", "anon");
-            filterChainDefinitionMap.put("/signup/signup*", "anon");
+            filterChainDefinitionMap.put("api/sys/signup*", "anon");
+            filterChainDefinitionMap.put("api/signup*", "anon");
 
         }
         // 设置登出的路径

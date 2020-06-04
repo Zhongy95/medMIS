@@ -151,7 +151,7 @@
         var tableIns = table.render({
             elem: "#noticeTable",
             title: "公告数据表格",
-            url: "/notice/loadAllNotice",
+            url: "api/notice/loadAllNotice",
             toolbar: "#noticeToolBar",
             page: true,
             height: "full-190",
@@ -230,7 +230,7 @@
                    $("#dataFrm")[0].reset();
                     //重置富文本编译器的内容为空
                     layedit.setContent(editIndex,"");
-                    url="/notice/addNotice";
+                    url="api/notice/addNotice";
                 }
             });
         };
@@ -248,7 +248,7 @@
                     //装载新的数据
                     form.val("dataFrm",data);
                     layedit.setContent(editIndex,data.content);
-                    url="/notice/updateNotice";
+                    url="api/notice/updateNotice";
                 }
             });
         };
@@ -287,7 +287,7 @@
         //删除
         function deleteInfo(data) {
             layer.confirm('你确定要删除【'+data.title+'】这条公告吗？',{icon: 3,title:'提示'},function (index) {
-                $.post("/notice/deleteNotice",{id:data.id},function (res) {
+                $.post("api/notice/deleteNotice",{id:data.id},function (res) {
                     if (res.code==200){
                         tableIns.reload({
                             //删除成功加载表格时，要重置查询条件
@@ -317,7 +317,7 @@
                             ids+="&ids="+item.id;
                         }
                     });
-                    $.post("/notice/batchDeleteNotice",ids,function (res) {
+                    $.post("api/notice/batchDeleteNotice",ids,function (res) {
                         if (res.code==200){
                             //重新刷新表格
                             tableIns.reload({

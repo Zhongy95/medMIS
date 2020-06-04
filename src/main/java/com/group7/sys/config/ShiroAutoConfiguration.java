@@ -29,18 +29,27 @@ import java.util.Map;
 @Data
 public class ShiroAutoConfiguration {
 
-  private static final String SHIRO_DIALECT = "shiroDialect";
-  private static final String SHIRO_FILTER = "shiroFilter";
-  /** 加密方式 */
-  private String hashAlgorithmName = "md5";
-  /** 散列次数 */
-  private int hashIterations = 1;
-  /** 默认的登陆页面 */
-  private String loginUrl = "/index.html";
+    private static final String SHIRO_DIALECT = "shiroDialect";
+    private static final String SHIRO_FILTER = "shiroFilter";
+    /**
+     * 加密方式
+     */
+    private String hashAlgorithmName = "md5";
+    /**
+     * 散列次数
+     */
+    private int hashIterations = 1;
+    /**
+     * 默认的登陆页面
+     */
+    private String loginUrl = "/index.html";
+    /**
+     * 放行网址
+     */
+    private String[] anonUrls=new String[]{"/signup.html","/sys/signup"};
 
-  private String[] anonUrls;
-  private String logOutUrl;
-  private String[] authcUlrs;
+    private String logOutUrl;
+    private String[] authcUlrs;
 
   /** 声明凭证匹配器 */
   @Bean("credentialsMatcher")
@@ -73,38 +82,49 @@ public class ShiroAutoConfiguration {
     securityManager.setRealm(userRealm);
     return securityManager;
   }
-  /** 配置shiro的过滤器 */
-  @Bean(SHIRO_FILTER)
-  public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
-    ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
-    // 设置安全管理器
-    factoryBean.setSecurityManager(securityManager);
-    // 设置未登陆的时要跳转的页面
-    factoryBean.setLoginUrl(loginUrl);
-    Map<String, String> filterChainDefinitionMap = new HashMap<>();
-    // 设置放行的路径
-    if (anonUrls != null && anonUrls.length > 0) {
-      for (String anon : anonUrls) {
-        filterChainDefinitionMap.put(anon, "anon");
-      }
+
+    /**配置shiro的过滤器*/
+
+
+    @Bean(SHIRO_FILTER)
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
+        ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
+        // 设置安全管理器
+        factoryBean.setSecurityManager(securityManager);
+        // 设置未登陆的时要跳转的页面
+        factoryBean.setLoginUrl(loginUrl);
+        Map<String, String> filterChainDefinitionMap = new HashMap<>();
+        // 设置放行的路径
+
+        if (anonUrls != null && anonUrls.length > 0) {
+
+            for (String anon : anonUrls) {
+                filterChainDefinitionMap.put(anon, "anon");
+                System.out.println(anon);
+            }
+            filterChainDefinitionMap.put("/signup.html*", "anon");
+            filterChainDefinitionMap.put("/sys/signup*", "anon");
+            filterChainDefinitionMap.put("/signup/signup*", "anon");
+
+        }
+        // 设置登出的路径
+        if (null != logOutUrl) {
+            filterChainDefinitionMap.put(logOutUrl, "logout");
+        }
+        // 设置拦截的路径
+        if (authcUlrs != null && authcUlrs.length > 0) {
+            for (String authc : authcUlrs) {
+                filterChainDefinitionMap.put(authc, "authc");
+            }
+        }
+        Map<String, Filter> filters = new HashMap<>();
+//		filters.put("authc", new ShiroLoginFilter());
+        //配置过滤器
+        factoryBean.setFilters(filters);
+        factoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+        return factoryBean;
     }
-    // 设置登出的路径
-    if (null != logOutUrl) {
-      filterChainDefinitionMap.put(logOutUrl, "logout");
-    }
-    // 设置拦截的路径
-    if (authcUlrs != null && authcUlrs.length > 0) {
-      for (String authc : authcUlrs) {
-        filterChainDefinitionMap.put(authc, "authc");
-      }
-    }
-    Map<String, Filter> filters = new HashMap<>();
-    //		filters.put("authc", new ShiroLoginFilter());
-    // 配置过滤器
-    factoryBean.setFilters(filters);
-    factoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-    return factoryBean;
-  }
+
 
   /**
    * 注册shiro的委托过滤器，相当于之前在web.xml里面配置的

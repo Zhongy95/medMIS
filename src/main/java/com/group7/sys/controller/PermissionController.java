@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020-06-02
  */
 @RestController
-@RequestMapping("api/sys/permission/")
+@RequestMapping("/api/sys/permission/")
 public class PermissionController {}

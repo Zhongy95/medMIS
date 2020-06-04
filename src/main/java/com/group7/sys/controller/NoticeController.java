@@ -28,7 +28,7 @@ import java.util.Date;
  * @since 2020-06-02
  */
 @RestController
-@RequestMapping("api/notice/")
+@RequestMapping("/api/notice/")
 public class NoticeController {
 
   @Autowired private NoticeService noticeService;

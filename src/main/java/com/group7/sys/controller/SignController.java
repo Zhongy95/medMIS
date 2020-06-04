@@ -24,7 +24,7 @@ import static com.group7.sys.common.Constast.ROLE_PATIENT;
 
 //注册控制器
 @RestController
-@RequestMapping("api/signup/")
+@RequestMapping("/api/signup/")
 public class SignController {
 
     @Autowired private UserService userService;

@@ -18,7 +18,7 @@ import java.util.Date;
 
 // 登录控制器
 @RestController
-@RequestMapping("api/login/")
+@RequestMapping("/api/login/")
 public class LoginController {
 
   @Autowired private LoginfoService loginfoService;

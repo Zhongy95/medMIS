@@ -83,9 +83,12 @@ public class ShiroAutoConfiguration {
     return securityManager;
   }
 
-    /**
-     * 配置shiro的过滤器
+    /**配置shiro的过滤器
+     *
+     * @param securityManager
+     * @return
      */
+
     @Bean(SHIRO_FILTER)
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();

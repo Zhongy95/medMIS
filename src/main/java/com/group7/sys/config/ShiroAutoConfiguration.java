@@ -97,6 +97,7 @@ public class ShiroAutoConfiguration {
         filterChainDefinitionMap.put(anon, "anon");
       }
     }
+  }
     /**
      * 配置shiro的过滤器
      */

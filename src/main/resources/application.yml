@@ -54,6 +54,9 @@ shiro:
     - /sys/toLogin*
     - /login/login*
     - /resources/**
+    - /signup.html*
+    - /sys/signup*
+    - /signup/signup*
   login-url: /index.html
   log-out-url: /login/logout*
   authc-ulrs:

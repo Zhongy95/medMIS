@@ -182,13 +182,15 @@ create table sys_user
     dept_id   char(10)      null comment '医生的部门id',
     role      int           not null comment '角色。0为管理员，1为门诊医生，2为药剂医生，3为检验医师，4为护士，5为病人',
     phone     char(100)     null comment '电话号码',
-    info      int           null comment '医生个人信息',
+    info      varchar(255)          null comment '医生个人信息',
     birthday  date          not null,
     job       char(100)     null comment '病人工作',
     available int default 1 not null comment '1为可用，0为不可用',
     job_title char(100)     null comment '医生职称',
     constraint sys_user_id_uindex
         unique (id)
+    constraint sys_user_loginname_uindex
+        unique (loginname)
 )  charset = utf8;
 
 alter table sys_user

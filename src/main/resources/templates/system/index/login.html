@@ -101,7 +101,7 @@
 				//设置登录按钮  为不可点击
 				btn.text("登录中...").attr("disabled","disabled").addClass("layui-disabled");
 				console.log(data.field);
-				$.post("/login/login",data.field,function(rs){
+				$.post("/api/login/",data.field,function(rs){
 					//设置登录按钮 恢复可点击   在前端防止 重复点击
 					btn.text("登录").attr("disabled",false).removeClass("layui-disabled");
 					layer.msg(rs.msg);
@@ -114,7 +114,7 @@
 					}else{
 						//跳转到templates/system/index/index.html页面
 						layer.msg(rs.msg);
-						location.href="/sys/index";
+						window.location.href="/sys/home";
 					}
 				});
 				return false;

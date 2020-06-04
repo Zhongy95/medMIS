@@ -18,12 +18,12 @@ import java.util.Date;
 
 // 登录控制器
 @RestController
-@RequestMapping("login/")
+@RequestMapping("/api/login/")
 public class LoginController {
 
   @Autowired private LoginfoService loginfoService;
 
-  @RequestMapping("login")
+  @RequestMapping("/")
   public ResultObj login(String loginname, String password) {
 
     Subject subject = SecurityUtils.getSubject();

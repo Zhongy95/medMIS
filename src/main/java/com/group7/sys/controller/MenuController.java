@@ -21,7 +21,7 @@ import static com.group7.sys.common.Constast.*;
 
 /** 菜单管理 */
 @RestController
-@RequestMapping("/menu")
+@RequestMapping("/api/menu/")
 public class MenuController {
 
   @Autowired private PermissionService permissionService;

@@ -24,13 +24,13 @@ import static com.group7.sys.common.Constast.ROLE_PATIENT;
 
 //注册控制器
 @RestController
-@RequestMapping("signup/")
+@RequestMapping("/api/signup/")
 public class SignController {
 
     @Autowired private UserService userService;
 
 
-    @RequestMapping("signup")
+    @RequestMapping("/")
     public ResultObj signup(UserVo uservo){
 
 

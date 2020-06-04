@@ -104,7 +104,7 @@ public class ShiroAutoConfiguration {
             }
             filterChainDefinitionMap.put("/signup.html*", "anon");
             filterChainDefinitionMap.put("/sys/signup*", "anon");
-            filterChainDefinitionMap.put("/signup/signup*", "anon");
+            filterChainDefinitionMap.put("/api/signup*", "anon");
 
         }
         // 设置登出的路径

@@ -127,7 +127,7 @@
         tableIns = table.render({
             elem: "#deptTable",
             title: "部门数据表格",
-            url: "/dept/loadAllDept",
+            url: "/api/dept/loadAllDept",
             toolbar: "#deptToolBar",
             page: true,
             height: "full-190",
@@ -209,7 +209,7 @@
                     $("#dataFrm")[0].reset();
                     //重置富文本编译器的内容为空
                     layedit.setContent(editIndex,"");
-                    url="/dept/addDept";
+                    url="/api/dept/addDept";
                 }
             });
         };
@@ -225,7 +225,7 @@
                 success:function () {
                     $("#dataFrm")[0].reset();
 
-                    url="/dept/updateDept";
+                    url="/api/dept/updateDept";
                 }
             });
         };
@@ -247,7 +247,7 @@
         //删除
         function deleteInfo(data) {
             layer.confirm('你确定要删除【'+data.title+'】这条部门吗？',{icon: 3,title:'提示'},function (index) {
-                $.post("/dept/deleteDept",{id:data.id},function (res) {
+                $.post("/api/dept/deleteDept",{id:data.id},function (res) {
                     if (res.code==200){
                         tableIns.reload({
                             //删除成功加载表格时，要重置查询条件

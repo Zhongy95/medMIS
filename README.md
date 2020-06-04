@@ -49,6 +49,8 @@ JDK1.8、MYSQL8、Maven3.6.3+
 
 此处更改为本地MYSQL的账号密码。
 
+3.给IDEA装一个Lombok插件，解决getter/setter飘红的问题
+
 ## 2.快速开始
 
 目标：完成某个表的增删查改
@@ -196,17 +198,27 @@ noticeManager.html
 
 ## 3.一些规范
 
-### 1.尽量不要出现常数
+### 1.代码格式
+
+建议给IDEA安装Google-Java-Format和Save-Actions插件，在保存时自动格式化代码，使代码更美观
+
+### 2.尽量不要出现常数
 
 常数统一集合在/common/contrast，返回的集中在/common/ResultObj
 
-###2.获得当前用户的信息
+### 3.获得当前用户的信息
 
 ![image-20200603001322631](mdpicture/image-20200603001322631.png)
 
 除了getSession(),还有getRequest()方法可以获得ip等信息，示例见LoginController。
 
-###3.开发前端页面直接去layui找样式
+### 4.命名
+
+1. 请使用驼峰命名
+2. 接口的url需要加上api/作为前缀，资源和路由的url则不需要
+2. 需要保存在sys_permission表的资源使用toXxxYyy的命名格式，普通路径则不需要
+
+### 5.开发前端页面直接去layui找样式
 
 或者参考已有的界面。不懂得用的就去开头的b站视频那里选一个章节看一下。
 

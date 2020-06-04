@@ -4,13 +4,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("sys/")
+@RequestMapping("/sys/")
 public class SystemController {
 
 
     //跳转到登陆页面
-    @RequestMapping("toLogin")
-    public String toLogin() {
+    @RequestMapping("login")
+    public String login() {
         return "system/index/login";
     }
 
@@ -20,7 +20,7 @@ public class SystemController {
     }
 
     //登陆成功，跳转到首页
-    @RequestMapping("index")
+    @RequestMapping("home")
     public String index() {
         return "system/index/index";
     }

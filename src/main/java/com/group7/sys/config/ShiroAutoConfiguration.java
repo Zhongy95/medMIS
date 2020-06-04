@@ -82,22 +82,7 @@ public class ShiroAutoConfiguration {
     securityManager.setRealm(userRealm);
     return securityManager;
   }
-  /** 配置shiro的过滤器 */
-  @Bean(SHIRO_FILTER)
-  public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
-    ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
-    // 设置安全管理器
-    factoryBean.setSecurityManager(securityManager);
-    // 设置未登陆的时要跳转的页面
-    factoryBean.setLoginUrl(loginUrl);
-    Map<String, String> filterChainDefinitionMap = new HashMap<>();
-    // 设置放行的路径
-    if (anonUrls != null && anonUrls.length > 0) {
-      for (String anon : anonUrls) {
-        filterChainDefinitionMap.put(anon, "anon");
-      }
-    }
-  }
+
     /**
      * 配置shiro的过滤器
      */
@@ -132,26 +117,14 @@ public class ShiroAutoConfiguration {
                 filterChainDefinitionMap.put(authc, "authc");
             }
         }
-        Map<String, Filter> filters=new HashMap<>();
+        Map<String, Filter> filters = new HashMap<>();
 //		filters.put("authc", new ShiroLoginFilter());
         //配置过滤器
         factoryBean.setFilters(filters);
         factoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return factoryBean;
     }
-    // 设置拦截的路径
-    if (authcUlrs != null && authcUlrs.length > 0) {
-      for (String authc : authcUlrs) {
-        filterChainDefinitionMap.put(authc, "authc");
-      }
-    }
-    Map<String, Filter> filters = new HashMap<>();
-    //		filters.put("authc", new ShiroLoginFilter());
-    // 配置过滤器
-    factoryBean.setFilters(filters);
-    factoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-    return factoryBean;
-  }
+
 
   /**
    * 注册shiro的委托过滤器，相当于之前在web.xml里面配置的

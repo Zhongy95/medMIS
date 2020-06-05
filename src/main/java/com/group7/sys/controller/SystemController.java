@@ -7,31 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/sys/")
 public class SystemController {
 
-
-    //跳转到登陆页面
-    @RequestMapping("login")
-    public String login() {
-        return "system/index/login";
-    }
-
-    @RequestMapping("signup")
-    public String signup() {
-        return "system/index/signup";
-    }
-
-    //登陆成功，跳转到首页
-    @RequestMapping("home")
-    public String index() {
-        return "system/index/index";
-    }
-    /**
-     * 跳转到工作台
-     */
-    @RequestMapping("toDeskManager")
-    public String toDeskManager(){
-        return "system/index/deskManager";
-    }
-
     /**
      * 跳转到日志管理
      */

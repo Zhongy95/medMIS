@@ -1,7 +1,6 @@
 package com.group7.sys.controller;
 
 import com.group7.sys.common.ActiverUser;
-import com.group7.sys.common.ResultObj;
 import com.group7.sys.common.WebUtils;
 import com.group7.sys.entity.Loginfo;
 import com.group7.sys.service.LoginfoService;
@@ -11,8 +10,10 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.group7.sys.exception.medMISException;
 
 import java.util.Date;
 
@@ -24,7 +25,7 @@ public class LoginController {
   @Autowired private LoginfoService loginfoService;
 
   @RequestMapping("/")
-  public ResultObj login(String loginname, String password) {
+  public ActiverUser login(String loginname, String password) throws medMISException {
 
     Subject subject = SecurityUtils.getSubject();
 
@@ -42,10 +43,10 @@ public class LoginController {
       entity.setLogintime(new Date());
       loginfoService.save(entity);
 
-      return ResultObj.LOGIN_SUCCESS;
+      return activerUser;
     } catch (AuthenticationException e) {
       e.printStackTrace();
-      return ResultObj.LOGIN_ERROR_PASS;
+      throw new medMISException("登陆失败", HttpStatus.UNAUTHORIZED);
     }
   }
 }

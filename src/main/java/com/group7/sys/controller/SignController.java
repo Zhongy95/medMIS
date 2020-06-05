@@ -43,7 +43,7 @@ public class SignController {
 
         try{
             this.userService.save(uservo);
-            return ResultObj.ADD_SUCCES;
+            return ResultObj.ADD_SUCCESS;
 
         }catch (Exception e) {
             e.printStackTrace();

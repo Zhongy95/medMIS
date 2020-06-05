@@ -90,7 +90,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">公告标题</label>
             <div class="layui-input-block">
-                <input type="hidden" name="id">
+                <input type="hidden" name="noticeId">
                 <input type="text" name="title" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入公告标题">
             </div>
         </div>
@@ -102,7 +102,7 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center;padding-right: 7%">
-                <button type="button" class="layui-btn layui-btn-radius" lay-submit="" id="doSubmit">
+                <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit">
                     <i class="layui-icon layui-icon-search layui-icon-normal"></i>提交
                 </button>
                 <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm">
@@ -157,7 +157,7 @@
             height: "full-190",
             cols: [ [
                 {type: 'checkbox', fixed: 'left'},
-                {field: 'id', title: 'ID', align: 'center'},
+                {field: 'noticeId', title: 'ID', align: 'center'},
                 {field: 'title', title: '公告标题', align: 'center'},
                 {field: 'opername', title: '操作人', align: 'center'},
                 {field: 'createtime', title: '创建时间', align: 'center'},
@@ -287,7 +287,7 @@
         //删除
         function deleteInfo(data) {
             layer.confirm('你确定要删除【'+data.title+'】这条公告吗？',{icon: 3,title:'提示'},function (index) {
-                $.post("/api/notice/deleteNotice",{id:data.id},function (res) {
+                $.post("/api/notice/deleteNotice",{noticeId:data.noticeId},function (res) {
                     if (res.code==200){
                         tableIns.reload({
                             //删除成功加载表格时，要重置查询条件
@@ -312,9 +312,9 @@
                     var ids = "";
                     $.each(data,function (index, item) {
                         if (index==0){
-                            ids+="ids="+item.id;
+                            ids+="ids="+item.noticeId;
                         }else {
-                            ids+="&ids="+item.id;
+                            ids+="&ids="+item.noticeId;
                         }
                     });
                     $.post("/api/notice/batchDeleteNotice",ids,function (res) {

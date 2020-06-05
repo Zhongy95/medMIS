@@ -22,21 +22,20 @@ public class Dept implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @TableId(value = "id", type = IdType.AUTO)
-  private Integer id;
+  @TableId(value = "dept_id", type = IdType.AUTO)
+  private Integer deptId;
 
   private Integer pid;
 
   private String name;
 
-  private Integer open;
+  private Boolean open;
 
   private String remark;
 
   private String address;
 
-  /** 状态【0不可用1可用】 */
-  private Integer available;
+  private Boolean available;
 
   /** 排序码【为了调试显示顺序】 */
   private Integer ordernum;

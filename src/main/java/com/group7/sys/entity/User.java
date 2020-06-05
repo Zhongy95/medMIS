@@ -22,8 +22,8 @@ public class User implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @TableId(value = "id", type = IdType.AUTO)
-  private Integer id;
+  @TableId(value = "user_id", type = IdType.AUTO)
+  private Integer userId;
 
   /** 真实姓名 */
   private String name;
@@ -48,7 +48,7 @@ public class User implements Serializable {
   private String deptId;
 
   /** 角色。0为管理员，1为门诊医生，2为药剂医生，3为检验医师，4为护士，5为病人 */
-  private Integer role;
+  private Integer roleId;
 
   /** 电话号码 */
   private String phone;
@@ -62,7 +62,7 @@ public class User implements Serializable {
   private String job;
 
   /** 1为可用，0为不可用 */
-  private Integer available;
+  private Boolean available;
 
   /** 医生职称 */
   private String jobTitle;

@@ -39,8 +39,8 @@ public class DeptController {
     List<Dept> list = this.deptService.list();
     List<TreeNode> treeNodes = new ArrayList<>();
     for (Dept dept : list) {
-      Boolean spread = dept.getOpen() == 1 ? true : false;
-      treeNodes.add(new TreeNode(dept.getId(), dept.getPid(), dept.getName(), spread));
+      Boolean spread = dept.getOpen();
+      treeNodes.add(new TreeNode(dept.getDeptId(), dept.getPid(), dept.getName(), spread));
     }
     return new DataGridView(treeNodes);
   }
@@ -55,9 +55,9 @@ public class DeptController {
     queryWrapper.like(StringUtils.isNotBlank(deptVo.getRemark()), "remark", deptVo.getRemark());
     queryWrapper.orderByDesc("ordernum"); // 排序依据
     queryWrapper
-        .eq(deptVo.getId() != null, "id", deptVo.getId())
+        .eq(deptVo.getDeptId() != null, "id", deptVo.getDeptId())
         .or()
-        .eq(deptVo.getId() != null, "pid", deptVo.getId());
+        .eq(deptVo.getDeptId() != null, "pid", deptVo.getDeptId());
 
     this.deptService.page(page, queryWrapper);
 

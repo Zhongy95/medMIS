@@ -107,16 +107,21 @@
 					layer.msg(rs.msg);
 					console.log(rs);
 					if(rs.user.roleId === 0){
-						layer.msg("管理员登录成功");
-						window.location.href="/home";
+						layer.msg("管理员登录成功", {
+							time: 200
+						}, function(){
+							location.href="/home";
+						});
 						// $.get("/login/getCode",function (code) {
 						// 	$("#img").attr("src","/login/getCode");
 						// })
 					}else if(rs.user.roleId === 5){
-						layer.msg("登录成功");
-						window.location.href="/home";
-					}
-				}).error(function(event){
+						layer.msg("登录成功", {
+							time: 200
+						}, function(){
+							location.href="/home";
+						})
+				}}).error(function(event){
 					layer.msg(event.responseJSON.message, {
 						time: 1000
 					}, function(){

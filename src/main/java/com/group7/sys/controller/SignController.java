@@ -34,7 +34,7 @@ public class SignController {
     public ResultObj signup(UserVo uservo){
 
 
-        uservo.setRole(ROLE_PATIENT);//设置
+        uservo.setRoleId(ROLE_PATIENT);//设置
 
         String pwd = uservo.getPassword();
         String md5Pwd = DigestUtils.md5DigestAsHex(pwd.getBytes());

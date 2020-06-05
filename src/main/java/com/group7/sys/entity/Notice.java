@@ -22,8 +22,8 @@ public class Notice implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @TableId(value = "id", type = IdType.AUTO)
-  private Integer id;
+  @TableId(value = "notice_id", type = IdType.AUTO)
+  private Integer noticeId;
 
   private String title;
 

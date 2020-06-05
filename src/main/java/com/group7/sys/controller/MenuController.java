@@ -50,12 +50,12 @@ public class MenuController {
     //
 
     for (Permission permission : list) {
-      Integer id = permission.getId();
+      Integer id = permission.getPermissionId();
       Integer pid = permission.getPid();
       String title = permission.getTitle();
       String icon = permission.getIcon();
       String href = permission.getHref();
-      Boolean spread = permission.getOpen() == OPEN_TRUE ? true : false;
+      Boolean spread = permission.getOpen();
       treeNodes.add(new TreeNode(id, pid, title, icon, href, spread));
     }
     // 构造层级关系

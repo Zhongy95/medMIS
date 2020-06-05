@@ -20,8 +20,8 @@ public class Permission implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @TableId(value = "id", type = IdType.AUTO)
-  private Integer id;
+  @TableId(value = "permission_id", type = IdType.AUTO)
+  private Integer permissionId;
 
   private Integer pid;
 
@@ -39,10 +39,9 @@ public class Permission implements Serializable {
 
   private String target;
 
-  private Integer open;
+  private Boolean open;
 
   private Integer ordernum;
 
-  /** 状态【0不可用1可用】 */
-  private Integer available;
+  private Boolean available;
 }

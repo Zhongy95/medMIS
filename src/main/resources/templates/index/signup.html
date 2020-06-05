@@ -166,11 +166,12 @@
 					layer.msg(rs.msg);
 					console.log(rs);
 					if(rs.code != 200){
-						layer.msg(rs.msg);
+						layer.msg(rs.msg, {time: 1000});
 					}else{
 						//跳转到templates/system/index/index.html页面
-						layer.msg(rs.msg);
-						location.href="login";
+						layer.msg(rs.msg, {time: 1000}, function(){
+							location.href="login";
+						});
 					}
 				});
 				return false;

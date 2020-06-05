@@ -144,12 +144,9 @@ public class DeptController {
   @RequestMapping("deleteDept")
   public ResultObj deleteDept(DeptVo deptVo){
     try {
-      System.out.println("*********************删除的deptvo"+deptVo.toString());
       deptService.removeById(deptVo.getDeptId());
-
       return ResultObj.DELETE_SUCCESS;
     } catch (Exception e) {
-      System.out.println("*********************删除的deptvo"+deptVo.toString());
       e.printStackTrace();
       return ResultObj.DELETE_ERROR;
     }

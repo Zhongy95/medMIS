@@ -50,7 +50,7 @@ public class MenuController {
     //
 
     for (Permission permission : list) {
-      Integer id = permission.getId();
+      Integer id = permission.getPermission_id();
       Integer pid = permission.getPid();
       String title = permission.getTitle();
       String icon = permission.getIcon();

@@ -20,8 +20,8 @@ public class Permission implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @TableId(value = "id", type = IdType.AUTO)
-  private Integer id;
+  @TableId(value = "permission_id", type = IdType.AUTO)
+  private Integer permission_id;
 
   private Integer pid;
 

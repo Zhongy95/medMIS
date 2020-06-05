@@ -54,7 +54,7 @@ public class User implements Serializable {
   private String phone;
 
   /** 医生个人信息 */
-  private Integer info;
+  private String info;
 
   private Date birthday;
 

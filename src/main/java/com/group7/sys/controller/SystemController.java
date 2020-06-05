@@ -33,7 +33,6 @@ public class SystemController {
     public String toDeptManager(){
         return "system/dept/deptManager";
     }
-
     /**
      * 跳转到部门管理-左
      */
@@ -50,5 +49,33 @@ public class SystemController {
     public String toDeptRight(){
         return "system/dept/deptRight";
     }
+
+
+    /**
+     * 跳转到菜单管理-左
+     */
+
+    @RequestMapping("toMenuLeft")
+    public String toMenuLeft(){
+        return "system/menu/menuLeft";
+    }
+    /**
+     * 跳转到菜单管理-右
+     */
+
+    @RequestMapping("toMenuRight")
+    public String toMenuRight(){
+        return "system/menu/menuRight";
+    }
+
+    /**
+     * 跳转到菜单管理
+     */
+
+    @RequestMapping("toMenuManager")
+    public String toMenuManager(){
+        return "system/menu/menuManager";
+    }
+
 
 }

@@ -106,7 +106,7 @@
 
             cols: [ [
                 {type: 'checkbox', fixed: 'left'},
-                {field: 'id', title: 'ID', align: 'center'},
+                {field: 'liId', title: 'ID', align: 'center'},
                 {field: 'loginname', title: '登陆用户名', align: 'center'},
                 {field: 'loginip', title: '登陆IP', align: 'center'},
                 {field: 'logintime', title: '登陆时间', align: 'center'},
@@ -155,9 +155,9 @@
                     var ids="";
                     $.each(data,function(index, item) {
                         if (index ==0) {
-                            ids += "ids=" + item.id;
+                            ids += "ids=" + item.liId;
                         }
-                        else{ids += "&ids=" + item.id;}
+                        else{ids += "&ids=" + item.liId;}
                     })
                     $.post("/api/loginfo/batchDeleteLoginfo",ids, function(res){
                         if (res.code==200){
@@ -179,7 +179,7 @@
         //删除
         function deleteInfo(data) {
             layer.confirm('你确定要删除这条数据吗？',{icon: 3,title:'提示'},function (index) {
-                $.post("/api/loginfo/deleteLoginfo",{id:data.id},function (res) {
+                $.post("/api/loginfo/deleteLoginfo",{liId:data.liId},function (res) {
                     if (res.code==200){
                         tableIns.reload({
                             where:"",

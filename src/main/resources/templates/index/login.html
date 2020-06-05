@@ -81,7 +81,7 @@
 				layer.msg("这只是做个样式，至于功能，你见过哪个后台能这样登录的？还是老老实实的找管理员去注册吧",{
 					time:5000
 				});
-				location.href="/sys/signup";
+				location.href="/signup";
 			})
 
 
@@ -89,11 +89,11 @@
 				var btn =  $(this);
 				//设置登录按钮  为不可点击
 				btn.text("跳转中...").attr("disabled","disabled").addClass("layui-disabled");
-				location.href="/sys/signup";
+				location.href="/signup";
 			});
 
 			$("#sign").click(function () {
-				location.href="/sys/signup";
+				location.href="/signup";
 			})
 			//登录按钮
 			form.on("submit(login)",function(data){
@@ -104,18 +104,29 @@
 				$.post("/api/login/",data.field,function(rs){
 					//设置登录按钮 恢复可点击   在前端防止 重复点击
 					btn.text("登录").attr("disabled",false).removeClass("layui-disabled");
-					layer.msg(rs.msg);
 					console.log(rs);
-					if(rs.code != 200){
-						layer.msg(rs.msg);
+					if(rs.user.roleId === 0){
+						layer.msg("管理员登录成功", {
+							time: 200
+						}, function(){
+							location.href="/home";
+						});
 						// $.get("/login/getCode",function (code) {
 						// 	$("#img").attr("src","/login/getCode");
 						// })
-					}else{
-						//跳转到templates/system/index/index.html页面
-						layer.msg(rs.msg);
-						window.location.href="/sys/home";
-					}
+					}else if(rs.user.roleId === 5){
+						layer.msg("登录成功", {
+							time: 200
+						}, function(){
+							location.href="/home";
+						})
+				}}).error(function(event){
+					layer.msg(event.responseJSON.message, {
+						time: 1000
+					}, function(){
+						location.href="/login";
+					});
+
 				});
 				return false;
 			});

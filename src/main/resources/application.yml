@@ -52,6 +52,8 @@ shiro:
   anon-urls:
     - /index.html*
     - /sys/login*
+    - /login*
+    - /signup*
     - /api/login/*
     - /resources/**
     - /signup.html*

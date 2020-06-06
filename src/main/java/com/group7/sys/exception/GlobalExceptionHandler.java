@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<?> accessDeniedExceptionHandler(AuthenticationException e, WebRequest request) {
-        return handler(new medMISException(e.getMessage(), HttpStatus.FORBIDDEN), request);
+        return handler(new medMISException(e.getMessage(), HttpStatus.UNAUTHORIZED), request);
     }
 
     @ExceptionHandler(Exception.class)

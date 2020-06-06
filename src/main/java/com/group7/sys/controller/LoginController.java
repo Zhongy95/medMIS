@@ -46,7 +46,7 @@ public class LoginController {
       return activerUser;
     } catch (AuthenticationException e) {
       e.printStackTrace();
-      throw new medMISException("无效的账号或密码", HttpStatus.FORBIDDEN);
+      throw new medMISException("无效的账号或密码", HttpStatus.UNAUTHORIZED);
     }
   }
 }

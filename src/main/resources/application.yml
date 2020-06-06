@@ -51,13 +51,11 @@ shiro:
   hash-iterations: 1
   anon-urls:
     - /index.html*
-    - /sys/login*
     - /login*
     - /signup*
     - /api/login/*
     - /resources/**
     - /signup.html*
-    - /sys/signup*
     - /api/signup/*
   login-url: /index.html
   log-out-url: /login/logout*

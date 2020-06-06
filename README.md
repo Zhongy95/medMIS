@@ -23,7 +23,7 @@ JDK1.8、MYSQL8、Maven3.6.3+
 
 ### 2.导入数据
 
-在mysql中运行medmis.sql，向数据库中导入数据
+在mysql中运行/dumps文件夹下的最新sql，向数据库中导入数据
 
 ### 3.修改环境
 
@@ -202,9 +202,14 @@ noticeManager.html
 
 建议给IDEA安装Google-Java-Format和Save-Actions插件，在保存时自动格式化代码，使代码更美观
 
-### 2.尽量不要出现常数
+IDEA必须安装lombok插件 否则会报错
 
-常数统一集合在/common/contrast，返回的集中在/common/ResultObj
+### 2.增加新功能与改bug
+
+增加新功能时，请新建分支feature/【功能名】，调试完成后在分支内commit+push。最后merge到master上。
+
+修改bug时，请新建分支hotfix/【修改内容】，调试完成后在分支内commit+push。最后merge到master上。
+
 
 ### 3.获得当前用户的信息
 
@@ -222,3 +227,7 @@ noticeManager.html
 
 或者参考已有的界面。不懂得用的就去开头的b站视频那里选一个章节看一下。
 
+建议跟着那个b站视频看几期，比如公告管理那几p
+### 2.尽量不要出现常数
+
+常数统一集合在/common/contrast，返回的集中在/common/ResultObj

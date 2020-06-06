@@ -62,6 +62,7 @@ public class DeptController {
     this.deptService.page(page, queryWrapper);
 
     return new DataGridView(page.getTotal(), page.getRecords());
+
   }
   /**
    * 添加部门

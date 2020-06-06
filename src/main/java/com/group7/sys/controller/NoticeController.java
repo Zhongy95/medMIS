@@ -8,10 +8,12 @@ import com.group7.sys.common.ResultObj;
 import com.group7.sys.common.WebUtils;
 import com.group7.sys.entity.Notice;
 import com.group7.sys.entity.User;
+import com.group7.sys.exception.medMISException;
 import com.group7.sys.service.NoticeService;
 import com.group7.sys.vo.NoticeVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -63,7 +65,7 @@ public class NoticeController {
    * @return
    */
   @RequestMapping("addNotice")
-  public ResultObj addNotice(NoticeVo noticeVo) {
+  public ResultObj addNotice(NoticeVo noticeVo) throws medMISException {
     try {
       noticeVo.setCreatetime(new Date());
       User user = (User) WebUtils.getSession().getAttribute("user");
@@ -73,7 +75,7 @@ public class NoticeController {
 
     } catch (Exception e) {
       e.printStackTrace();
-      return ResultObj.ADD_ERROR;
+      throw new medMISException("添加失败", HttpStatus.UNAUTHORIZED);
     }
   }
 
@@ -84,14 +86,14 @@ public class NoticeController {
    * @return
    */
   @RequestMapping("updateNotice")
-  public ResultObj updateNotice(NoticeVo noticeVo) {
+  public ResultObj updateNotice(NoticeVo noticeVo) throws medMISException {
     try {
       this.noticeService.updateById(noticeVo);
       return ResultObj.UPDATE_SUCCESS;
 
     } catch (Exception e) {
       e.printStackTrace();
-      return ResultObj.UPDATE_ERROR;
+      throw new medMISException("更改失败", HttpStatus.UNAUTHORIZED);
     }
   }
   /**
@@ -101,13 +103,13 @@ public class NoticeController {
    * @return
    */
   @RequestMapping("deleteNotice")
-  public ResultObj deleteNotice(NoticeVo noticeVo) {
+  public ResultObj deleteNotice(NoticeVo noticeVo) throws medMISException {
     try {
       noticeService.removeById(noticeVo);
       return ResultObj.DELETE_SUCCESS;
     } catch (Exception e) {
       e.printStackTrace();
-      return ResultObj.DELETE_ERROR;
+      throw new medMISException("删除失败", HttpStatus.UNAUTHORIZED);
     }
   }
 
@@ -118,7 +120,7 @@ public class NoticeController {
    * @return
    */
   @RequestMapping("batchDeleteNotice")
-  public ResultObj batchDeleteNotice(NoticeVo noticeVo) {
+  public ResultObj batchDeleteNotice(NoticeVo noticeVo) throws medMISException {
     try {
       Collection<Serializable> idList = new ArrayList<>();
       for (Integer id : noticeVo.getIds()) {
@@ -128,7 +130,7 @@ public class NoticeController {
       return ResultObj.DELETE_SUCCESS;
     } catch (Exception e) {
       e.printStackTrace();
-      return ResultObj.DELETE_ERROR;
+      throw new medMISException("删除失败", HttpStatus.UNAUTHORIZED);
     }
   }
 }

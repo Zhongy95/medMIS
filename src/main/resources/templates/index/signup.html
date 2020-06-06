@@ -15,35 +15,15 @@
 </head>
 <body class="SignBody">
 
-<!--	<form class="layui-form">-->
-<!--		<div class="login_face"><img src="/resources/images/face.jpg" class="userAvatar"></div>-->
-<!--		<div class="layui-form-item input-item">-->
-<!--			<label for="loginname">用户名</label>-->
-<!--			<input type="text" placeholder="请输入用户名" autocomplete="off" id="loginname" name="loginname" class="layui-input" lay-verify="required">-->
-<!--		</div>-->
-<!--		<div class="layui-form-item input-item">-->
-<!--			<label for="password">密码</label>-->
-<!--			<input type="password" placeholder="请输入密码" autocomplete="off" id="password" name="password" class="layui-input" lay-verify="required">-->
-<!--		</div>-->
-<!--&lt;!&ndash;		<div class="layui-form-item input-item" id="imgCode">&ndash;&gt;-->
-<!--&lt;!&ndash;			<label for="code">验证码</label>&ndash;&gt;-->
-<!--&lt;!&ndash;			<input type="text" placeholder="请输入验证码" autocomplete="off" id="code" class="layui-input">&ndash;&gt;-->
-<!--&lt;!&ndash;			<img src="/resources/images/code.jpg" >&ndash;&gt;-->
-<!--&lt;!&ndash;		</div>&ndash;&gt;-->
-<!--		<div class="layui-form-item">-->
-<!--			<button class="layui-btn layui-block" lay-filter="login" lay-submit>登录</button>-->
-<!--		</div>-->
-
-<!--&lt;!&ndash;		<div class="layui-form-item layui-row">&ndash;&gt;-->
-<!--&lt;!&ndash;			<a href="javascript:;" class="seraph icon-qq layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>&ndash;&gt;-->
-<!--&lt;!&ndash;			<a href="javascript:;" class="seraph icon-wechat layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>&ndash;&gt;-->
-<!--&lt;!&ndash;			<a href="javascript:;" class="seraph icon-sina layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a>&ndash;&gt;-->
-<!--&lt;!&ndash;		</div>&ndash;&gt;-->
-
-
 
 <!--	</form>-->
 	<form class="layui-form" action="">
+		<div class="layui-form-item" >
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+				<legend>开始注册</legend>
+			</fieldset>
+		</div>
+
 		<div class="layui-form-item" >
 			<label class="layui-form-label">账号名</label>
 			<div class="layui-input-inline">
@@ -120,6 +100,7 @@
 			<div class="layui-input-block">
 				<button class="layui-btn" lay-submit lay-filter="sign">立即提交</button>
 				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				<button class="layui-btn" lay-filter="back" onclick="window.location.href='/login'">返回登录页</button>
 			</div>
 		</div>
 	</form>
@@ -173,26 +154,21 @@
 							location.href="login";
 						});
 					}
+				}).error(function(event){
+					layer.msg(event.responseJSON.message, {
+						time: 1000
+					}, function(){
+						location.href="signup";
+					});
+
 				});
 				return false;
 			});
+
 			var mainIndex;
 			var url;
-			form.on("(signin)",function (){
-						mainIndex = layer.open({
-							type:1,
-							content : $("#addOrUpdateDiv"),
-							area:['800px','550px'],
-							title:'添加公告',
-							success:function () {
-								$("#dataFrm")[0].reset();
-								//重置富文本编译器的内容为空
-								//layedit.setContent(editIndex,"");
-								url="/api/notice/addNotice";
-							}
-						});
-			}
-			);
+
+
 
 			//表单输入效果
 			$(".loginBody .input-item").click(function(e){

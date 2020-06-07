@@ -196,6 +196,27 @@ noticeManager.html
 
 同样，接收到了id就进行修改即可。
 
+### 6.不会写querywarpper怎么办？
+
+mybatis支持使用SQL来查询数据库，写一个mapper interface的方法，然后通过@Select（"一条sql"）的注解定义这个方法如何查询数据库，写好mapper的方法后通过service层的套娃，在controller调用service层的套娃方法。插入和删除也可以，注解具体写法请自行探索。
+
+例子参考mapper/PermissionMapper的getMenu方法。
+
+### 7.接口错误处理
+controller的返回值除了返回template中的视图资源，还可以返回实体对象或者数据传输对象。
+
+如果只需要返回成功或者失败的信息，你可以偷懒使用ResultObj对象，前端在请求成功的方法里处理请求失败的情况，但是不建议这样做。
+
+推荐的做法是通过JAVA的异常处理。在可能请求失败的地方捕获并抛出异常，抛出异常统一使用medMISException，需要填入异常信息和Httpstatus，然后前端根据Httpstatus是否为200来处理接口的请求。
+
+例子参考controler/LoginController和templates/index/login.html。
+
+### 8.设置接口权限
+
+TODO
+
+
+
 ## 3.一些规范
 
 ### 1.代码格式
@@ -206,9 +227,9 @@ IDEA必须安装lombok插件 否则会报错
 
 ### 2.增加新功能与改bug
 
-增加新功能时，请新建分支feature/【功能名】，调试完成后在分支内commit+push。最后merge到master上。
+增加新功能时，请新建分支feature/【功能名】，调试完成后在分支内commit+push。最后merge到master上，不确定写得有没有问题可以@一个伙伴检查一下再合并。
 
-修改bug时，请新建分支hotfix/【修改内容】，调试完成后在分支内commit+push。最后merge到master上。
+修改bug时，请新建分支hotfix/【修改内容】，调试完成后在分支内commit+push。最后merge到master上，不确定写得有没有问题可以@一个伙伴检查一下再合并。
 
 
 ### 3.获得当前用户的信息
@@ -228,6 +249,6 @@ IDEA必须安装lombok插件 否则会报错
 或者参考已有的界面。不懂得用的就去开头的b站视频那里选一个章节看一下。
 
 建议跟着那个b站视频看几期，比如公告管理那几p
-### 2.尽量不要出现常数
+### 6.尽量不要出现常数
 
 常数统一集合在/common/contrast，返回的集中在/common/ResultObj

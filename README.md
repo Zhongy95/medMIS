@@ -227,9 +227,9 @@ IDEA必须安装lombok插件 否则会报错
 
 ### 2.增加新功能与改bug
 
-增加新功能时，请新建分支feature/【功能名】，调试完成后在分支内commit+push。最后merge到master上，不确定写得有没有问题可以@一个伙伴检查一下再合并。
+增加新功能时，请新建分支feature/【功能名】，修改bug时，请新建分支hotfix/【修改内容】。内容用-分隔，如feature/user-login。
 
-修改bug时，请新建分支hotfix/【修改内容】，调试完成后在分支内commit+push。最后merge到master上，不确定写得有没有问题可以@一个伙伴检查一下再合并。
+写好代码后pull一下master分支，在本地处理冲突，调试完成后再push。最后merge到master上，不确定写得有没有问题可以@一个伙伴检查一下再合并。
 
 
 ### 3.获得当前用户的信息

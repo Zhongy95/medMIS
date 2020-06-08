@@ -220,6 +220,7 @@ controller的返回值除了返回template中的视图资源，还可以返回�
 
 ~~建议给IDEA安装Google-Java-Format和Save-Actions插件，在保存时自动格式化代码，使代码更美观~~
 千万不要做这个，他会在你修改JS的时候格式化，然后会炸穿你的thymeleaf
+
 IDEA必须安装lombok插件 否则会报错
 
 ### 2.增加新功能与改bug

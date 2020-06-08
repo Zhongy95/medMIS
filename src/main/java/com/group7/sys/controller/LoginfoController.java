@@ -39,12 +39,12 @@ public class LoginfoController {
     IPage<Loginfo> page = new Page<>(loginfoVo.getPage(), loginfoVo.getLimit());
     QueryWrapper<Loginfo> querywrapper = new QueryWrapper<Loginfo>();
     querywrapper.like(
-        StringUtils.isNotBlank(loginfoVo.getLoginname()), "loginname", loginfoVo.getLoginname());
+        StringUtils.isNotBlank(loginfoVo.getLoginName()), "login_name", loginfoVo.getLoginName());
     querywrapper.like(
-        StringUtils.isNotBlank(loginfoVo.getLoginip()), "loginip", loginfoVo.getLoginip());
-    querywrapper.ge(loginfoVo.getStartTime() != null, "logintime", loginfoVo.getStartTime());
-    querywrapper.ge(loginfoVo.getEndTime() != null, "logintime", loginfoVo.getEndTime());
-    querywrapper.orderByDesc("logintime"); // 排序依据
+        StringUtils.isNotBlank(loginfoVo.getLoginIp()), "login_ip", loginfoVo.getLoginIp());
+    querywrapper.ge(loginfoVo.getStartTime() != null, "login_time", loginfoVo.getStartTime());
+    querywrapper.ge(loginfoVo.getEndTime() != null, "login_time", loginfoVo.getEndTime());
+    querywrapper.orderByDesc("login_time"); // 排序依据
     this.loginfoService.page(page, querywrapper);
 
     return new DataGridView(page.getTotal(), page.getRecords());
@@ -57,9 +57,9 @@ public class LoginfoController {
    * @return
    */
   @RequestMapping("deleteLoginfo")
-  public ResultObj deleteLoginfo(Integer id) {
+  public ResultObj deleteLoginfo(Integer liId) {
     try {
-      this.loginfoService.removeById(id);
+      this.loginfoService.removeById(liId);
       return ResultObj.DELETE_SUCCESS;
     } catch (Exception e) {
       e.printStackTrace();

@@ -41,8 +41,8 @@ public class DeptController {
     List<Dept> list = this.deptService.list();
     List<TreeNode> treeNodes = new ArrayList<>();
     for (Dept dept : list) {
-      Boolean spread = dept.getOpen();
-      treeNodes.add(new TreeNode(dept.getDeptId(), dept.getPid(), dept.getName(), spread));
+      Boolean spread = dept.getOpened();
+      treeNodes.add(new TreeNode(dept.getDeptId(), dept.getPid(), dept.getDeptName(), spread));
     }
     return new DataGridView(treeNodes);
   }
@@ -52,10 +52,10 @@ public class DeptController {
     IPage<Dept> page = new Page<>(deptVo.getPage(), deptVo.getLimit());
     QueryWrapper<Dept> queryWrapper = new QueryWrapper<>();
     // 输入给定查询条件，默认无
-    queryWrapper.like(StringUtils.isNotBlank(deptVo.getName()), "name", deptVo.getName());
+    queryWrapper.like(StringUtils.isNotBlank(deptVo.getDeptName()), "dept_name", deptVo.getDeptName());
     queryWrapper.like(StringUtils.isNotBlank(deptVo.getAddress()), "address", deptVo.getAddress());
     queryWrapper.like(StringUtils.isNotBlank(deptVo.getRemark()), "remark", deptVo.getRemark());
-    queryWrapper.orderByDesc("ordernum"); // 排序依据
+    queryWrapper.orderByDesc("order_num"); // 排序依据
     queryWrapper
         .eq(deptVo.getDeptId() != null, "dept_id", deptVo.getDeptId())
         .or()
@@ -74,7 +74,7 @@ public class DeptController {
   @RequestMapping("addDept")
   public ResultObj addDept(DeptVo deptVo) {
     try {
-      deptVo.setCreatetime(new Date());
+      deptVo.setCreateTime(new Date());
       deptService.save(deptVo);
       return ResultObj.ADD_SUCCESS;
     } catch (Exception e) {
@@ -92,11 +92,11 @@ public class DeptController {
   public Map<String, Object> loadDeptMaxOrderNum() {
     Map<String, Object> map = new HashMap<String, Object>();
     QueryWrapper<Dept> queryWrapper = new QueryWrapper<>();
-    queryWrapper.orderByDesc("ordernum");
+    queryWrapper.orderByDesc("order_num");
     IPage<Dept> page = new Page<>(1, 1);
     List<Dept> list = deptService.page(page, queryWrapper).getRecords();
     if (list.size() > 0) {
-      map.put("value", list.get(0).getOrdernum() + 1);
+      map.put("value", list.get(0).getOrderNum() + 1);
     } else {
       map.put("value", 1);
     }

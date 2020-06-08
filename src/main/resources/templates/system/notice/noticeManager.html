@@ -33,7 +33,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">发布人</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="opername"   autocomplete="off" class="layui-input">
+                    <input type="text" name="operName"   autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">
@@ -117,8 +117,8 @@
 <div id="showNoticeDiv" style="display: none;padding: 10px">
     <h3 id="notice_title" style="text-align: center"></h3>
     <div style="text-align: right;margin-top: 2%">
-        发布人：<span id="notice_opername"></span>
-        发布时间：<span id="notice_createtime"></span>
+        发布人：<span id="notice_operName"></span>
+        发布时间：<span id="notice_createTime"></span>
     </div>
     <hr>
     <div id="notice_content"></div>
@@ -159,8 +159,8 @@
                 {type: 'checkbox', fixed: 'left'},
                 {field: 'noticeId', title: 'ID', align: 'center'},
                 {field: 'title', title: '公告标题', align: 'center'},
-                {field: 'opername', title: '操作人', align: 'center'},
-                {field: 'createtime', title: '创建时间', align: 'center'},
+                {field: 'operName', title: '操作人', align: 'center'},
+                {field: 'createTime', title: '创建时间', align: 'center'},
                 {fixed: 'right', title: '操作', toolbar: '#noticeRowBar', align: 'center'}
             ] ],
             done:function (data, curr, count) {
@@ -277,8 +277,8 @@
                 title:'查看公告',
                 success:function () {
                     $("#notice_title").html(data.title);
-                    $("#notice_opername").html(data.opername);
-                    $("#notice_createtime").html(data.createtime);
+                    $("#notice_operName").html(data.operName);
+                    $("#notice_createTime").html(data.createTime);
                     $("#notice_content").html(data.content);
                 }
             });

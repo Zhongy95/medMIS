@@ -25,9 +25,9 @@ public class Loginfo implements Serializable {
   @TableId(value = "li_id", type = IdType.AUTO)
   private Integer liId;
 
-  private String loginname;
+  private String loginName;
 
-  private String loginip;
+  private String loginIp;
 
-  private Date logintime;
+  private Date loginTime;
 }

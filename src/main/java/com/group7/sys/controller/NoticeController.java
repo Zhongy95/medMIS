@@ -50,10 +50,10 @@ public class NoticeController {
     // 输入给定查询条件，默认无
     queryWrapper.like(StringUtils.isNotBlank(noticeVo.getTitle()), "title", noticeVo.getTitle());
     queryWrapper.like(
-        StringUtils.isNotBlank(noticeVo.getOpername()), "opername", noticeVo.getOpername());
-    queryWrapper.ge(noticeVo.getStartTime() != null, "createtime", noticeVo.getStartTime());
-    queryWrapper.le(noticeVo.getEndTime() != null, "createtime", noticeVo.getEndTime());
-    queryWrapper.orderByDesc("createtime"); // 排序依据
+        StringUtils.isNotBlank(noticeVo.getOperName()), "oper_name", noticeVo.getOperName());
+    queryWrapper.ge(noticeVo.getStartTime() != null, "create_time", noticeVo.getStartTime());
+    queryWrapper.le(noticeVo.getEndTime() != null, "create_time", noticeVo.getEndTime());
+    queryWrapper.orderByDesc("create_time"); // 排序依据
 
     this.noticeService.page(page, queryWrapper);
 
@@ -69,9 +69,9 @@ public class NoticeController {
   @RequestMapping("addNotice")
   public ResultObj addNotice(NoticeVo noticeVo) throws medMISException {
     try {
-      noticeVo.setCreatetime(new Date());
+      noticeVo.setCreateTime(new Date());
       User user = (User) WebUtils.getSession().getAttribute("user");
-      noticeVo.setOpername(user.getName());
+      noticeVo.setOperName(user.getName());
       this.noticeService.saveOrUpdate(noticeVo);
       return ResultObj.ADD_SUCCESS;
 

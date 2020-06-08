@@ -31,7 +31,7 @@ public class Permission implements Serializable {
   private String title;
 
   /** 权限编码[只有type= permission才有 user:view] */
-  private String percode;
+  private String perCode;
 
   private String icon;
 
@@ -39,9 +39,9 @@ public class Permission implements Serializable {
 
   private String target;
 
-  private Boolean open;
+  private Boolean opened;
 
-  private Integer ordernum;
+  private Integer orderNum;
 
   private Boolean available;
 }

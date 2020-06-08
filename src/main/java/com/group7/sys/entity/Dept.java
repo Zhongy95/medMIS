@@ -27,9 +27,9 @@ public class Dept implements Serializable {
 
   private Integer pid;
 
-  private String name;
+  private String deptName;
 
-  private Boolean open;
+  private Boolean opened;
 
   private String remark;
 
@@ -38,7 +38,7 @@ public class Dept implements Serializable {
   private Boolean available;
 
   /** 排序码【为了调试显示顺序】 */
-  private Integer ordernum;
+  private Integer orderNum;
 
-  private Date createtime;
+  private Date createTime;
 }

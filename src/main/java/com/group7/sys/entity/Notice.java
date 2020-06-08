@@ -29,7 +29,7 @@ public class Notice implements Serializable {
 
   private String content;
 
-  private Date createtime;
+  private Date createTime;
 
-  private String opername;
+  private String operName;
 }

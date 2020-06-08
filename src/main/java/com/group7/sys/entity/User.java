@@ -1,5 +1,6 @@
 package com.group7.sys.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -26,10 +27,12 @@ public class User implements Serializable {
   private Integer userId;
 
   /** 真实姓名 */
+  @TableField(value = "user_name")
   private String name;
 
-  private String loginname;
+  private String loginName;
 
+  @TableField(value = "user_password")
   private String password;
 
   /** 性别.1为男，0为女 */

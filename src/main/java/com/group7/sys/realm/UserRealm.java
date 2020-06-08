@@ -34,7 +34,7 @@ public class UserRealm extends AuthorizingRealm {
   protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
       throws AuthenticationException {
     QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("loginname", authenticationToken.getPrincipal().toString());
+    queryWrapper.eq("login_name", authenticationToken.getPrincipal().toString());
     // 通过用户名从数据库中查询出该用户
     User user = userService.getOne(queryWrapper);
 

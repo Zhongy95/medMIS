@@ -122,8 +122,8 @@
             <div class="layui-inline">
                 <label class="layui-form-label">是否展开</label>
                 <div class="layui-input-block">
-                    <input type="radio" name="open" value="1" title="展开" >
-                    <input type="radio" name="open" value="0" title="不展开"checked="">
+                    <input type="radio" name="opened" value="1" title="展开" >
+                    <input type="radio" name="opened" value="0" title="不展开"checked="">
                 </div>
             </div>
         </div>
@@ -131,7 +131,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">排序码</label>
                 <div class="layui-input-block">
-                    <input type="text" id="ordernum" name="ordernum" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入部门排序码[>0]">
+                    <input type="text" id="orderNum" name="orderNum" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入部门排序码[>0]">
                 </div>
             </div>
         </div>
@@ -186,10 +186,10 @@
                 {field: 'icon', title: '是否可用', align: 'center',width:'100',templet:function (d) {
                         return d.available==1?'<font color="blue">可用</font>':'<font color="red">不可用</font>';
                     }},
-                {field: 'open', title: '是否展开', align: 'center',width:'100',templet:function (d) {
-                        return d.open==1?'<font color="blue">展开</font>':'<font color="red">不展开</font>';
+                {field: 'opened', title: '是否展开', align: 'center',width:'100',templet:function (d) {
+                        return d.opened==1?'<font color="blue">展开</font>':'<font color="red">不展开</font>';
                     }},
-                {field: 'ordernum', title: '排序码', align: 'center',width:'80'},
+                {field: 'orderNum', title: '排序码', align: 'center',width:'80'},
                 {field: 'target', title: 'TARGET', align: 'center',width:'80',hide:true},
                 {fixed: 'right', title: '操作', toolbar: '#menuRowBar', align: 'center',width:'180'}
             ] ],
@@ -258,7 +258,7 @@
                     url="/api/menu/addMenu";
                     //初始化排序码
                     $.get("/api/menu/loadMenuMaxOrderNum",function (res) {
-                        $("#ordernum").val(res.value);
+                        $("#orderNum").val(res.value);
                     });
                     //设置下拉树的value值为空
                     selectTree.selectVal("");

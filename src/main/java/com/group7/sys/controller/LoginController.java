@@ -25,11 +25,11 @@ public class LoginController {
   @Autowired private LoginfoService loginfoService;
 
   @RequestMapping("/")
-  public ActiverUser login(String loginname, String password) throws medMISException {
+  public ActiverUser login(String loginName, String password) throws medMISException {
 
     Subject subject = SecurityUtils.getSubject();
 
-    AuthenticationToken token = new UsernamePasswordToken(loginname, password);
+    AuthenticationToken token = new UsernamePasswordToken(loginName, password);
     try {
       subject.login(token);
       ActiverUser activerUser = (ActiverUser) subject.getPrincipal();
@@ -37,10 +37,9 @@ public class LoginController {
 
       // 记录登录日志
       Loginfo entity = new Loginfo();
-      entity.setLoginname(
-          activerUser.getUser().getName() + "-" + activerUser.getUser().getLoginname());
-      entity.setLoginip(WebUtils.getRequest().getRemoteAddr());
-      entity.setLogintime(new Date());
+      entity.setLoginName(activerUser.getUser().getName() + "-" + activerUser.getUser().getName());
+      entity.setLoginIp(WebUtils.getRequest().getRemoteAddr());
+      entity.setLoginTime(new Date());
       loginfoService.save(entity);
 
       return activerUser;

@@ -57,7 +57,7 @@ public class MenuController {
       String title = permission.getTitle();
       String icon = permission.getIcon();
       String href = permission.getHref();
-      Boolean spread = permission.getOpen();
+      Boolean spread = permission.getOpened();
       treeNodes.add(new TreeNode(id, pid, title, icon, href, spread));
     }
     // 构造层级关系
@@ -81,7 +81,7 @@ public class MenuController {
     List<Permission> list = this.permissionService.list(queryWrapper);
     List<TreeNode> treeNodes = new ArrayList<>();
     for (Permission menu : list) {
-      Boolean spread = menu.getOpen();
+      Boolean spread = menu.getOpened();
       treeNodes.add(new TreeNode(menu.getPermissionId(), menu.getPid(), menu.getTitle(), spread));
     }
     return new DataGridView(treeNodes);
@@ -95,7 +95,7 @@ public class MenuController {
     queryWrapper.eq("type", TYPE_MENU); // 控制只能查询菜单
     queryWrapper.like(
         StringUtils.isNotBlank(permissionVo.getTitle()), "title", permissionVo.getTitle());
-    queryWrapper.orderByDesc("ordernum"); // 排序依据
+    queryWrapper.orderByDesc("order_num"); // 排序依据
     queryWrapper
         .eq(permissionVo.getPermissionId() != null, "permission_id", permissionVo.getPermissionId())
         .or()
@@ -133,11 +133,11 @@ public class MenuController {
     Map<String, Object> map = new HashMap<String, Object>();
     QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
     queryWrapper.eq("type", TYPE_MENU); // 控制只能查询菜单
-    queryWrapper.orderByDesc("ordernum");
+    queryWrapper.orderByDesc("order_num");
     IPage<Permission> page = new Page<>(1, 1);
     List<Permission> list = permissionService.page(page, queryWrapper).getRecords();
     if (list.size() > 0) {
-      map.put("value", list.get(0).getOrdernum() + 1);
+      map.put("value", list.get(0).getOrderNum() + 1);
     } else {
       map.put("value", 1);
     }

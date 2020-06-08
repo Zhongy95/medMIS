@@ -30,7 +30,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">部门名称</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="name"  autocomplete="off" class="layui-input">
+                    <input type="text" name="deptName"  autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">
@@ -95,7 +95,7 @@
                 <label class="layui-form-label">部门名称</label>
                 <div class="layui-input-block">
                     <input type="hidden" name="deptId">
-                    <input type="text" name="name" lay-verify="required" autocomplete="off"
+                    <input type="text" name="deptName" lay-verify="required" autocomplete="off"
                            class="layui-input input-radius" placeholder="请输入部门名称">
                 </div>
             </div>
@@ -125,8 +125,8 @@
             <div class="layui-inline">
                 <label class="layui-form-label">是否展开</label>
                 <div class="layui-input-block">
-                    <input type="radio" name="open" value="1" title="展开" checked="">
-                    <input type="radio" name="open" value="0" title="不展开">
+                    <input type="radio" name="opened" value="1" title="展开" checked="">
+                    <input type="radio" name="opened" value="0" title="不展开">
                 </div>
             </div>
         </div>
@@ -134,7 +134,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">排序码</label>
                 <div class="layui-input-block">
-                    <input type="text" id="ordernum" name="ordernum" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入部门排序码[>0]">
+                    <input type="text" id="orderNum" name="orderNum" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入部门排序码[>0]">
                 </div>
             </div>
         </div>
@@ -181,17 +181,17 @@
             cols: [ [
                 {field: 'deptId', title: 'ID', align: 'center',width:'50'},
                 {field: 'pid', title: '父级部门ID', align: 'center',width:'100'},
-                {field: 'name', title: '部门名称', align: 'center',width:'150'},
+                {field: 'deptName', title: '部门名称', align: 'center',width:'150'},
                 {field: 'remark', title: '部门备注', align: 'center',width:'150'},
                 {field: 'address', title: '部门地址', align: 'center',width:'100'},
                 {field: 'available', title: '是否可用', align: 'center',width:'100',templet:function (d) {
                         return d.available==1?'<font color="blue">可用</font>':'<font color="red">不可用</font>';
                     }},
-                {field: 'open', title: '是否展开', align: 'center',width:'100',templet:function (d) {
-                        return d.open==1?'<font color="blue">展开</font>':'<font color="red">不展开</font>';
+                {field: 'opened', title: '是否展开', align: 'center',width:'100',templet:function (d) {
+                        return d.opened==1?'<font color="blue">展开</font>':'<font color="red">不展开</font>';
                     }},
-                {field: 'ordernum', title: '排序码', align: 'center',width:'80'},
-                {field: 'createtime', title: '部门创建时间', align: 'center',width:'160'},
+                {field: 'orderNum', title: '排序码', align: 'center',width:'80'},
+                {field: 'create_time', title: '部门创建时间', align: 'center',width:'160'},
                 {fixed: 'right', title: '操作', toolbar: '#deptRowBar', align: 'center',width:'180'}
             ] ],
             done:function (data, curr, count) {
@@ -259,7 +259,7 @@
                     url="/api/dept/addDept";
                     //初始化排序码
                     $.get("/api/dept/loadDeptMaxOrderNum",function (res) {
-                        $("#ordernum").val(res.value);
+                        $("#orderNum").val(res.value);
                     });
                     //设置下拉树的value值为空
                     selectTree.selectVal("");
@@ -330,7 +330,7 @@
                 if (resoult.value){
                     layer.msg("当前部门节点有子部门，请选择删除子部门！")
                 }else {
-                    layer.confirm('你确定要删除【' + data.name + '】这个部门吗？', {icon: 3, title: '提示'}, function (index) {
+                    layer.confirm('你确定要删除【' + data.deptName + '】这个部门吗？', {icon: 3, title: '提示'}, function (index) {
                         console.log(data);
                         $.post("/api/dept/deleteDept", {deptId: data.deptId},function (res) {
                             if (res.code == 200) {

@@ -249,3 +249,9 @@ IDEA必须安装lombok插件 否则会报错
 ### 6.尽量不要出现常数
 
 常数统一集合在/common/contrast，返回的集中在/common/ResultObj
+
+## 4.Tips
+
+- 不要人眼调试代码。服务端可以使用IDEA的debug功能，也可以使用Postman测试接口返回的数据，用Postman发请求时如果有请求体，选x-www-form-urlencoded的格式。当然也可以从前端测试接口返回的数据，前端建议使用chrome的F12，在Sources里加断点调试。
+
+- 善用搜索引擎。

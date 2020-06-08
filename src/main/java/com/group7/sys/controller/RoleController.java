@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
  * 前端控制器
  *
  * @author Robin
- * @since 2020-06-02
+ * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/api/sys/permission/")
+@RequestMapping("/api/sys/role/")
 @RequiresRoles("ADMIN")
-public class PermissionController {}
+public class RoleController {}

@@ -213,9 +213,13 @@ controller的返回值除了返回template中的视图资源，还可以返回�
 
 ### 8.设置接口权限
 
-TODO
+如果一个controller中的接口是只能某个或某些角色的用户使用，需要使用@RequiresRoles注解做权限控制
 
+如果在controller的类加上注解@RequiresRoles("ADMIN")，那么这个类的所有接口都需要ADMIN权限
 
+或者如果只是在controller类中的某个方法加上注解@RequiresRoles("DOCTOR")，那么就只是这个方法需要DOCTOR权限
+
+角色的权限码有ADMIN、DOCTOR、PHARMACIST、LABORATORIAN、NURSE、PATIENT
 
 ## 3.一些规范
 

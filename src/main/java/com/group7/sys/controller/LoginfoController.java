@@ -9,6 +9,7 @@ import com.group7.sys.entity.Loginfo;
 import com.group7.sys.service.LoginfoService;
 import com.group7.sys.vo.LoginfoVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,6 +27,7 @@ import java.util.Collection;
  */
 @RestController
 @RequestMapping("/api/loginfo/")
+@RequiresRoles("ADMIN")
 public class LoginfoController {
 
   @Autowired private LoginfoService loginfoService;

@@ -93,7 +93,7 @@ JDK1.8、MYSQL8、Maven3.6.3+
 
 以notice（公告管理）为例子，做一个会分页的查询
 
-####1.创建NoticeVo
+#### 1.创建NoticeVo
 
 noticeVo可以用来体现查询条件与限定初始显示的页面情况。
 
@@ -125,14 +125,7 @@ noticeManager.html
 
 ![image-20200602234445084](mdpicture/image-20200602234445084.png)
 
-####5.修改菜单地址
-
-在数据库中的sys_permission里，添加/修改你的菜单地址，以接口形式表示。
-
-![image-20200602234445084](mdpicture/image-20200602234445084.png)
-
-
-#### 6.启动应用查看有无bug
+#### 5.启动应用查看有无bug
 
 ![image-20200602234649776](mdpicture/image-20200602234649776.png)
 

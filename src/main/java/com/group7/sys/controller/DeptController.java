@@ -10,6 +10,7 @@ import com.group7.sys.entity.Dept;
 import com.group7.sys.service.DeptService;
 import com.group7.sys.vo.DeptVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -25,6 +26,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/api/dept/")
+@RequiresRoles("ADMIN")
 public class DeptController {
 
   @Autowired private DeptService deptService;
@@ -62,15 +64,15 @@ public class DeptController {
     this.deptService.page(page, queryWrapper);
 
     return new DataGridView(page.getTotal(), page.getRecords());
-
   }
   /**
    * 添加部门
+   *
    * @param deptVo
    * @return
    */
   @RequestMapping("addDept")
-  public ResultObj addDept(DeptVo deptVo){
+  public ResultObj addDept(DeptVo deptVo) {
     try {
       deptVo.setCreatetime(new Date());
       deptService.save(deptVo);
@@ -83,33 +85,34 @@ public class DeptController {
 
   /**
    * 加载排序码
+   *
    * @return
    */
   @RequestMapping("loadDeptMaxOrderNum")
-  public Map<String,Object> loadDeptMaxOrderNum(){
-    Map<String,Object> map = new HashMap<String,Object>();
+  public Map<String, Object> loadDeptMaxOrderNum() {
+    Map<String, Object> map = new HashMap<String, Object>();
     QueryWrapper<Dept> queryWrapper = new QueryWrapper<>();
     queryWrapper.orderByDesc("ordernum");
-    IPage<Dept> page = new Page<>(1,1);
-    List<Dept> list = deptService.page(page,queryWrapper).getRecords();
-    if (list.size()>0){
-      map.put("value",list.get(0).getOrdernum()+1);
-    }else {
-      map.put("value",1);
+    IPage<Dept> page = new Page<>(1, 1);
+    List<Dept> list = deptService.page(page, queryWrapper).getRecords();
+    if (list.size() > 0) {
+      map.put("value", list.get(0).getOrdernum() + 1);
+    } else {
+      map.put("value", 1);
     }
     return map;
   }
 
   /**
    * 更新部门
+   *
    * @param deptVo
    * @return
    */
   @RequestMapping("updateDept")
-  public ResultObj updateDept(DeptVo deptVo){
+  public ResultObj updateDept(DeptVo deptVo) {
     try {
       deptService.updateById(deptVo);
-
 
       return ResultObj.UPDATE_SUCCESS;
     } catch (Exception e) {
@@ -120,30 +123,32 @@ public class DeptController {
 
   /**
    * 检查当前部门是否有子部门
+   *
    * @param deptVo
    * @return
    */
   @RequestMapping("checkDeptHasChildrenNode")
-  public Map<String,Object> checkDeptHasChildrenNode(DeptVo deptVo){
-    Map<String,Object> map = new HashMap<String, Object>();
+  public Map<String, Object> checkDeptHasChildrenNode(DeptVo deptVo) {
+    Map<String, Object> map = new HashMap<String, Object>();
     QueryWrapper<Dept> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("pid",deptVo.getDeptId());
+    queryWrapper.eq("pid", deptVo.getDeptId());
     List<Dept> list = deptService.list(queryWrapper);
-    if (list.size()>0){
-      map.put("value",true);
-    }else {
-      map.put("value",false);
+    if (list.size() > 0) {
+      map.put("value", true);
+    } else {
+      map.put("value", false);
     }
     return map;
   }
 
   /**
    * 删除部门
+   *
    * @param deptVo
    * @return
    */
   @RequestMapping("deleteDept")
-  public ResultObj deleteDept(DeptVo deptVo){
+  public ResultObj deleteDept(DeptVo deptVo) {
     try {
       deptService.removeById(deptVo.getDeptId());
       return ResultObj.DELETE_SUCCESS;

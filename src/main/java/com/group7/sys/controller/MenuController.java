@@ -15,6 +15,8 @@ import com.group7.sys.service.impl.PermissionServiceImpl;
 import com.group7.sys.vo.PermissionVo;
 import com.group7.sys.vo.PermissionVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,8 +66,7 @@ public class MenuController {
     return new DataGridView(list2);
   }
 
-  /**菜单管理开始**/
-
+  /** 菜单管理开始* */
   @Autowired private PermissionService permissionService;
 
   /**
@@ -75,8 +76,8 @@ public class MenuController {
    */
   @RequestMapping("loadMenuManagerLeftTreeJson")
   public DataGridView loadMenuManagerLeftTreeJson() {
-    QueryWrapper<Permission> queryWrapper=new QueryWrapper<>();
-    queryWrapper.eq("type", TYPE_MENU); //控制只能查询菜单
+    QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
+    queryWrapper.eq("type", TYPE_MENU); // 控制只能查询菜单
     List<Permission> list = this.permissionService.list(queryWrapper);
     List<TreeNode> treeNodes = new ArrayList<>();
     for (Permission menu : list) {
@@ -91,13 +92,14 @@ public class MenuController {
     IPage<Permission> page = new Page<>(permissionVo.getPage(), permissionVo.getLimit());
     QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
     // 输入给定查询条件，默认无
-    queryWrapper.eq("type", TYPE_MENU); //控制只能查询菜单
-    queryWrapper.like(StringUtils.isNotBlank(permissionVo.getTitle()), "title", permissionVo.getTitle());
+    queryWrapper.eq("type", TYPE_MENU); // 控制只能查询菜单
+    queryWrapper.like(
+        StringUtils.isNotBlank(permissionVo.getTitle()), "title", permissionVo.getTitle());
     queryWrapper.orderByDesc("ordernum"); // 排序依据
     queryWrapper
-            .eq(permissionVo.getPermissionId() != null, "permission_id", permissionVo.getPermissionId())
-            .or()
-            .eq(permissionVo.getPid() != null, "pid", permissionVo.getPid());
+        .eq(permissionVo.getPermissionId() != null, "permission_id", permissionVo.getPermissionId())
+        .or()
+        .eq(permissionVo.getPid() != null, "pid", permissionVo.getPid());
 
     this.permissionService.page(page, queryWrapper);
 
@@ -105,13 +107,14 @@ public class MenuController {
   }
   /**
    * 添加菜单
+   *
    * @param permissionVo
    * @return
    */
   @RequestMapping("addMenu")
-  public ResultObj addMenu(PermissionVo permissionVo){
+  public ResultObj addMenu(PermissionVo permissionVo) {
     try {
-      permissionVo.setType(TYPE_MENU);//添加类型
+      permissionVo.setType(TYPE_MENU); // 添加类型
       permissionService.save(permissionVo);
       return ResultObj.ADD_SUCCESS;
     } catch (Exception e) {
@@ -122,34 +125,35 @@ public class MenuController {
 
   /**
    * 加载排序码
+   *
    * @return
    */
   @RequestMapping("loadMenuMaxOrderNum")
-  public Map<String,Object> loadMenuMaxOrderNum(){
-    Map<String,Object> map = new HashMap<String,Object>();
+  public Map<String, Object> loadMenuMaxOrderNum() {
+    Map<String, Object> map = new HashMap<String, Object>();
     QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("type", TYPE_MENU); //控制只能查询菜单
+    queryWrapper.eq("type", TYPE_MENU); // 控制只能查询菜单
     queryWrapper.orderByDesc("ordernum");
-    IPage<Permission> page = new Page<>(1,1);
-    List<Permission> list = permissionService.page(page,queryWrapper).getRecords();
-    if (list.size()>0){
-      map.put("value",list.get(0).getOrdernum()+1);
-    }else {
-      map.put("value",1);
+    IPage<Permission> page = new Page<>(1, 1);
+    List<Permission> list = permissionService.page(page, queryWrapper).getRecords();
+    if (list.size() > 0) {
+      map.put("value", list.get(0).getOrdernum() + 1);
+    } else {
+      map.put("value", 1);
     }
     return map;
   }
 
   /**
    * 更新菜单
+   *
    * @param permissionVo
    * @return
    */
   @RequestMapping("updateMenu")
-  public ResultObj updateMenu(PermissionVo permissionVo){
+  public ResultObj updateMenu(PermissionVo permissionVo) {
     try {
       permissionService.updateById(permissionVo);
-
 
       return ResultObj.UPDATE_SUCCESS;
     } catch (Exception e) {
@@ -160,31 +164,33 @@ public class MenuController {
 
   /**
    * 检查当前菜单是否有子菜单
+   *
    * @param permissionVo
    * @return
    */
   @RequestMapping("checkMenuHasChildrenNode")
-  public Map<String,Object> checkMenuHasChildrenNode(PermissionVo permissionVo){
-    Map<String,Object> map = new HashMap<String, Object>();
+  public Map<String, Object> checkMenuHasChildrenNode(PermissionVo permissionVo) {
+    Map<String, Object> map = new HashMap<String, Object>();
     QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("type", TYPE_MENU); //控制只能查询菜单
-    queryWrapper.eq("pid",permissionVo.getPermissionId());
+    queryWrapper.eq("type", TYPE_MENU); // 控制只能查询菜单
+    queryWrapper.eq("pid", permissionVo.getPermissionId());
     List<Permission> list = permissionService.list(queryWrapper);
-    if (list.size()>0){
-      map.put("value",true);
-    }else {
-      map.put("value",false);
+    if (list.size() > 0) {
+      map.put("value", true);
+    } else {
+      map.put("value", false);
     }
     return map;
   }
 
   /**
    * 删除菜单
+   *
    * @param permissionVo
    * @return
    */
   @RequestMapping("deleteMenu")
-  public ResultObj deleteMenu(PermissionVo permissionVo){
+  public ResultObj deleteMenu(PermissionVo permissionVo) {
     try {
       permissionService.removeById(permissionVo.getPermissionId());
 
@@ -194,7 +200,5 @@ public class MenuController {
       return ResultObj.DELETE_ERROR;
     }
   }
-  /**菜单管理结束**/
-
-
+  /** 菜单管理结束* */
 }

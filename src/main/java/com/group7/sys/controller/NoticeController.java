@@ -12,6 +12,7 @@ import com.group7.sys.exception.medMISException;
 import com.group7.sys.service.NoticeService;
 import com.group7.sys.vo.NoticeVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ import java.util.Date;
  */
 @RestController
 @RequestMapping("/api/notice/")
+@RequiresRoles("ADMIN")
 public class NoticeController {
 
   @Autowired private NoticeService noticeService;

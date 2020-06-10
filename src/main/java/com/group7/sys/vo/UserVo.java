@@ -12,6 +12,9 @@ public class UserVo extends User {
     private static final long serialVersionUID = 1L;
 
 
+    private Integer Page = 1;
+
+    private Integer limit = 10;
 
 
 

@@ -69,4 +69,18 @@ public class User implements Serializable {
 
   /** 医生职称 */
   private String jobTitle;
+
+  /**部门名称*/
+  @TableField(exist = false)
+  private String deptname;
+
+  /**角色名称*/
+  @TableField(exist = false)
+  private String rolename;
+
+  /**确认密码*/
+  @TableField(exist = false)
+  private String password_enter=password;
+
+
 }

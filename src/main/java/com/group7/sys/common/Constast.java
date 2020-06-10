@@ -28,10 +28,14 @@ public interface Constast {
   public static final Boolean OPEN_FALSE = false;
 
   /*角色类型*/
-  public static final Integer ROLE_ADMIN = 0;
+  public static final Integer ROLE_ADMIN = 6;
   public static final Integer ROLE_DOCTOR = 1;
   public static final Integer ROLE_PHARMACIST = 2;
   public static final Integer ROLE_LABORATORIAN = 3;
   public static final Integer ROLE_NURSE = 4;
   public static final Integer ROLE_PATIENT = 5;
+
+  /** 默认密码*/
+
+  public static final String USER_DEFAULT_PWD = "123456";
 }

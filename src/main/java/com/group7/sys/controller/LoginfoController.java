@@ -53,7 +53,7 @@ public class LoginfoController {
   /**
    * 删除
    *
-   * @param id
+   * @param liId
    * @return
    */
   @RequestMapping("deleteLoginfo")

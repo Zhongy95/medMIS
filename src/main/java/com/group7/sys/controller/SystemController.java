@@ -53,4 +53,13 @@ public class SystemController {
   public String toMenuManager() {
     return "system/menu/menuManager";
   }
+
+  /** 跳转到医生管理 */
+  @RequestMapping("toDoctorManager")
+  public String toDoctorManager() {
+    return "system/user/doctorManager";
+  }
+
+
+
 }

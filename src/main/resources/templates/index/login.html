@@ -107,19 +107,11 @@
                 //设置登录按钮 恢复可点击   在前端防止 重复点击
                 btn.text("登录").attr("disabled", false).removeClass("layui-disabled");
                 console.log(rs);
-                if (rs.user.roleId === 0) {
-                    layer.msg("管理员登录成功", {
-                        time: 200
-                    }, function () {
-                        location.href = "/home";
-                    });
-                } else if (rs.user.roleId === 5) {
-                    layer.msg("登录成功", {
-                        time: 200
-                    }, function () {
-                        location.href = "/home";
-                    })
-                }
+                layer.msg("登录成功", {
+                    time: 200
+                }, function () {
+                    location.href = "/home";
+                });
             }).error(function (event) {
                 layer.msg(event.responseJSON.message, {
                     time: 1000

@@ -25,29 +25,29 @@
     <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form layui-form-pane">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">公告标题</label>
+                <label class="layui-form-label">病人ID</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="title"  autocomplete="off" class="layui-input">
+                    <input type="text" name="patientId"  autocomplete="off" class="layui-input">
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">发布人</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="operName"   autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">开始时间</label>
-                <div class="layui-input-inline">
-                    <input type="tel" name="startTime"id="startTime" readonly="readonly" placeholder="yyyy-MM-dd HH:mm:ss"  class="layui-input">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">结束时间</label>
-                <div class="layui-input-inline">
-                    <input type="tel" name="endTime" id="endTime" readonly="readonly" placeholder="yyyy-MM-dd HH:mm:ss" class="layui-input">
-                </div>
-            </div>
+<!--            <div class="layui-inline">-->
+<!--                <label class="layui-form-label">发布人</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="text" name="operName"   autocomplete="off" class="layui-input">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-inline">-->
+<!--                <label class="layui-form-label">开始时间</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="tel" name="startTime"id="startTime" readonly="readonly" placeholder="yyyy-MM-dd HH:mm:ss"  class="layui-input">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-inline">-->
+<!--                <label class="layui-form-label">结束时间</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="tel" name="endTime" id="endTime" readonly="readonly" placeholder="yyyy-MM-dd HH:mm:ss" class="layui-input">-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center;">
@@ -160,6 +160,7 @@
                 {field: 'registerId', title: 'ID', align: 'center',width:'100'},
                 {field: 'patientId', title: '病人ID', align: 'center',width:'100'},
                 {field: 'doctorId', title: '医生ID', align: 'center',width:'100'},
+                {field: 'doctorName', title: '医生姓名', align: 'center',width:'100'},
                 {field: 'paymentId', title: '缴费单号', align: 'center',width:'100'},
                 {field: 'createTime', title: '创建时间', align: 'center',width:'100'},
                 {field: 'paymentIfdone', title: '是否完成缴费', align: 'center',width:'100'},

@@ -1,5 +1,6 @@
 package com.group7.bus.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -41,6 +42,10 @@ public class Register implements Serializable {
     private Boolean paymentIfdone;
 
     private Boolean available;
+
+    /**医生姓名*/
+    @TableField(exist = false)
+    private String doctorName;
 
 
 }

@@ -6,13 +6,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/bus/")
-@RequiresRoles("ADMIN")
-public class BusinessController {
+@RequiresRoles("PATIENT")
+public class PatientController {
 
-    /** 跳转到挂号时间管理 */
+    /** 跳转到挂号时间 */
     @RequestMapping("toDoctorTimeManager")
     public String toDoctorTimeManager() {
-        return "/business/register/doctorTimeManager";
+        return "business/register/doctorTimeManager";
+    }
+
+    /** 跳转到挂号时间-左 */
+    @RequestMapping("toDoctorTimeLeft")
+    public String toDeptLeft() {
+        return "business/register/doctorTimeLeft";
+    }
+    /** 跳转到挂号时间-右 */
+    @RequestMapping("toDoctorTimeRight")
+    public String toDeptRight() {
+        return "business/register/doctorTimeRight";
     }
 
     /** 跳转到挂号管理 */

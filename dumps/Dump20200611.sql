@@ -33,7 +33,7 @@ CREATE TABLE `bus_doctortime` (
   UNIQUE KEY `bus_doctortime_doctortime_id_uindex` (`doctortime_id`),
   KEY `bus_doctortime_sys_user_user_id_fk` (`doctor_id`),
   CONSTRAINT `bus_doctortime_sys_user_user_id_fk` FOREIGN KEY (`doctor_id`) REFERENCES `sys_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='医生工作时间';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='医生工作时间';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,7 +123,7 @@ CREATE TABLE `bus_payment` (
   KEY `bus_payment_bus_paymentitem_paymentitem_id_fk` (`paymentitem_id`),
   CONSTRAINT `bus_payment_bus_paymentitem_paymentitem_id_fk` FOREIGN KEY (`paymentitem_id`) REFERENCES `bus_paymentitem` (`paymentitem_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `bus_payment_sys_user_user_id_fk` FOREIGN KEY (`patient_id`) REFERENCES `sys_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='缴费单';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='缴费单';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -149,7 +149,7 @@ CREATE TABLE `bus_paymentitem` (
   PRIMARY KEY (`paymentitem_id`),
   UNIQUE KEY `bus_paymentitem_paymentitem_id_uindex` (`paymentitem_id`),
   UNIQUE KEY `bus_paymentitem_paymentitem_name_uindex` (`paymentitem_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='缴费项目';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='缴费项目';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,7 +214,7 @@ CREATE TABLE `bus_register` (
   `available` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`register_id`),
   UNIQUE KEY `bus_register_register_id_uindex` (`register_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='挂号单';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='挂号单';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

@@ -46,6 +46,7 @@ public class NoticeController {
   @RequestMapping("loadAllNotice")
   public DataGridView loadAllNotice(NoticeVo noticeVo) {
     IPage<Notice> page = new Page<>(noticeVo.getPage(), noticeVo.getLimit());
+
     QueryWrapper<Notice> queryWrapper = new QueryWrapper<>();
     // 输入给定查询条件，默认无
     queryWrapper.like(StringUtils.isNotBlank(noticeVo.getTitle()), "title", noticeVo.getTitle());

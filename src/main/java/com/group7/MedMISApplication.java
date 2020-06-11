@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @MapperScan(basePackages = {"com.group7.sys.mapper"})
+@MapperScan(basePackages = {"com.group7.bus.mapper"})
 public class MedMISApplication {
 
   public static void main(String[] args) {

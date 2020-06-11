@@ -25,10 +25,12 @@ public interface DoctortimeMapper extends BaseMapper<Doctortime> {
           + "SELECT user_name AS doctor_name, bus_doctortime.* FROM bus_doctortime "
           + "JOIN sys_user ON doctor_id = user_id  \n"
           + "<if test='m.pid!=null or m.deptId!=null'> "
-          + "JOIN sys_dept ON sys_dept.dept_id = sys_user.dept_id WHERE </if>\n"
+          + "JOIN sys_dept ON sys_dept.dept_id = sys_user.dept_id </if>\n"
+          + "<if test='m.pid!=null or m.deptId!=null or m.doctorName!=null'> WHERE </if>"
           + "<if test='m.deptId!=null'> sys_dept.dept_id = #{m.deptId} </if>"
-          + "<if test='m.doctorName!=null'> user_name = #{m.doctorName} </if>\n"
           + "<if test='m.pid!=null'> pid = #{m.pid} </if>\n"
+          + "<if test='(m.pid!=null or m.deptId!=null) and m.doctorName!=null'> AND </if>\n"
+          + "<if test='m.doctorName!=null'> user_name = #{m.doctorName} </if>\n"
           + "</script>")
   IPage<DoctortimeVo> loadAllDoctortime(Map m, IPage<DoctortimeVo> page);
 }

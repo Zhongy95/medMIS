@@ -124,6 +124,9 @@
                 where: data.field,
                 page: {
                     curr: 1
+                },
+                done: function(res, curr, count){
+                    delete this.where.doctorName;
                 }
             });
             return false;

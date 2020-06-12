@@ -46,6 +46,10 @@ public class Register implements Serializable {
     /**医生姓名*/
     @TableField(exist = false)
     private String doctorName;
-
-
+    /*病人姓名*/
+    @TableField(exist = false)
+    private String patientName;
+    /*科室*/
+    @TableField(exist = false)
+    private String deptName;
 }

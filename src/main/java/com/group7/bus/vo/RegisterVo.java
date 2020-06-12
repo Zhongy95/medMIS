@@ -20,9 +20,12 @@ public class RegisterVo extends Register {
 
   private Integer limit = 10;
 
-//  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//  private Date startTime;
-//
-//  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//  private Date endTime;
+  private Integer[] registerIds;
+
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private java.util.Date startTime;
+
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private Date endTime;
+
 }

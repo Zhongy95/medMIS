@@ -22,10 +22,9 @@ import java.util.Map;
 public interface DoctortimeMapper extends BaseMapper<Doctortime> {
 
   @Select("<script>"
-          + "SELECT user_name AS doctor_name, bus_doctortime.* FROM bus_doctortime "
-          + "JOIN sys_user ON doctor_id = user_id  \n"
-          + "<if test='m.pid!=null or m.deptId!=null'> "
-          + "JOIN sys_dept ON sys_dept.dept_id = sys_user.dept_id </if>\n"
+          + "SELECT user_name AS doctor_name, dept_name, bus_doctortime.* FROM bus_doctortime "
+          + "JOIN sys_user ON doctor_id = user_id \n"
+          + "JOIN sys_dept ON sys_dept.dept_id = sys_user.dept_id \n"
           + "<if test='m.pid!=null or m.deptId!=null or m.doctorName!=null'> WHERE </if>"
           + "<if test='m.deptId!=null'> sys_dept.dept_id = #{m.deptId} </if>"
           + "<if test='m.pid!=null'> pid = #{m.pid} </if>\n"

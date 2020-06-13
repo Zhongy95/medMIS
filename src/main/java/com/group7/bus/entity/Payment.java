@@ -1,5 +1,6 @@
 package com.group7.bus.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -69,6 +70,18 @@ public class Payment implements Serializable {
      * 缴费是否完成
      */
     private Boolean ifdone;
+
+    /**
+     * 缴费项目名称
+     */
+    @TableField(exist = false)
+    private String paymentitemName;
+
+    /**
+     * 缴费病人名称
+     */
+    @TableField(exist = false)
+    private String patientName;
 
 
 }

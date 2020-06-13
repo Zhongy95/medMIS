@@ -4,6 +4,11 @@ package com.group7.bus.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.group7.bus.entity.Doctortime;
+import com.group7.bus.entity.Payment;
+import com.group7.bus.service.DoctortimeService;
+import com.group7.bus.service.PaymentService;
+import com.group7.bus.vo.DoctortimeVo;
 import com.group7.sys.common.DataGridView;
 import com.group7.bus.entity.Register;
 import com.group7.bus.service.RegisterService;
@@ -29,6 +34,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import static com.group7.sys.common.Constast.PAYMENT_REGISTER;
+
 /**
  * <p>
  * 挂号单 前端控制器
@@ -47,7 +54,9 @@ public class RegisterController {
 
     @Autowired private DeptService deptService;
 
+    @Autowired private DoctortimeService doctortimeService;
 
+    @Autowired private PaymentService paymentService;
     /**
      * 查询
      *
@@ -76,6 +85,9 @@ public class RegisterController {
             register.setDeptName((dept.getDeptName()));
             User userpat =userService.getById(register.getPatientId());
             register.setPatientName(userpat.getName());
+            Payment payment =paymentService.getById(register.getPaymentId());
+            register.setPaymentIfdone(payment.getIfdone());
+            this.registerService.updateById(register);
         }
         System.out.println(page.getRecords());
         return new DataGridView(page.getTotal(), page.getRecords());
@@ -87,19 +99,68 @@ public class RegisterController {
      * @param registerVo
      * @return
      */
-    @RequestMapping("addRegister")
-    public ResultObj addRegister(RegisterVo registerVo) throws medMISException {
-        try {
-            registerVo.setCreatetime(new Date());
-            User user = (User) WebUtils.getSession().getAttribute("user");
-            registerVo.setRegisterId(registerVo.getRegisterId());
-            registerVo.setPatientId(registerVo.getPatientId());
-            registerVo.setDoctorId(registerVo.getDoctorId());
-            registerVo.setPaymentId(registerVo.getPaymentId());
-            registerVo.setPaymentIfdone(registerVo.getPaymentIfdone());
-            registerVo.setAvailable(registerVo.getAvailable());
+//    @RequestMapping("addRegister")
+//    public ResultObj addRegister(RegisterVo registerVo) throws medMISException {
+//        try {
+//            registerVo.setCreatetime(new Date());
+//            User user = (User) WebUtils.getSession().getAttribute("user");
+//            registerVo.setRegisterId(registerVo.getRegisterId());
+//            registerVo.setPatientId(registerVo.getPatientId());
+//            registerVo.setDoctorId(registerVo.getDoctorId());
+//            registerVo.setPaymentId(registerVo.getPaymentId());
+//            registerVo.setPaymentIfdone(registerVo.getPaymentIfdone());
+//            registerVo.setAvailable(registerVo.getAvailable());
+//
+//            this.registerService.saveOrUpdate(registerVo);
+//            return ResultObj.ADD_SUCCESS;
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw new medMISException("添加失败", HttpStatus.UNAUTHORIZED);
+//        }
+//    }
 
-            this.registerService.saveOrUpdate(registerVo);
+    /**
+     * 添加
+     *
+     * @param doctortimeVo
+     * @return
+     */
+    @RequestMapping("addRegister")
+    public ResultObj addRegister(DoctortimeVo doctortimeVo) throws medMISException {
+        try {
+
+            Register registeradd = new Register();
+            registeradd.setDoctortimeId(doctortimeVo.getDoctortimeId());
+            registeradd.setDoctorId(doctortimeVo.getDoctorId());
+            User userdoc = userService.getById(registeradd.getDoctorId());
+            registeradd.setDoctorName(userdoc.getName());
+            registeradd.setCreatetime(new Date());
+            User patient = (User) WebUtils.getSession().getAttribute("user");
+            registeradd.setPatientId(patient.getUserId());
+            System.out.println("************价格为:"+doctortimeVo.getPrice());
+            //挂号提交的同时新建缴费单
+            Payment paymentnew = new Payment();
+            paymentnew.setAmount(doctortimeVo.getPrice());
+            paymentnew.setPatientId(patient.getUserId());
+            paymentnew.setPaymentitemId(PAYMENT_REGISTER);
+            paymentnew.setCreatetime(new Date());
+            this.paymentService.save(paymentnew);
+
+
+            //重新查询，得到id
+            Payment paymentcreated =this.paymentService.getById(paymentnew);
+            registeradd.setPaymentId(paymentcreated.getPaymentId());
+            registeradd.setPaymentIfdone(paymentcreated.getIfdone());
+
+            if(this.doctortimeService.getById(doctortimeVo).getRemain()<=0){
+                throw new medMISException("添加失败", HttpStatus.BAD_REQUEST);
+            }
+            //完成挂号后，减少1个余号
+            doctortimeVo.setRemain(doctortimeVo.getRemain()-1);
+            this.doctortimeService.updateById( doctortimeVo);
+
+            this.registerService.saveOrUpdate(registeradd);
             return ResultObj.ADD_SUCCESS;
 
         } catch (Exception e) {
@@ -107,6 +168,7 @@ public class RegisterController {
             throw new medMISException("添加失败", HttpStatus.UNAUTHORIZED);
         }
     }
+
 
 
     @RequestMapping("payRegister")
@@ -130,7 +192,17 @@ public class RegisterController {
     @RequestMapping("deleteRegister")
     public ResultObj deleteRegister(RegisterVo registerVo) throws medMISException {
         try {
-            registerService.removeById(registerVo);
+
+            Register registerdel =this.registerService.getById( registerVo.getRegisterId());
+            //删除缴费单
+            this.paymentService.removeById(registerdel.getPaymentId());
+            //恢复余号
+            Doctortime doctortime = this.doctortimeService.getById(registerdel.getDoctortimeId());
+            doctortime.setRemain(doctortime.getRemain()+1);
+            this.doctortimeService.updateById(doctortime);
+            this.registerService.removeById(registerdel);
+
+
             return ResultObj.DELETE_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();

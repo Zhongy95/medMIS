@@ -70,7 +70,7 @@
 
     </table>
     <div id="paymentToolBar" style="display: none;">
-        <!--<button type="button" lay-event="add" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1"></span>添加</button>-->
+        <button type="button" lay-event="reload" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1"></span>刷新</button>
         <button type="button" lay-event="batchPay" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-rmb"></span>结算全部</button>
     </div>
     <!--<div id="paymentRowBar" style="display: none;">
@@ -157,13 +157,17 @@
             height: "full",
             cols: [ [
                 //{type: 'checkbox', fixed: 'left', width: 50},
-                {field: 'createtime', title: '创建时间', align: 'center', width: 200, totalRowText: '未结算合计'},
-                {field: 'info', title: '内容', align: 'center', width: 350},
+                {field: 'paymentId', title: '缴费单号', align: 'center', width: 100, totalRowText: '未结算合计'},
+                {field: 'patientId', title: '患者诊号', align: 'center', width: 100},
+                {field: 'paymentitemName', title: '缴费类型', align: 'center', width: 100},
+                {field: 'info', title: '内容', align: 'center', width: 200},
+                {field: 'createtime', title: '创建时间', align: 'center', width: 180},
+                {field: 'donetime', title: '完成时间', align: 'center', width: 180},
                 {field: 'ifdone', title: '缴费状态', align: 'center', width: 200, templet: function (d) {
                     if(d.ifdone == 0)
-                        return "<span>未完成</span>";
+                        return "<font color='red'>未完成</font>";
                     else
-                        return "<span>已完成</span>";
+                        return "<font color='blue'>已完成</font>";
                     }},
                 {field: 'amount', title: '金额', align: 'center', width: 150, totalRow: 'true'},
                 {fixed: 'right', title: '操作', toolbar: '#paymentRowBar', align: 'center', width: 153}
@@ -179,10 +183,10 @@
 
                 var Total=0;//统计结算后余额
                 layui.each(data.data,function(index,d){
-                    console.log(d);
+                    // console.log(d);
                     if(!d.ifdone)
                         Total+=Number(d.amount);
-                    console.log(" " + Total + "\n");
+                    // console.log(" " + Total + "\n");
                 });
                 //修改 结算后余额 统计单元格文本
                 this.elem.next().find('.layui-table-total td[data-field="amount"] .layui-table-cell').text(Total);
@@ -206,6 +210,9 @@
             switch (obj.event) {
                 case 'batchPay':
                     batchPay(obj.data);
+                    break;
+                case 'reload':
+                    reload();
                     break;
                 default:
                     break;
@@ -331,6 +338,12 @@
             });
 
         }
+        function reload(){
+            tableIns.reload({
+                where:"",
+            });
+        }
+
     });
 
 </script>

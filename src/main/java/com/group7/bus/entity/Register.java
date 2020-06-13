@@ -31,6 +31,8 @@ public class Register implements Serializable {
       @TableId(value = "register_id", type = IdType.AUTO)
     private Integer registerId;
 
+    private Integer doctortimeId;
+
     private Integer patientId;
 
     private Integer doctorId;

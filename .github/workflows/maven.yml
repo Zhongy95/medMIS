@@ -18,14 +18,13 @@ jobs:
         with:
           skipCommit: true
           args: "--skip-sorting-imports --replace"
-  
-  build:
+
+  docker_push:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
+      - uses: docker/build-push-action@v1
         with:
-          java-version: 1.8
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: zhongy95/medmis
+          tags: latest

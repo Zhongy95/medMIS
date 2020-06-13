@@ -38,4 +38,10 @@ public interface Constast {
   /** 默认密码*/
 
   public static final String USER_DEFAULT_PWD = "123456";
+
+  /** 缴费记录类型*/
+  public static final Integer PAYMENT_REGISTER = 1;
+  public static final Integer PAYMENT_EXAM = 2;
+  public static final Integer PAYMENT_TREATMENT = 3;
+  public static final Integer PAYMENT_MEDICINE = 4;
 }

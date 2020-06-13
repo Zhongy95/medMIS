@@ -27,9 +27,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2 # v2 minimum required
-      - name: Teststep
-        run: |
-          ls
       - name: docker_build
         uses: docker/build-push-action@v1
         with:

@@ -29,13 +29,13 @@ public class PatientController {
     /** 跳转到挂号管理 */
     @RequestMapping("toRegisterManager")
     public String toRegisterManager() {
-        return "/business/register/registerTimeManager";
+        return "business/register/registerTimeManager";
     }
 
     /** 跳转到挂号缴费管理 */
     @RequestMapping("toPaymentManager")
     public String toPaymentManager() {
-        return "/business/register/paymentManager";
+        return "business/register/paymentManager";
     }
 
 }

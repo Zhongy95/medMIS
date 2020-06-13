@@ -29,7 +29,7 @@ public interface DoctortimeMapper extends BaseMapper<Doctortime> {
           + "<if test='m.deptId!=null'> sys_dept.dept_id = #{m.deptId} </if>"
           + "<if test='m.pid!=null'> pid = #{m.pid} </if>\n"
           + "<if test='(m.pid!=null or m.deptId!=null) and m.doctorName!=null'> AND </if>\n"
-          + "<if test='m.doctorName!=null'> user_name = #{m.doctorName} </if>\n"
+          + "<if test='m.doctorName!=null'> user_name LIKE concat('%', #{m.doctorName}, '%')</if>\n"
           + "</script>")
   IPage<DoctortimeVo> loadAllDoctortime(Map m, IPage<DoctortimeVo> page);
 }

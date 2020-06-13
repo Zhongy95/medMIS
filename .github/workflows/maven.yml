@@ -3,7 +3,10 @@
 
 name: Java CI with Maven
 
-on: [create, push, pull_request]
+on:
+  push:
+    branches:    
+      - master
 
 jobs:
   formatting:
@@ -22,6 +25,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout
+        uses: actions/checkout@v2 # v2 minimum required
       - name: Teststep
         run: |
           ls

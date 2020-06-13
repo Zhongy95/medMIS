@@ -19,9 +19,13 @@ jobs:
           skipCommit: true
           args: "--skip-sorting-imports --replace"
 
-  docker_push:
+  build:
     runs-on: ubuntu-latest
     steps:
+      - name: Teststep
+        run: |
+          ls
+      - name: docker_build
       - uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKER_USER }}

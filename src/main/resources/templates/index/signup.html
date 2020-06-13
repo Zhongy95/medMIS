@@ -150,9 +150,11 @@
             //设置登录按钮  为不可点击
             btn.text("注册中...").attr("disabled", "disabled").addClass("layui-disabled");
             console.log(data.field);
+
+            //将String转为Date
             var strdate = data.field.birthday;
             strdate = strdate.replace(/-/g, "/");
-            console.log(strdate);
+
             var Datef = new Date(strdate);
             data.field.birthday = Datef;
             $.post("/api/signup/", data.field, function (rs) {

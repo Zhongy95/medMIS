@@ -182,6 +182,7 @@
             })
         }
 
+
         //页面加载时判断左侧菜单是否显示
         //通过顶部菜单获取左侧菜单
         $(".topLevelMenus li,.mobileTopLevelMenus dd").click(function () {
@@ -310,6 +311,15 @@
                 anim: 5
             });
         });
+
+    }
+    function reload(url){
+
+        var target = "\"[data-url =\'"+url+"\']\"";
+        var target1 = "\'"+url+"\'";
+        console.log(target1);
+         $("[data-url ="+ target1+"]").trigger("click");
+
     }
 </script>
 </body>

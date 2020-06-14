@@ -59,12 +59,14 @@ public class RegisterController {
         IPage<Register> page = new Page<>(registerVo.getPage(), registerVo.getLimit());
 
         QueryWrapper<Register> queryWrapper = new QueryWrapper<>();
+        User user = (User) WebUtils.getSession().getAttribute("user");
+        queryWrapper.eq((registerVo.getPatientId()!=null), "patient_id", user.getUserId());
         // 输入给定查询条件，默认无
         queryWrapper.like((registerVo.getRegisterId()!=null), "register_id", registerVo.getRegisterId());
-        queryWrapper.like((registerVo.getPatientId()!=null), "patient_id", registerVo.getPatientId());
-        queryWrapper.like((registerVo.getDoctorId()!=null), "doctor_id", registerVo.getDoctorId());
-        queryWrapper.like((registerVo.getPaymentId()!=null), "payment_id", registerVo.getPaymentId());
-
+//        queryWrapper.like((registerVo.getPatientId()!=null), "patient_id", registerVo.getPatientId());
+//        queryWrapper.like((registerVo.getDoctorId()!=null), "doctor_id", registerVo.getDoctorId());
+//        queryWrapper.like((registerVo.getPaymentId()!=null), "payment_id", registerVo.getPaymentId());
+//        queryWrapper.like((registerVo.getDeptName()!=null), "dept_name", registerVo.getDeptName());
         queryWrapper.ge(registerVo.getStartTime() != null, "createtime", registerVo.getStartTime());
         queryWrapper.le(registerVo.getEndTime() != null, "createtime", registerVo.getEndTime());
         queryWrapper.orderByDesc("createtime"); // 排序依据

@@ -30,24 +30,24 @@
                     <input type="text" name="registerId"  autocomplete="off" class="layui-input">
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">病人ID</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="patientId"   autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">医生ID</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="doctorId" autocomplete="on" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">缴费单号</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="paymentId" autocomplete="off" class="layui-input">
-                </div>
-            </div>
+<!--            <div class="layui-inline">-->
+<!--                <label class="layui-form-label">科室</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="text" name="deptName"   autocomplete="off" class="layui-input">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-inline">-->
+<!--                <label class="layui-form-label">医生ID</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="text" name="doctorId" autocomplete="on" class="layui-input">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-inline">-->
+<!--                <label class="layui-form-label">缴费单号</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="text" name="paymentId" autocomplete="off" class="layui-input">-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="layui-inline">
                 <label class="layui-form-label">开始时间</label>
                 <div class="layui-input-inline">
@@ -80,10 +80,10 @@
     <table class="layui-hide" id="registerTable" lay-filter="registerTable">
 
     </table>
-    <div id="registerToolBar"style="display: none;">
-        <button type="button" lay-event="add" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1"></span>添加</button>
-        <button type="button" lay-event="batchDelete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>批量删除</button>
-    </div>
+<!--    <div id="registerToolBar"style="display: none;">-->
+<!--        <button type="button" lay-event="add" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1"></span>添加</button>-->
+<!--        <button type="button" lay-event="batchDelete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>批量删除</button>-->
+<!--    </div>-->
     <div id="registerRowBar"style="display: none;">
         <button type="button" lay-event="pay" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-edit"></span>缴费</button>
         <button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
@@ -146,14 +146,14 @@
 </div>
 
 
-查看层
+<!--查看层-->
 <div id="showRegisterDiv" style="display: none;padding: 10px">
     <h3 id="register_title" style="text-align: left"></h3>
     <div style="text-align: center;margin-top: 2%">
         <p>ID：  <span id="registerId"></span></p>
         <P>病人ID：    <span id="registerPatientId"></span></P>
         <p>病人姓名：    <span id="registerPatientName"></span></p>
-        <p>医生ID：    <span id="registerDoctorID"></span></p>
+<!--        <p>医生ID：    <span id="registerDoctorID"></span></p>-->
         <p>医生姓名：    <span id="registerDoctorName"></span></p>
         <p>科室：  <span id="registerDeptName"></span></p>
         <p>创建时间：    <span id="registerCreatetime"></span></p>
@@ -203,7 +203,7 @@
                 {field: 'registerId', title: 'ID', align: 'center',width:'100'},
                 {field: 'patientId', title: '病人ID', align: 'center',width:'100'},
                 {field: 'patientName', title: '病人姓名', align: 'center',width:'100'},
-                {field: 'doctorId', title: '医生ID', align: 'center',width:'100'},
+                // {field: 'doctorId', title: '医生ID', align: 'center',width:'100'},
                 {field: 'doctorName', title: '医生姓名', align: 'center',width:'100'},
                 {field: 'deptName', title: '科室', align: 'center',width:'100'},
                 {field: 'createtime', title: '创建时间', align: 'center',width:'200'},

@@ -17,7 +17,7 @@ spring:
       stat-view-servlet:
         enabled: true
         login-username: root
-        login-password: 2208603
+        login-password: 123456
         url-pattern: /druid/*
 
   servlet:

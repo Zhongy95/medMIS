@@ -36,7 +36,7 @@ public class CodeGenerator_MIS {
     GlobalConfig gc = new GlobalConfig();
     String projectPath = System.getProperty("user.dir");
     //        gc.setOutputDir(projectPath + "/src/main/java");
-    gc.setOutputDir("D:\\MIS\\MedMIS\\src\\main\\java");
+    gc.setOutputDir("D:\\projects\\GitHub\\medMIS\\src\\main\\java");
     gc.setAuthor("Robin");
     gc.setOpen(true); // 当代码生成完毕后是否打开所在文件夹
     // gc.setSwagger2(true); 实体属性 Swagger2 注解
@@ -50,7 +50,7 @@ public class CodeGenerator_MIS {
     // dsc.setSchemaName("public");
     dsc.setDriverName("com.mysql.cj.jdbc.Driver");
     dsc.setUsername("root");
-    dsc.setPassword("2208603");
+    dsc.setPassword("123456");
     mpg.setDataSource(dsc);
 
     // 包配置

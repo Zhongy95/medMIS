@@ -93,57 +93,57 @@
 
 <!--数据表格结束-->
 
-<!--添加和修改弹出层-->
-<div id="addOrUpdateDiv" style="display: none;padding: 10px;margin-right: 4%">
-    <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
+<!--&lt;!&ndash;添加和修改弹出层&ndash;&gt;-->
+<!--<div id="addOrUpdateDiv" style="display: none;padding: 10px;margin-right: 4%">-->
+<!--    <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">-->
 
-        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
-            <legend>添加挂号单</legend>
-        </fieldset>
+<!--        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">-->
+<!--            <legend>添加挂号单</legend>-->
+<!--        </fieldset>-->
 
-                <div class="layui-form-item layui-col-xs6 layui-col-sm6 layui-col-md4">
-                    <label class="layui-form-label">病人ID</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="patientId" id="patientId" placeholder="请输入病人ID" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item layui-col-xs6 layui-col-sm6 layui-col-md4">
-                    <label class="layui-form-label">医生ID</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="doctorId" id="doctorId" placeholder="请输入医生ID" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item layui-col-xs6 layui-col-sm6 layui-col-md4">
-                    <label class="layui-form-label">缴费单号</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="paymentId" id="paymentId"  placeholder="请输入缴费单号" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item layui-col-xs6 layui-col-sm6 layui-col-md4">
-                    <label class="layui-form-label">是否完成</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="paymentIfdone" id="pamentIfdone" placeholder="请输入是否完成" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item layui-col-xs6 layui-col-sm6 layui-col-md4">
-                    <label class="layui-form-label">是否可用</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="available" id="available" placeholder="请输入是否可用" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
+<!--                <div class="layui-form-item layui-col-xs6 layui-col-sm6 layui-col-md4">-->
+<!--                    <label class="layui-form-label">病人ID</label>-->
+<!--                    <div class="layui-input-block">-->
+<!--                        <input type="text" name="patientId" id="patientId" placeholder="请输入病人ID" autocomplete="off" class="layui-input">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="layui-form-item layui-col-xs6 layui-col-sm6 layui-col-md4">-->
+<!--                    <label class="layui-form-label">医生ID</label>-->
+<!--                    <div class="layui-input-block">-->
+<!--                        <input type="text" name="doctorId" id="doctorId" placeholder="请输入医生ID" autocomplete="off" class="layui-input">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="layui-form-item layui-col-xs6 layui-col-sm6 layui-col-md4">-->
+<!--                    <label class="layui-form-label">缴费单号</label>-->
+<!--                    <div class="layui-input-block">-->
+<!--                        <input type="text" name="paymentId" id="paymentId"  placeholder="请输入缴费单号" autocomplete="off" class="layui-input">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="layui-form-item layui-col-xs6 layui-col-sm6 layui-col-md4">-->
+<!--                    <label class="layui-form-label">是否完成</label>-->
+<!--                    <div class="layui-input-block">-->
+<!--                        <input type="text" name="paymentIfdone" id="pamentIfdone" placeholder="请输入是否完成" autocomplete="off" class="layui-input">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="layui-form-item layui-col-xs6 layui-col-sm6 layui-col-md4">-->
+<!--                    <label class="layui-form-label">是否可用</label>-->
+<!--                    <div class="layui-input-block">-->
+<!--                        <input type="text" name="available" id="available" placeholder="请输入是否可用" autocomplete="off" class="layui-input">-->
+<!--                    </div>-->
+<!--                </div>-->
 
-        <div class="layui-form-item">
-            <div class="layui-input-block" style="text-align: center;padding-right: 7%">
-                <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit">
-                    <i class="layui-icon layui-icon-search layui-icon-normal"></i>提交
-                </button>
-                <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm">
-                    <i class="layui-icon layui-icon-refresh"></i><span>重置</span>
-                </button>
-            </div>
-        </div>
-    </form>
-</div>
+<!--        <div class="layui-form-item">-->
+<!--            <div class="layui-input-block" style="text-align: center;padding-right: 7%">-->
+<!--                <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit">-->
+<!--                    <i class="layui-icon layui-icon-search layui-icon-normal"></i>提交-->
+<!--                </button>-->
+<!--                <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm">-->
+<!--                    <i class="layui-icon layui-icon-refresh"></i><span>重置</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </form>-->
+<!--</div>-->
 
 
 <!--查看层-->
@@ -169,6 +169,9 @@
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript">
+
+    var tableIns;
+    
     layui.use(['jquery', 'form', 'layer', 'laydate', 'table','layedit'], function () {
         var $ = layui.jquery;
         var form = layui.form;
@@ -191,7 +194,7 @@
         var editIndex = layedit.build('content');
 
         //初始化表格 加载数据
-        var tableIns = table.render({
+        tableIns = table.render({
             elem: "#registerTable",
             title: "挂号表",
             url: "/api/bus/register/loadAllRegister",
@@ -208,7 +211,12 @@
                 {field: 'deptName', title: '科室', align: 'center',width:'100'},
                 {field: 'createtime', title: '创建时间', align: 'center',width:'200'},
                 {field: 'paymentId', title: '缴费单号', align: 'center',width:'100'},
-                {field: 'paymentIfdone', title: '是否完成缴费', align: 'center',width:'100'},
+                {field: 'paymentIfdone', title: '缴费状态', align: 'center', width: 200, templet: function (d) {
+                        if(d.paymentIfdone == false)
+                            return "<font color='red'>未完成</font>";
+                        else
+                            return "<font color='blue'>已完成</font>";
+                    }},
                 {field: 'icon', title: '是否可用', align: 'center',width:'100',templet:function (d) {
                         return d.available==1?'<font color="blue">可用</font>':'<font color="red">不可用</font>';
                     }},
@@ -287,15 +295,8 @@
         };
         function payRegister(data){
             layer.confirm('你确定要缴费【'+data.registerId+'】吗？',{icon: 3,title:'提示'},function (index) {
-                $.post("/api/bus/register/payRegister",{registerId:data.registerId},function (res) {
-                    if (res.code==200){
-                        tableIns.reload({
-                            //删除成功加载表格时，要重置查询条件
-                            where:"",
-                        });
-                    }
-                    layer.msg(res.msg);
-                });
+                var targeturl ='/bus/patient/toPaymentManager';
+                window.parent.parent.parent.reload(targeturl);
                 layer.close(index);
             });
         }
@@ -357,13 +358,17 @@
 
         //删除
         function deleteInfo(data) {
-            layer.confirm('你确定要删除【'+data.title+'】这条公告吗？',{icon: 3,title:'提示'},function (index) {
+            layer.confirm('你确定要删除【'+data.registerId+'】这条挂号记录吗？',{icon: 3,title:'提示'},function (index) {
                 $.post("/api/bus/register/deleteRegister",{registerId:data.registerId},function (res) {
                     if (res.code==200){
                         tableIns.reload({
                             //删除成功加载表格时，要重置查询条件
                             where:"",
                         });
+                        var payurl ='/bus/patient/toPaymentManager';
+                        window.parent.parent.parent.parent.onlyreload(payurl);
+                        var doctortimeurl ='/bus/patient/toDoctortimeRight';
+                        window.parent.parent.parent.parent.onlyreload(doctortimeurl);
                     }
                     layer.msg(res.msg);
                 });
@@ -405,6 +410,11 @@
         }
 
     });
+    function reloadTable() {
+        tableIns.reload({
+            where:""
+        });
+    }
 
 </script>
 </body>

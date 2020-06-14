@@ -28,6 +28,9 @@ public class ResultObj {
   public static final ResultObj DISPATCH_SUCCESS = new ResultObj(Constast.OK, "分配成功");
   public static final ResultObj DISPATCH_ERROR = new ResultObj(Constast.ERROR, "分配失败");
 
+  public static final ResultObj PAY_SUCCESS = new ResultObj(Constast.OK, "支付成功");
+  public static final ResultObj PAY_ERROR = new ResultObj(Constast.ERROR, "支付失败");
+
   private Integer code;
 
   private String msg;

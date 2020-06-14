@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,13 +53,16 @@ public class DoctortimeController {
     @RequestMapping("loadDoctortimeManagerLeftTreeJson")
     public DataGridView loadDoctortimeManagerLeftTreeJson() {
         QueryWrapper<Dept> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("pid", 2);
+        queryWrapper.eq("pid", 2).or().eq("dept_id", 2);
         List<Dept> list = deptService.list(queryWrapper);
         List<TreeNode> treeNodes = new ArrayList<>();
         for (Dept dept : list) {
-            Boolean spread = dept.getOpened();
             // 如果以后有第二层门诊部门，这里要重新设计pid
-            treeNodes.add(new TreeNode(dept.getDeptId(), 0, dept.getDeptName(), spread));
+            if (dept.getDeptId() == 2)
+                treeNodes.add(new TreeNode(dept.getDeptId(), 0, dept.getDeptName(), true));
+            else
+                treeNodes.add(new TreeNode(dept.getDeptId(), 2, dept.getDeptName(), false));
+                // 2是门诊
         }
         return new DataGridView(treeNodes);
     }
@@ -67,7 +71,9 @@ public class DoctortimeController {
     public DataGridView loadAllDoctortime(DoctortimeVo doctortimeVo) {
         IPage<DoctortimeVo> page = new Page<>(doctortimeVo.getPage(), doctortimeVo.getLimit());
         Map<String,Object> m = new HashMap<>();
-        m.put("deptId", doctortimeVo.getDeptId());
+        Integer deptId = doctortimeVo.getDeptId();
+        if (deptId != null && deptId != 2)
+            m.put("deptId", deptId);
         // pid留着以后扩展用
         m.put("pid", doctortimeVo.getPid());
         m.put("doctorName", doctortimeVo.getDoctorName());

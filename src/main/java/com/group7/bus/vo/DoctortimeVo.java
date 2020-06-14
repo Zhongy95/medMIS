@@ -16,6 +16,8 @@ public class DoctortimeVo extends Doctortime {
 
     private String doctorName;
 
+    private String deptName;
+
     private Integer Page = 1;
 
     private Integer limit = 10;

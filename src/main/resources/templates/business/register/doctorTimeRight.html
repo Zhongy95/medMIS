@@ -123,6 +123,8 @@
                             $.post("/api/bus/register/addRegister", data, function (res) {
                                 if (res.code === 200) {
                                     var targeturl = '/bus/patient/toRegisterManager';
+                                    var payurl ='/bus/patient/toPaymentManager';
+                                    window.parent.parent.parent.onlyreload(payurl);
                                     window.parent.parent.parent.reload(targeturl);
                                     layer.msg(res.msg);
                                 } else if (res.code === 400) {

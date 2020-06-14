@@ -156,7 +156,7 @@ layui.define(["element","jquery"],function(exports){
 				title += '<i class="layui-icon layui-unselect layui-tab-close" data-id="'+tabIdIndex+'">&#x1006;</i>';
 				element.tabAdd(tabFilter, {
 			        title : title,
-			        content :"<iframe src='"+_this.attr("data-url")+"' data-id='"+tabIdIndex+"'></iframe>",
+			        content :"<iframe src='"+_this.attr("data-url")+"' data-id='"+tabIdIndex+"' name='"+_this.attr("data-url")+"' ></iframe>",
 			        id : new Date().getTime()
 			    })
 				//当前窗口内容

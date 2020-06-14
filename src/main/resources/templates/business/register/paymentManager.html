@@ -125,6 +125,8 @@
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript">
+    var tableIns;
+
     layui.use(['jquery', 'form', 'layer', 'laydate', 'table','layedit'], function () {
         var $ = layui.jquery;
         var form = layui.form;
@@ -143,11 +145,9 @@
             type: "datetime"
         });
 
-        //初始化富文本编译器
-        var editIndex = layedit.build('content');
 
         //初始化表格 加载数据
-        var tableIns = table.render({
+        tableIns = table.render({
             elem: "#paymentTable",
             title: "公告数据表格",
             url: "/api/bus/payment/loadRegisterPayment",
@@ -212,7 +212,7 @@
                     batchPay(obj.data);
                     break;
                 case 'reload':
-                    reload();
+                    reloadTable();
                     break;
                 default:
                     break;
@@ -338,13 +338,18 @@
             });
 
         }
-        function reload(){
+        function reloadTable(){
             tableIns.reload({
                 where:"",
             });
         }
 
     });
+    function reloadTable(){
+        tableIns.reload({
+            where:"",
+        });
+    }
 
 </script>
 

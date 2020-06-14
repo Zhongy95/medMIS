@@ -115,17 +115,18 @@
             else {
                 if (obj.event === 'register') {
                     var index = layer.confirm("是否要对" + data.doctorName + "医生挂号？"
-                        , {icon: 3, title: '挂号确认', btn: ['确认并前往挂号页', '取消']}
+                        , {icon: 3, title: '挂号确认', btn: ['确认并前往缴费', '取消']}
                         , function (value, index) {
                             console.log(data);
                             data.startime = new Date(data.startime.replace(/-/g, "/"));
                             data.endtime = new Date(data.endtime.replace(/-/g, "/"));
                             $.post("/api/bus/register/addRegister", data, function (res) {
                                 if (res.code === 200) {
-                                    var targeturl = '/bus/patient/toRegisterManager';
+                                    // var targeturl = '/bus/patient/toRegisterManager';
                                     var payurl ='/bus/patient/toPaymentManager';
-                                    window.parent.parent.parent.onlyreload(payurl);
-                                    window.parent.parent.parent.reload(targeturl);
+
+                                    window.parent.parent.parent.parent.onlyreload(payurl);
+                                    window.parent.parent.parent.parent.reload(payurl);
                                     layer.msg(res.msg);
                                 } else if (res.code === 400) {
                                     layer.msg("余号不足");
@@ -163,6 +164,11 @@
             where:{
                 deptId:deptId
             }
+        });
+    }
+    function reloadTable() {
+        tableIns.reload({
+            where:""
         });
     }
 

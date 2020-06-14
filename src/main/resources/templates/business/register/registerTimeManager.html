@@ -365,6 +365,10 @@
                             //删除成功加载表格时，要重置查询条件
                             where:"",
                         });
+                        var payurl ='/bus/patient/toPaymentManager';
+                        window.parent.parent.parent.parent.onlyreload(payurl);
+                        var doctortimeurl ='/bus/patient/toDoctortimeRight';
+                        window.parent.parent.parent.parent.onlyreload(doctortimeurl);
                     }
                     layer.msg(res.msg);
                 });

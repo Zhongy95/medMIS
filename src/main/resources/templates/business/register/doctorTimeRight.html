@@ -87,6 +87,7 @@
             height: "full-190",
             cols: [ [
                 {field: 'doctorName', title: '医生', align: 'center',width:'120'},
+                {field: 'deptId', title: '门诊id', align: 'center',hide:true},
                 {field: 'deptName', title: '门诊', align: 'center',width:'120'},
                 {field: 'startime', title: '上班时间', align: 'center',width:'180'},
                 {field: 'endtime', title: '下班时间', align: 'center',width:'180'},
@@ -158,7 +159,7 @@
         });
 
     });
-    function reloadTable(deptId) {
+    function reloadTablebyDept(deptId) {
         console.log(deptId);
         tableIns.reload({
             where:{

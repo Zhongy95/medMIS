@@ -323,7 +323,11 @@
 
     function onlyreload(url) {
         if (window.frames[url]!==undefined) {
+            if (url.search("Right")===-1)
                 window.frames[url].reloadTable();
+            else {
+                window.frames["right"].reloadTable();
+            }
         }
     }
 </script>

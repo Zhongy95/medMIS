@@ -49,7 +49,7 @@
         dtree.on("node('deptTree')" ,function(obj){
             // layer.msg(JSON.stringify(obj.param));
             //将树节点的id传到reloadTable方法中
-            window.parent.right.reloadTable(obj.param.nodeId);
+            window.parent.right.reloadTablebyDept(obj.param.nodeId);
         });
     });
 </script>

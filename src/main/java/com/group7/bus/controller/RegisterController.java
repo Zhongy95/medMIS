@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -57,6 +58,9 @@ public class RegisterController {
     @Autowired private DoctortimeService doctortimeService;
 
     @Autowired private PaymentService paymentService;
+
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     /**
      * 查询
      *
@@ -139,10 +143,14 @@ public class RegisterController {
             User patient = (User) WebUtils.getSession().getAttribute("user");
             registeradd.setPatientId(patient.getUserId());
             System.out.println("************价格为:"+doctortimeVo.getPrice());
+
             //挂号提交的同时新建缴费单
             Payment paymentnew = new Payment();
             paymentnew.setAmount(doctortimeVo.getPrice());
             paymentnew.setPatientId(patient.getUserId());
+
+            String content = "挂号医生为"+userdoc.getName()+",挂号时间为"+simpleDateFormat.format(doctortimeVo.getStartime())+"~"+simpleDateFormat.format(doctortimeVo.getEndtime());
+            paymentnew.setInfo(content);
             paymentnew.setPaymentitemId(PAYMENT_REGISTER);
             paymentnew.setCreatetime(new Date());
             this.paymentService.save(paymentnew);

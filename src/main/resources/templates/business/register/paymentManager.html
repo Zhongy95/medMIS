@@ -70,7 +70,7 @@
 
     </table>
     <div id="paymentToolBar" style="display: none;">
-        <button type="button" lay-event="reload" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1"></span>刷新</button>
+        <button type="button" lay-event="reload" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-refresh"></span>刷新</button>
         <button type="button" lay-event="batchPay" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-rmb"></span>结算全部</button>
     </div>
     <!--<div id="paymentRowBar" style="display: none;">
@@ -158,9 +158,9 @@
             cols: [ [
                 //{type: 'checkbox', fixed: 'left', width: 50},
                 {field: 'paymentId', title: '缴费单号', align: 'center', width: 100, totalRowText: '未结算合计'},
-                {field: 'patientId', title: '患者诊号', align: 'center', width: 100},
+                {field: 'patientName', title: '患者姓名', align: 'center', width: 100},
                 {field: 'paymentitemName', title: '缴费类型', align: 'center', width: 100},
-                {field: 'info', title: '内容', align: 'center', width: 200},
+                {field: 'info', title: '内容', align: 'center', width: 250},
                 {field: 'createtime', title: '创建时间', align: 'center', width: 180},
                 {field: 'donetime', title: '完成时间', align: 'center', width: 180},
                 {field: 'ifdone', title: '缴费状态', align: 'center', width: 200, templet: function (d) {

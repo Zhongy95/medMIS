@@ -118,9 +118,10 @@ public class PaymentController {
                 if(payment.getIfdone()!=true){
                     payment.setIfdone(true);
                     payment.setDonetime(new Date());
+                    this.paymentService.updateById(payment);
                 }
             }
-            this.paymentService.updateBatchById(page.getRecords());
+            //this.paymentService.updateBatchById(page.getRecords());
             return ResultObj.PAY_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();

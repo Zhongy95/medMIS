@@ -22,6 +22,7 @@ import com.group7.sys.exception.medMISException;
 import com.group7.sys.service.DeptService;
 import com.group7.sys.service.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +48,7 @@ import static com.group7.sys.common.Constast.PAYMENT_REGISTER;
  */
 @RestController
 @RequestMapping("/api/bus/register")
+@RequiresRoles("PATIENT")
 public class RegisterController {
 
     @Autowired private RegisterService registerService;
@@ -75,7 +77,7 @@ public class RegisterController {
         User user = (User) WebUtils.getSession().getAttribute("user");
         queryWrapper.eq((registerVo.getPatientId()!=null), "patient_id", user.getUserId());
         // 输入给定查询条件，默认无
-        queryWrapper.like((registerVo.getRegisterId()!=null), "register_id", registerVo.getRegisterId());
+        queryWrapper.like((registerVo.getRegisterId()!=null), "register_id", registerVo.getPaymentId());
 //        queryWrapper.like((registerVo.getPatientId()!=null), "patient_id", registerVo.getPatientId());
 //        queryWrapper.like((registerVo.getDoctorId()!=null), "doctor_id", registerVo.getDoctorId());
 //        queryWrapper.like((registerVo.getPaymentId()!=null), "payment_id", registerVo.getPaymentId());

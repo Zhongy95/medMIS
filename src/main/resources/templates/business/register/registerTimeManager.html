@@ -25,9 +25,9 @@
     <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form layui-form-pane">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">ID</label>
+                <label class="layui-form-label">缴费单号</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="registerId"  autocomplete="off" class="layui-input">
+                    <input type="text" name="paymentId"  autocomplete="off" class="layui-input">
                 </div>
             </div>
 <!--            <div class="layui-inline">-->
@@ -150,8 +150,10 @@
 <div id="showRegisterDiv" style="display: none;padding: 10px">
     <h3 id="register_title" style="text-align: left"></h3>
     <div style="text-align: center;margin-top: 2%">
+        <!--
         <p>ID：  <span id="registerId"></span></p>
         <P>病人ID：    <span id="registerPatientId"></span></P>
+        -->
         <p>病人姓名：    <span id="registerPatientName"></span></p>
 <!--        <p>医生ID：    <span id="registerDoctorID"></span></p>-->
         <p>医生姓名：    <span id="registerDoctorName"></span></p>
@@ -203,8 +205,8 @@
             height: "full-190",
             cols: [ [
                 {type: 'checkbox', fixed: 'left'},
-                {field: 'registerId', title: 'ID', align: 'center',width:'100'},
-                {field: 'patientId', title: '病人ID', align: 'center',width:'100'},
+                // {field: 'registerId', title: 'ID', align: 'center',width:'100'},
+                // {field: 'patientId', title: '病人ID', align: 'center',width:'100'},
                 {field: 'patientName', title: '病人姓名', align: 'center',width:'100'},
                 // {field: 'doctorId', title: '医生ID', align: 'center',width:'100'},
                 {field: 'doctorName', title: '医生姓名', align: 'center',width:'100'},

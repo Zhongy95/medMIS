@@ -38,4 +38,37 @@ public class PatientController {
         return "business/register/paymentManager";
     }
 
+    /** 跳转到排队治疗 */
+    @RequestMapping("toRegisterQueue")
+    public String toRegisterQueue() {
+        return "business/record/patientRegisterQueue";
+    }
+
+    /** 跳转到病历查看 */
+    @RequestMapping("toRecordManager")
+    public String toRecordManager() {
+        return "business/record/patientRecordManager";
+    }
+
+
+    /** 跳转到待做检查 */
+    @RequestMapping("toExamToDoManager")
+    public String toExamToDoManager() {
+        return "business/record/patientExamtodoManager";
+    }
+
+
+    /** 跳转到待领药品 */
+    @RequestMapping("toMedToDoManager")
+    public String toMedToDoManager() {
+        return "business/record/patientMedtodoManager";
+    }
+
+    /** 跳转到待做治疗 */
+    @RequestMapping("toTreatToDoManager")
+    public String toTreatToDoManager() {
+        return "business/record/patientTreattodoManager";
+    }
+
+
 }

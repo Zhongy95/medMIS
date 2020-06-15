@@ -293,7 +293,7 @@
                     // console.log(" " + Total + "\n");
                 });
                 //修改 结算后余额 统计单元格文本
-                this.elem.next().find('.layui-table-total td[data-field="amount"] .layui-table-cell').text(Total);
+                this.elem.next().find('.layui-table-total td[data-field="amount"] .layui-table-cell').text(Total.toFixed(1));
             }
         });
 

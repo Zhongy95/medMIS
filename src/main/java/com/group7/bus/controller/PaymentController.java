@@ -105,21 +105,22 @@ public class PaymentController {
     public ResultObj payForAll(PaymentVo paymentVo) throws medMISException {
         try {
             //建立查询
-            IPage<Payment> page = new Page<>(paymentVo.getPage(), paymentVo.getLimit());
+            //IPage<Payment> page = new Page<>(paymentVo, paymentVo.getLimit());
             QueryWrapper<Payment> queryWrapper = new QueryWrapper<>();
             User user = (User)WebUtils.getSession().getAttribute("user");
             queryWrapper.eq("patient_id", user.getUserId())
-                    .eq("paymentitem_id", Constast.PAYMENT_REGISTER);
+                    .eq("paymentitem_id", Constast.PAYMENT_REGISTER)
+                    .eq("ifdone", false);
 
             //完成查询，内容装到page里
-            this.paymentService.page(page, queryWrapper);
+            this.paymentService.list(queryWrapper);
             //遍历List，完成每一个payment更改
-            for(Payment payment: page.getRecords()) {
-                if(payment.getIfdone()!=true){
+            for(Payment payment: this.paymentService.list()) {
+                //if(payment.getIfdone()!=true){
                     payment.setIfdone(true);
                     payment.setDonetime(new Date());
                     this.paymentService.updateById(payment);
-                }
+                //}
             }
             //this.paymentService.updateBatchById(page.getRecords());
             return ResultObj.PAY_SUCCESS;

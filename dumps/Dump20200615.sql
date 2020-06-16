@@ -95,7 +95,7 @@ CREATE TABLE `bus_examdoc` (
   KEY `bus_examdoc_bus_record_record_id_fk` (`record_id`),
   CONSTRAINT `bus_examdoc_bus_examtodo_examtodo_id_fk` FOREIGN KEY (`examtodo_id`) REFERENCES `bus_examtodo` (`examtodo_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `bus_examdoc_bus_record_record_id_fk` FOREIGN KEY (`record_id`) REFERENCES `bus_record` (`record_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='检查报告';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='检查报告';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,7 +122,7 @@ CREATE TABLE `bus_examqueue` (
   PRIMARY KEY (`queue_id`),
   KEY `bus_examqueue_bus_examregister_examregister_id_fk` (`examregister_id`),
   CONSTRAINT `bus_examqueue_bus_examregister_examregister_id_fk` FOREIGN KEY (`examregister_id`) REFERENCES `bus_examregister` (`examregister_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='排队看病';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='排队看病';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,7 +156,7 @@ CREATE TABLE `bus_examregister` (
   KEY `bus_examregister_bus_examtime_eaxmtime_id_fk` (`examtime_id`),
   CONSTRAINT `bus_examregister_bus_exam_exam_id_fk` FOREIGN KEY (`exam_id`) REFERENCES `bus_exam` (`exam_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `bus_examregister_bus_examtime_eaxmtime_id_fk` FOREIGN KEY (`examtime_id`) REFERENCES `bus_examtime` (`eaxmtime_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='检查预约单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='检查预约单';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +184,7 @@ CREATE TABLE `bus_examtime` (
   `price` double DEFAULT NULL,
   PRIMARY KEY (`eaxmtime_id`),
   UNIQUE KEY `bus_laboratoriantime_doctortime_id_uindex` (`eaxmtime_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='检验工作时间';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='检验工作时间';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,7 +214,7 @@ CREATE TABLE `bus_examtodo` (
   KEY `bus_examtodo_bus_exam_exam_id_fk` (`exam_id`),
   CONSTRAINT `bus_examtodo_bus_exam_exam_id_fk` FOREIGN KEY (`exam_id`) REFERENCES `bus_exam` (`exam_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `bus_examtodo_bus_record_record_id_fk` FOREIGN KEY (`record_id`) REFERENCES `bus_record` (`record_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='医生给患者开具的待检查项目单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='医生给患者开具的待检查项目单';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -250,7 +250,7 @@ CREATE TABLE `bus_meddoc` (
   KEY `bus_meddoc_bus_record_record_id_fk` (`record_id`),
   CONSTRAINT `bus_meddoc_bus_medtodo_medtodo_id_fk` FOREIGN KEY (`medtodo_id`) REFERENCES `bus_medtodo` (`medtodo_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `bus_meddoc_bus_record_record_id_fk` FOREIGN KEY (`record_id`) REFERENCES `bus_record` (`record_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='药品报告';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='药品报告';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -304,7 +304,7 @@ CREATE TABLE `bus_medqueue` (
   PRIMARY KEY (`queue_id`),
   KEY `bus_medqueue_bus_medtodo_medtodo_id_fk` (`medtodo_id`),
   CONSTRAINT `bus_medqueue_bus_medtodo_medtodo_id_fk` FOREIGN KEY (`medtodo_id`) REFERENCES `bus_medtodo` (`medtodo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='排队取药';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='排队取药';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -334,7 +334,7 @@ CREATE TABLE `bus_medtodo` (
   KEY `bus_medtodo_bus_record_record_id_fk` (`record_id`),
   CONSTRAINT `bus_medtodo_bus_exam_exam_id_fk` FOREIGN KEY (`med_id`) REFERENCES `bus_medicine` (`med_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `bus_medtodo_bus_record_record_id_fk` FOREIGN KEY (`record_id`) REFERENCES `bus_record` (`record_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='医生给患者开具的药物单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='医生给患者开具的药物单';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -491,7 +491,7 @@ CREATE TABLE `bus_registerqueue` (
   UNIQUE KEY `bus_registerqueue_queue_id_uindex` (`queue_id`),
   KEY `registerqueue_bus_register_register_id_fk` (`register_id`),
   CONSTRAINT `registerqueue_bus_register_register_id_fk` FOREIGN KEY (`register_id`) REFERENCES `bus_register` (`register_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='排队看病';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='排队看病';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -526,7 +526,7 @@ CREATE TABLE `bus_treatdoc` (
   KEY `bus_treatdoc_bus_record_record_id_fk` (`record_id`),
   CONSTRAINT `bus_treatdoc_bus_record_record_id_fk` FOREIGN KEY (`record_id`) REFERENCES `bus_record` (`record_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `bus_treatdoc_bus_treattodo_treattodo_id_fk` FOREIGN KEY (`treattodo_id`) REFERENCES `bus_treattodo` (`treattodo_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='治疗报告';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='治疗报告';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -580,7 +580,7 @@ CREATE TABLE `bus_treatqueue` (
   PRIMARY KEY (`queue_id`),
   KEY `bus_treatqueue_bus_treattodo_treattodo_id_fk` (`treattodo_id`),
   CONSTRAINT `bus_treatqueue_bus_treattodo_treattodo_id_fk` FOREIGN KEY (`treattodo_id`) REFERENCES `bus_treattodo` (`treattodo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='排队治疗';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='排队治疗';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -610,7 +610,7 @@ CREATE TABLE `bus_treattodo` (
   KEY `bus_treattodo_bus_record_record_id_fk` (`record_id`),
   CONSTRAINT `bus_treattodo_bus_exam_exam_id_fk` FOREIGN KEY (`treatment_id`) REFERENCES `bus_treatment` (`treatment_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `bus_treattodo_bus_record_record_id_fk` FOREIGN KEY (`record_id`) REFERENCES `bus_record` (`record_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='医生给患者开具的待检查项目单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='医生给患者开具的待检查项目单';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

@@ -19,7 +19,7 @@ layui.use(['form','jquery',"layer"],function() {
         $("#userFace").attr("src",window.sessionStorage.getItem('userFace'));
         $(".userAvatar").attr("src",$(".userAvatar").attr("src").split("images/")[0] + "images/" + window.sessionStorage.getItem('userFace').split("images/")[1]);
     }else{
-        $("#userFace").attr("src","../../images/face.jpg");
+        $("#userFace").attr("src","https://img.icons8.com/color/96/000000/user-male-skin-type-6.png");
     }
 
     //公告层
@@ -64,7 +64,7 @@ layui.use(['form','jquery',"layer"],function() {
             title : false,
             type : 1,
             content : '<div class="admin-header-lock" id="lock-box">'+
-                            '<div class="admin-header-lock-img"><img src="images/face.jpg" class="userAvatar"/></div>'+
+                            '<div class="admin-header-lock-img"><img src="https://img.icons8.com/color/96/000000/user-male-skin-type-6.png" class="userAvatar"/></div>'+
                             '<div class="admin-header-lock-name" id="lockUserName">驊驊龔頾</div>'+
                             '<div class="input_btn">'+
                                 '<input type="password" class="admin-header-lock-input layui-input" autocomplete="off" placeholder="请输入密码解锁.." name="lockPwd" id="lockPwd" />'+

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.com">
 <head>
     <meta charset="utf-8">
-    <title>MIS后台首页</title>
+    <title>好医院在线医疗系统首页</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="icon" href="/resources/favicon.ico">
+    <link rel="icon" href="https://img.icons8.com/android/48/000000/hospital.png">
     <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" href="/resources/css/index.css" media="all"/>
 </head>
@@ -59,7 +59,7 @@
                     <a href="javascript:;"><i class="seraph icon-lock"></i><cite>锁屏</cite></a>
                 </li>
                 <li class="layui-nav-item" id="userInfo">
-                    <a href="javascript:;"><img src="/resources/images/face.jpg" class="layui-nav-img userAvatar"
+                    <a href="javascript:;"><img src="https://img.icons8.com/color/96/000000/user-male-skin-type-6.png" class="layui-nav-img userAvatar"
                                                 width="35" height="35"><cite class="adminName"
                                                                              th:text="${session.user.name}"></cite></a>
                     <dl class="layui-nav-child">
@@ -80,7 +80,7 @@
     <!-- 左侧导航 -->
     <div class="layui-side layui-bg-black">
         <div class="user-photo">
-            <a class="img" title="我的头像"><img src="/resources/images/face.jpg" class="userAvatar"></a>
+            <a class="img" title="我的头像"><img src="https://img.icons8.com/color/96/000000/user-male-skin-type-6.png" class="userAvatar"></a>
             <p>你好！<span class="name" th:text="${session.user.name}"></span>, 欢迎登录</p>
         </div>
         <!-- 搜索 -->
@@ -96,7 +96,7 @@
             <ul class="layui-nav layui-nav-tree">
                 <li class="layui-nav-item layui-this">
                     <a href="javascript:;" data-url="/toDeskManager"><i class="layui-icon"
-                                                                        data-icon=""></i><cite>后台首页</cite></a>
+                                                                        data-icon=""></i><cite>首页</cite></a>
                 </li>
             </ul>
         </div>
@@ -105,7 +105,7 @@
     <div class="layui-body layui-form" id="right">
         <div class="layui-tab mag0" lay-filter="bodyTab" id="top_tabs_box"  >
             <ul class="layui-tab-title top_tab" id="top_tabs">
-                <li class="layui-this" lay-id=""><i class="layui-icon">&#xe68e;</i> <cite>后台首页</cite></li>
+                <li class="layui-this" lay-id=""><i class="layui-icon">&#xe68e;</i> <cite>首页</cite></li>
             </ul>
             <ul class="layui-nav closeBox">
                 <li class="layui-nav-item">

@@ -18,7 +18,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">用户名</label>
 			<div class="layui-input-block">
-				<input type="text" value="" disabled class="layui-input layui-disabled">
+				<input type="text" value="抱歉，登录名不能修改" disabled class="layui-input layui-disabled">
 			</div>
 		</div>
 		<div class="layui-form-item">
@@ -49,5 +49,11 @@
 </form>
 <script type="text/javascript" src="../../layui/layui.js"></script>
 <script type="text/javascript" src="user.js"></script>
+<script type="text/javascript">
+	layui.use(['jquery'], function () {
+		var $ = layui.jquery;
+
+	})
+</script>
 </body>
 </html>

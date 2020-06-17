@@ -67,7 +67,7 @@ public class PaymentController {
         for(Payment payment:page.getRecords()){
             Paymentitem paymentitem = this.paymentitemService.getById(payment.getPaymentitemId());
             payment.setPaymentitemName(paymentitem.getPaymentitemName());
-            User userpay = this.userService.getById(payment.getPaymentitemId());
+            User userpay = this.userService.getById(payment.getPatientId());
             payment.setPatientName(userpay.getName());
         }
 

@@ -35,7 +35,7 @@ public class PatientController {
     /** 跳转到挂号缴费管理 */
     @RequestMapping("toPaymentManager")
     public String toPaymentManager() {
-        return "business/register/paymentManager";
+        return "business/paymentManager";
     }
 
     /** 跳转到排队治疗 */

@@ -149,22 +149,24 @@
 <!--查看层-->
 <div id="showRegisterDiv" style="display: none;padding: 10px">
     <h3 id="register_title" style="text-align: left"></h3>
-    <div style="text-align: center;margin-top: 2%">
+    <div style="text-align: left">
         <!--
         <p>ID：  <span id="registerId"></span></p>
         <P>病人ID：    <span id="registerPatientId"></span></P>
         -->
-        <p>病人姓名：    <span id="registerPatientName"></span></p>
+        <p style="margin: 10px 0;">病人姓名：    <span id="registerPatientName"></span></p>
 <!--        <p>医生ID：    <span id="registerDoctorID"></span></p>-->
-        <p>医生姓名：    <span id="registerDoctorName"></span></p>
-        <p>科室：  <span id="registerDeptName"></span></p>
-        <p>创建时间：    <span id="registerCreatetime"></span></p>
-        <p>缴费单号：    <span id="registerPaymentId"></span></p>
-        <p>是否完成：    <span id="registerPaymentIfdone"></span></p>
-        <p>是否可用：    <span id="registerAvailable"></span></p>
+        <p style="margin: 10px 0;">医生姓名：    <span id="registerDoctorName"></span></p>
+        <p style="margin: 10px 0;">科室：  <span id="registerDeptName"></span></p>
+        <p style="margin: 10px 0;">创建时间：    <span id="registerCreatetime"></span></p>
+        <p style="margin: 10px 0;">缴费单号：    <span id="registerPaymentId"></span></p>
+        <p style="margin: 10px 0;">是否完成：    <span id="registerPaymentIfdone"></span></p>
+        <p style="margin: 10px 0;">是否可用：    <span id="registerAvailable"></span></p>
     </div>
     <hr>
-    <div id="register_content"></div>
+    <div id="register_content">
+        <p>更多信息：<span id="registerContent"></span></p>
+    </div>
 </div>
 
 
@@ -341,8 +343,9 @@
             mainIndex = layer.open({
                 type:1,
                 content:$("#showRegisterDiv"),
-                area:['800px','550px'],
+                area:['600px','350px'],
                 title:'挂号单信息',
+                skin:'layui-layer-molv',
                 success:function () {
                     $("#registerId").html(data.registerId);
                     $("#registerPatientId").html(data.patientId);
@@ -352,8 +355,20 @@
                     $("#registerDeptName").html(data.deptName);
                     $("#registerCreatetime").html(data.createtime);
                     $("#registerPaymentId").html(data.paymentId);
-                    $("#registerPaymentIfdone").html(data.paymentIfdone);
-                    $("#registerAvailable").html(data.available);
+                    if (data.paymentIfdone) {
+                        $("#registerPaymentIfdone").html("已完成");
+                        $("#registerPaymentIfdone").css("color", "blue");
+                    } else {
+                        $("#registerPaymentIfdone").html("未完成");
+                        $("#registerPaymentIfdone").css("color", "red");
+                    }
+                    if (data.available) {
+                        $("#registerAvailable").html("可用");
+                        $("#registerAvailable").css("color", "blue");
+                    } else {
+                        $("#registerAvailable").html("不可用");
+                        $("#registerAvailable").css("color", "red");
+                    }
                 }
             });
         }

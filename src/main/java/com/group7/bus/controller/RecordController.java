@@ -4,6 +4,7 @@ package com.group7.bus.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.group7.MedMISApplication;
 import com.group7.bus.entity.Record;
 import com.group7.bus.service.RecordService;
 import com.group7.bus.service.impl.RecordServiceImpl;
@@ -12,17 +13,21 @@ import com.group7.sys.common.DataGridView;
 import com.group7.sys.common.WebUtils;
 import com.group7.sys.entity.Dept;
 import com.group7.sys.entity.User;
+import com.group7.sys.exception.medMISException;
 import com.group7.sys.service.DeptService;
 import com.group7.sys.service.UserService;
+import javafx.scene.media.MediaException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -121,6 +126,20 @@ public class RecordController {
         record.setDeptName(dept.getDeptName());
         record.setDoctorName(doctor.getName());
         record.setPatientName(patient.getName());
+    }
+
+    @RequestMapping("addRecord")
+    @RequiresRoles("DOCTOR")
+    public RecordVo addRecord(RecordVo recordVo) throws medMISException {
+        try {
+            User doctor = (User) WebUtils.getSession().getAttribute("user");
+            recordVo.setCreatetime(new Date());
+            recordVo.setDoctorId(doctor.getUserId());
+            recordService.save(recordVo);
+            return recordVo;
+        } catch (Exception e) {
+            throw new medMISException("添加病历失败", HttpStatus.BAD_REQUEST);
+        }
     }
 }
 

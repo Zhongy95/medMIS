@@ -1,10 +1,13 @@
 package com.group7.bus.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -49,7 +52,7 @@ public class Record implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createtime;
+    private Date createtime;
 
     /**
      * 是否需要检查
@@ -76,5 +79,12 @@ public class Record implements Serializable {
      */
     private Integer ifdone;
 
+    @TableField(exist = false)
+    private String doctorName;
 
+    @TableField(exist = false)
+    private String patientName;
+
+    @TableField(exist = false)
+    private String deptName;
 }

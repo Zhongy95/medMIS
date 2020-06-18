@@ -11,6 +11,7 @@ import java.util.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
@@ -87,4 +88,8 @@ public class Record implements Serializable {
 
     @TableField(exist = false)
     private String deptName;
+
+    @TableField(exist = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private java.util.Date startTime;
 }

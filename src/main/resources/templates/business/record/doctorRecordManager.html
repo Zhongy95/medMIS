@@ -26,7 +26,7 @@
     <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form layui-form-pane">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">医生姓名</label>
+                <label class="layui-form-label">病人姓名</label>
                 <div class="layui-input-inline">
                     <input type="text" name="doctorName" autocomplete="off" class="layui-input">
                 </div>
@@ -59,6 +59,7 @@
         <button type="button" lay-event="reload" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-refresh"></span>刷新</button>
     </div>
     <div id="recordRowBar"style="display: none;">
+        <button type="button" lay-event="modify" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-edit"></span>修改</button>
         <button type="button" lay-event="show" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-about"></span>查看</button>
     </div>
 </div>
@@ -106,7 +107,7 @@
         tableIns = table.render({
             elem: "#recordTable",
             title: "病历表格",
-            url: "/api/bus/record/loadAllRecordByPatient",
+            url: "/api/bus/record/loadAllRecordByDoctor",
             toolbar: "#recordToolBar",
             page: true,
             height: "full",
@@ -141,7 +142,7 @@
                             return "<font color='blue'>需要</font>";
                     }
                 },
-                {fixed: 'right', title: '操作', toolbar: '#recordRowBar', align: 'center', width: 100}
+                {fixed: 'right', title: '操作', toolbar: '#recordRowBar', align: 'center', width: 180}
             ] ],
             done: function (data, curr, count) {
                 if (data.data.length === 0 && curr !== 1) {   //不是第一页时，如果当前返回的数据为0那么就返回上一页
@@ -182,6 +183,9 @@
             switch (obj.event){
                 case 'show':
                     showRecord(data);
+                    break;
+                case 'modify':
+                    layer.msg("TODO");
                     break;
                 default:
                     break;

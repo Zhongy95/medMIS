@@ -62,25 +62,65 @@ public class RecordController {
         if (StringUtils.isNotBlank(recordVo.getDoctorName())) {
             doctorqw.like("user_name", recordVo.getDoctorName());
             doctors = this.userService.list(doctorqw);
-            for(User user:doctors){
-                doctorIds.add(user.getUserId());
+            if (doctors.isEmpty()){
+                return new DataGridView(page.getTotal(), page.getRecords());
+            } else {
+                for(User user:doctors){
+                    doctorIds.add(user.getUserId());
+                }
             }
         }
         queryWrapper.eq("patient_id", patient.getUserId())
-                .in(StringUtils.isNotBlank(recordVo.getDoctorName()),"doctor_id", doctorIds)
-                .ge(recordVo.getCreatetime() != null, "createtime", recordVo.getCreatetime())
+                .in(!doctorIds.isEmpty(),"doctor_id", doctorIds)
+                .ge(recordVo.getStartTime() != null, "createtime", recordVo.getStartTime())
                 .orderByDesc("createtime");
         this.recordService.page(page, queryWrapper);
         for(Record record:page.getRecords()) {
             User doctor = this.userService.getById(record.getDoctorId());
-            QueryWrapper<Dept> deptqw = new QueryWrapper<>();
-            deptqw.eq("dept_id",doctor.getDeptId());
-            Dept dept = this.deptService.getOne(deptqw);
-            record.setDeptName(dept.getDeptName());
-            record.setDoctorName(doctor.getName());
-            record.setPatientName(patient.getName());
+            refactorRecord(doctor, record, patient);
         }
         return new DataGridView(page.getTotal(), page.getRecords());
+    }
+
+    @RequestMapping("loadAllRecordByDoctor")
+    @RequiresRoles("DOCTOR")
+    public DataGridView loadAllRecordByDoctor(RecordVo recordVo) {
+        IPage<Record> page = new Page<>(recordVo.getPage(), recordVo.getLimit());
+        QueryWrapper<Record> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<User> patientqw = new QueryWrapper<>();
+        List<User> patients = new ArrayList();
+        List<Integer> patientIds = new ArrayList();
+        User doctor = (User) WebUtils.getSession().getAttribute("user");
+        if (StringUtils.isNotBlank(recordVo.getDoctorName())) {
+            patientqw.like("user_name", recordVo.getDoctorName());
+            patients = this.userService.list(patientqw);
+            if (patients.isEmpty()){
+                return new DataGridView(page.getTotal(), page.getRecords());
+            } else {
+                for(User user:patients){
+                    patientIds.add(user.getUserId());
+                }
+            }
+        }
+        queryWrapper.eq("doctor_id", doctor.getUserId())
+                .in(!patientIds.isEmpty(),"patient_id", patientIds)
+                .ge(recordVo.getStartTime() != null, "createtime", recordVo.getStartTime())
+                .orderByDesc("createtime");
+        this.recordService.page(page, queryWrapper);
+        for(Record record:page.getRecords()) {
+            User patient = this.userService.getById(record.getPatientId());
+            refactorRecord(doctor, record, patient);
+        }
+        return new DataGridView(page.getTotal(), page.getRecords());
+    }
+
+    private void refactorRecord(User doctor, Record record, User patient) {
+        QueryWrapper<Dept> deptqw = new QueryWrapper<>();
+        deptqw.eq("dept_id",doctor.getDeptId());
+        Dept dept = this.deptService.getOne(deptqw);
+        record.setDeptName(dept.getDeptName());
+        record.setDoctorName(doctor.getName());
+        record.setPatientName(patient.getName());
     }
 }
 

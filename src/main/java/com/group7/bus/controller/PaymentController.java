@@ -57,12 +57,8 @@ public class PaymentController {
         IPage<Payment> page = new Page<>(paymentVo.getPage(), paymentVo.getLimit());
         QueryWrapper<Payment> queryWrapper = new QueryWrapper<>();
         User user = (User)WebUtils.getSession().getAttribute("user");
-
         queryWrapper.eq("patient_id", user.getUserId())
-            .eq("paymentitem_id", Constast.PAYMENT_REGISTER)
             .orderByDesc("createtime"); // 排序依据
-
-
         this.paymentService.page(page, queryWrapper);
         for(Payment payment:page.getRecords()){
             Paymentitem paymentitem = this.paymentitemService.getById(payment.getPaymentitemId());
@@ -70,7 +66,6 @@ public class PaymentController {
             User userpay = this.userService.getById(payment.getPatientId());
             payment.setPatientName(userpay.getName());
         }
-
         return new DataGridView(page.getTotal(), page.getRecords());
     }
 
@@ -109,7 +104,6 @@ public class PaymentController {
             QueryWrapper<Payment> queryWrapper = new QueryWrapper<>();
             User user = (User)WebUtils.getSession().getAttribute("user");
             queryWrapper.eq("patient_id", user.getUserId())
-                    .eq("paymentitem_id", Constast.PAYMENT_REGISTER)
                     .eq("ifdone", false);
 
             //完成查询，内容装到page里

@@ -72,15 +72,10 @@ public class User implements Serializable {
 
   /**部门名称*/
   @TableField(exist = false)
-  private String deptname;
+  private String deptName;
 
   /**角色名称*/
   @TableField(exist = false)
-  private String rolename;
-
-  /**确认密码*/
-  @TableField(exist = false)
-  private String password_enter=password;
-
+  private String roleName;
 
 }

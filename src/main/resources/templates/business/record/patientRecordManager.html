@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en"xmlns:th="http://www.thymeleaf.com">
+<head>
+    <meta charset="UTF-8">
+    <title>病历</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="https://img.icons8.com/android/48/000000/hospital.png">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" th:href="@{/resources/layui/css/layui.css}"
+          media="all"/>
+    <link rel="stylesheet" href="/resources/css/public.css" th:href="@{/resources/css/public.css}" media="all"/>
+    <link rel="stylesheet" href="/resources/css/invoice.css" th:href="@{/resources/css/invoice.css}" media="all"/>
+</head>
+<body class="childrenBody">
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>查询条件</legend>
+</fieldset>
+<blockquote class="layui-elem-quote">
+    <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form layui-form-pane">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">医生姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="doctorName" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: auto;">创建时间（查询该时间后创建的病历）</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="startTime" id="startTime" readonly="readonly" placeholder="点击选择创建时间"  class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="text-align: center;">
+                <button type="button" class="layui-btn" lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>查询</button>
+                <button type="reset" class="layui-btn layui-btn-warm"><span class="layui-icon layui-icon-refresh"></span>重置</button>
+
+            </div>
+        </div>
+
+    </form>
+</blockquote>
+
+
+<!--数据表格开始-->
+<div>
+    <table class="layui-hide" id="recordTable" lay-filter="recordTable">
+
+    </table>
+    <div id="recordToolBar" style="display: none;">
+        <button type="button" lay-event="reload" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-refresh"></span>刷新</button>
+    </div>
+    <div id="recordRowBar"style="display: none;">
+        <button type="button" lay-event="show" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-about"></span>查看</button>
+    </div>
+</div>
+
+<!--数据表格结束-->
+
+<div id="showRecord" style="display: none;padding: 10px">
+    <h3 id="recordTitle" style="text-align: left"></h3>
+    <div style="text-align: left">
+        <p style="margin: 10px 0;">病人姓名：    <span id="recordPatientName"></span></p>
+        <p style="margin: 10px 0;">医生姓名：    <span id="recordDoctorName"></span></p>
+        <p style="margin: 10px 0;">科室：  <span id="recordDeptName"></span></p>
+        <p style="margin: 10px 0;">创建时间：    <span id="recordCreatetime"></span></p>
+    </div>
+    <hr>
+    <div id="register_content">
+        <p>诊断结果：<span id="recordDiagnosis"></span></p>
+    </div>
+    <hr>
+    <p style="margin: 10px 0;">后续检查：    <span id="recordIfexam"></span></p>
+    <p style="margin: 10px 0;">后续用药：    <span id="recordIfdrug"></span></p>
+    <p style="margin: 10px 0;">后续治疗：    <span id="recordIftreat"></span></p>
+</div>
+
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+    var tableIns;
+
+    layui.use(['jquery', 'form', 'layer', 'laydate', 'table','layedit'], function () {
+        var $ = layui.jquery;
+        var form = layui.form;
+        var layer = layui.layer;
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var layedit = layui.layedit;
+
+        //初始化时间选择器
+        laydate.render({
+            elem: "#startTime",
+            type: "datetime"
+        });
+
+        //初始化表格 加载数据
+        tableIns = table.render({
+            elem: "#recordTable",
+            title: "病历表格",
+            url: "/api/bus/record/loadAllRecordByPatient",
+            toolbar: "#recordToolBar",
+            page: true,
+            height: "full",
+            cols: [ [
+                {field: 'recordId', title: '病历号', align: 'center', width: 100},
+                {field: 'patientName', title: '患者姓名', align: 'center', width: 100},
+                {field: 'doctorName', title: '医生姓名', align: 'center', width: 100},
+                {field: 'deptName', title: '科室', align: 'center', width: 100},
+                {field: 'createtime', title: '创建时间', align: 'center', width: 180},
+                {field: 'diagnosis', title: '诊断结果', align: 'center', width: 250},
+                {
+                    field: 'ifexam', title: '后续检查', align: 'center', width: 100, templet: function (d) {
+                        if (d.ifexam === 0)
+                            return "<font color='grey'>不需要</font>";
+                        else
+                            return "<font color='blue'>需要</font>";
+                    }
+                },
+                {
+                    field: 'ifdrug', title: '后续用药', align: 'center', width: 100, templet: function (d) {
+                        if (d.ifdrug === 0)
+                            return "<font color='grey'>不需要</font>";
+                        else
+                            return "<font color='blue'>需要</font>";
+                    }
+                },
+                {
+                    field: 'iftreat', title: '后续治疗', align: 'center', width: 100, templet: function (d) {
+                        if (d.iftreat === 0)
+                            return "<font color='grey'>不需要</font>";
+                        else
+                            return "<font color='blue'>需要</font>";
+                    }
+                },
+                {fixed: 'right', title: '操作', toolbar: '#recordRowBar', align: 'center', width: 100}
+            ] ],
+            done: function (data, curr, count) {
+                if (data.data.length === 0 && curr !== 1) {   //不是第一页时，如果当前返回的数据为0那么就返回上一页
+                    tableIns.reload({
+                        page: {
+                            curr: curr - 1
+                        }
+                    });
+                }
+            }
+        });
+
+        form.on("submit(doSearch)", function (data) {
+            tableIns.reload({
+                where: data.field,
+                page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+
+        //监控工具条事件
+        table.on("toolbar(recordTable)", function (obj) {
+            switch (obj.event) {
+                case 'reload':
+                    reloadTable();
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        //监控行工具条事件
+        table.on("tool(recordTable)",function (obj) {
+            //获取当前行数据
+            var data = obj.data;
+            switch (obj.event){
+                case 'show':
+                    showRecord(data);
+                    break;
+                default:
+                    break;
+            }
+        });
+    });
+
+    var mainIndex;
+    var url;
+
+    //打开查看的弹出层
+    function showRecord(data) {
+        mainIndex = layer.open({
+            type: 1,
+            content: $("#showRecord"),
+            area: ['600px', '350px'],
+            title: '病历信息',
+            skin: 'layui-layer-molv',
+            success: function () {
+                $("#recordPatientName").html(data.patientName);
+                $("#recordDoctorName").html(data.doctorName);
+                $("#recordDeptName").html(data.deptName);
+                $("#recordCreatetime").html(data.createtime);
+                $("#recordDiagnosis").html(data.diagnosis);
+                if (data.ifdrug) {
+                    $("#recordIfdrug").html("需要");
+                    $("#recordIfdrug").css("color", "blue");
+                } else {
+                    $("#recordIfdrug").html("不需要");
+                    $("#recordIfdrug").css("color", "grey");
+                }
+                if (data.ifexam) {
+                    $("#recordIfexam").html("需要");
+                    $("#recordIfexam").css("color", "blue");
+                } else {
+                    $("#recordIfexam").html("不需要");
+                    $("#recordIfexam").css("color", "grey");
+                }
+                if (data.iftreat) {
+                    $("#recordIftreat").html("需要");
+                    $("#recordIftreat").css("color", "blue");
+                } else {
+                    $("#recordIftreat").html("不需要");
+                    $("#recordIftreat").css("color", "grey");
+                }
+            }
+        });
+    }
+
+    function reloadTable() {
+        tableIns.reload({
+            where: "",
+        });
+    }
+
+
+</script>
+</body>
+</html>

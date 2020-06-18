@@ -81,7 +81,7 @@ public class UserController {
                 Integer deptIdint=Integer.valueOf(deptId);
                 Dept one = deptService.getById(deptIdint);
                 //设置user的部门名称
-                user.setDeptname(one.getDeptName());
+                user.setDeptName(one.getDeptName());
             }
             Integer roleId = user.getRoleId();
             if (roleId!=null){
@@ -89,7 +89,7 @@ public class UserController {
                 queryWrapperrole.eq("role_id",roleId);
                 Role one = roleService.getOne(queryWrapperrole);
                 //设置user的角色名称
-                user.setRolename(one.getRoleName());
+                user.setRoleName(one.getRoleName());
             }
         }
         return new DataGridView(page.getTotal(),list);

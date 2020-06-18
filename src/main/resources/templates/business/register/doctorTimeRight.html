@@ -52,6 +52,9 @@
 <div>
     <table class="layui-hide" id="doctorTimeTable" lay-filter="doctorTimeTable">
     </table>
+    <div id="doctortimeToolBar" style="display: none;">
+        <button type="button" lay-event="reload" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-refresh"></span>刷新</button>
+    </div>
     <div id="doctortimeRowBar"style="display: none;">
         <button type="button" lay-event="register" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-friends"></span>挂号</button>
     </div>
@@ -82,7 +85,7 @@
             elem: "#doctorTimeTable",
             title: "数据表格",
             url: "/api/doctortime/loadAllDoctortime",
-            toolbar: "#deptToolBar",
+            toolbar: "#doctortimeToolBar",
             page: true,
             height: "full-190",
             cols: [ [
@@ -159,7 +162,18 @@
             return false;
         });
 
+        //监控工具条事件
+        table.on("toolbar(doctorTimeTable)", function (obj) {
+            switch (obj.event) {
+                case 'reload':
+                    reloadTable();
+                    break;
+                default:
+                    break;
+            }
+        });
     });
+
     function reloadTablebyDept(deptId) {
         console.log(deptId);
         tableIns.reload({

@@ -76,8 +76,9 @@
     </div>
     <div id="examtodoRowBar" style="display: none;">
         <!--<button type="button" lay-event="pay" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-rmb"></span>支付</button>-->
-        <button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
+        <button type="button" lay-event="register" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-ok"></span>预约</button>
         <button type="button" lay-event="show" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-about"></span>查看</button>
+        <button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
     </div>
 </div>
 
@@ -100,56 +101,23 @@
             <p>检查单号&nbsp;&nbsp;&nbsp;&nbsp;<span id="id" ></span></p>
             <p>检查名称&nbsp;&nbsp;&nbsp;&nbsp;<span id="name" ></span></p>
             <p>病人姓名&nbsp;&nbsp;&nbsp;&nbsp;<span id="pname" ></span></p>
-            <p>缴费状态&nbsp;&nbsp;&nbsp;&nbsp;<span id="ifpay" ></span></p>
         </div>
     </div>
 </div>
 
-<!--
-&lt;!&ndash;添加和修改弹出层&ndash;&gt;
 <div id="addOrUpdateDiv" style="display: none;padding: 10px;margin-right: 4%">
-    <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
-        <div class="layui-form-item">
-            <label class="layui-form-label">公告标题</label>
-            <div class="layui-input-block">
-                <input type="hidden" name="noticeId">
-                <input type="text" name="title" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入公告标题">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">公告内容</label>
-            <div class="layui-input-block">
-                <textarea class="layui-textarea" name="content" id="content" placeholder="请输入公告内容" ></textarea>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block" style="text-align: center;padding-right: 7%">
-                <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit">
-                    <i class="layui-icon layui-icon-search layui-icon-normal"></i>提交
-                </button>
-                <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm">
-                    <i class="layui-icon layui-icon-refresh"></i><span>重置</span>
-                </button>
-            </div>
-        </div>
-    </form>
-</div>
-
-&lt;!&ndash;查看层&ndash;&gt;
-<div id="showNoticeDiv" style="display: none;padding: 10px">
-    <h3 id="notice_title" style="text-align: center"></h3>
-    <div style="text-align: right;margin-top: 2%">
-        发布人：<span id="notice_operName"></span>
-        发布时间：<span id="notice_createTime"></span>
+    <table class="layui-hide" id="examtimeTable" lay-filter="examtimeTable">
+    </table>
+    <div id="examtimeRowBar" style="display: none;">
+        <button type="button" lay-event="register" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-ok"></span>预约</button>
     </div>
-    <hr>
-    <div id="notice_content"></div>
-</div>-->
+</div>
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript" src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript">
     var tableIns;
+    var tableLayer;
 
     layui.use(['jquery', 'form', 'layer', 'laydate', 'table','layedit'], function () {
         var $ = layui.jquery;
@@ -184,12 +152,6 @@
                 {field: 'examName', title: '检查名称', align: 'center', width: 200},
                 {field: 'patientName', title: '患者姓名', align: 'center', width: 150},
                 {field: 'createtime', title: '创建时间', align: 'center', width: 250},
-                {field: 'payIfdone', title: '缴费状态', align: 'center', width: 150, templet: function (d) {
-                    if(d.payIfdone == 0)
-                        return "<font color='red'>未完成</font>";
-                    else
-                        return "<font color='blue'>已完成</font>";
-                    }},
                 {fixed: 'right', title: '操作', toolbar: '#examtodoRowBar', align: 'center', width: 250}
             ] ],
             done:function (data, curr, count) {
@@ -213,6 +175,7 @@
             */
             }
         });
+
 
 
         /*//监控模糊查询按钮事件
@@ -247,6 +210,9 @@
                     break;
                 case 'show':
                     showExamtodo(data);
+                    break;
+                case 'register':
+                    registerExamtodo(data);
                     break;
                 default:
                     break;
@@ -320,14 +286,6 @@
                     $("#id").text(data.examtodoId);
                     $("#name").text(data.examName);
                     $("#pname").text(data.patientName);
-                    if(data.payIfdone) {
-                        $("#ifpay").text("已完成");
-                        $("#ifpay").css("color", "blue");
-                    }
-                    else {
-                        $("#ifpay").text("未完成");
-                        $("#ifpay").css("color", "red");;
-                    }
                 }
             });
         }
@@ -383,7 +341,83 @@
             }
         }
 
+        table.on('tool(examtimeTable)', function(obj){
+            var data = obj.data;
+            if (data.remain<= 0)
+            {
+                layer.msg("余号不足!");
+            }
+            else {
+                if (obj.event === 'register') {
+                    var index = layer.confirm("是否要对" + data.examName + "项目挂号？"
+                        , {icon: 3, title: '挂号确认', btn: ['确认并前往缴费', '取消']}
+                        , function (value, index) {
+                            data.startime = new Date(data.startime.replace(/-/g, "/"));
+                            data.endtime = new Date(data.endtime.replace(/-/g, "/"));
+                            $.post("/api/bus/examregister/addRegister", data, function (res) {
+                                if (res.code === 200) {
+                                    layer.msg(res.msg);
+                                    var payurl ='/bus/patient/toPaymentManager';
+                                    var regurl ='/bus/patient/toExamManager';
+                                    window.top.onlyreload(payurl);
+                                    window.top.onlyreload(regurl);
+                                } else if (res.code === 400) {
+                                    layer.msg("余号不足");
+                                }
+                                layer.closeAll();
+                                tableLayer.reload({
+                                    where: "",
+                                });
+                                if (res.code === 200) {
+                                    window.top.reload(payurl);
+                                }
+                            });
+                        }
+                    );
+                }
+            }
+        });
 
+        function registerExamtodo(data) {
+            mainIndex = layer.open({
+                // 这个千万不能漏，默认0会把你的DOM吃掉，1才能重复打开。 --lyh
+                type:1,
+                content:$("#addOrUpdateDiv"),
+                area:['850px','450px'],
+                skin:'layui-layer-molv',
+                title:'检查预约',
+                success:function () {
+                    tableLayer = table.render({
+                        elem: "#examtimeTable",
+                        title: "检查预约表格",
+                        url: "/api/bus/examtime/loadExamtime",
+                        where: {examId: data.examId},
+                        toolbar: "#examtimeToolBar",
+                        page: true,
+                        height: "full",
+                        cols: [ [
+                            {field: 'examName', title: '检查名称', align: 'center', width: 100},
+                            {field: 'startime', title: '开始时间', align: 'center', width: 180},
+                            {field: 'endtime', title: '结束时间', align: 'center', width: 180},
+                            {field: 'remain', title: '剩余号数', align: 'center', width: 180},
+                            {fixed: 'right', title: '操作', toolbar: '#examtimeRowBar', align: 'center', width: 180}
+                        ] ],
+                        done:function (d, curr, count) {
+                            if(d.data.length===0&&curr!==1){   //不是第一页时，如果当前返回的数据为0那么就返回上一页
+                                tableLayer.reload({
+                                    page:{
+                                        curr:curr-1
+                                    }
+                                });
+                            }
+                            d.data.forEach(function(item) {
+                                item["examtodoId"] = data.examtodoId;
+                            });
+                        }
+                    });
+                }
+            });
+        }
     });
 
 </script>

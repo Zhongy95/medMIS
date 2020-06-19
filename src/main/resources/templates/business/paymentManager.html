@@ -486,6 +486,7 @@
                             //支付成功加载表格时，要重置查询条件
                             where:"",
                         });
+                        top.location.reload();
                     }
                     layer.msg(res.msg);
                 });
@@ -503,6 +504,7 @@
                         tableIns.reload({
                             where:"",
                         });
+                        top.location.reload();
                     }
                     layer.msg(res.msg);
                 });

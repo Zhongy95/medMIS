@@ -70,5 +70,10 @@ public class PatientController {
         return "business/record/patientTreattodoManager";
     }
 
+    /** 跳转到检查管理 */
+    @RequestMapping("toExamManager")
+    public String toExamManager() {
+        return "business/exam/patientExamManager";
+    }
 
 }

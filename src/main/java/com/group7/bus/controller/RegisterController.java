@@ -75,7 +75,7 @@ public class RegisterController {
 
         QueryWrapper<Register> queryWrapper = new QueryWrapper<>();
         User user = (User) WebUtils.getSession().getAttribute("user");
-        queryWrapper.eq((registerVo.getPatientId()!=null), "patient_id", user.getUserId());
+        queryWrapper.eq( "patient_id", user.getUserId());
         // 输入给定查询条件，默认无
         queryWrapper.like((registerVo.getPaymentId()!=null), "payment_id", registerVo.getPaymentId());
 //        queryWrapper.like((registerVo.getPatientId()!=null), "patient_id", registerVo.getPatientId());
@@ -137,7 +137,6 @@ public class RegisterController {
     @RequestMapping("addRegister")
     public ResultObj addRegister(DoctortimeVo doctortimeVo) throws medMISException {
         try {
-
             Register registeradd = new Register();
             registeradd.setDoctortimeId(doctortimeVo.getDoctortimeId());
             registeradd.setDoctorId(doctortimeVo.getDoctorId());
@@ -158,7 +157,6 @@ public class RegisterController {
             paymentnew.setPaymentitemId(PAYMENT_REGISTER);
             paymentnew.setCreatetime(new Date());
             this.paymentService.save(paymentnew);
-
 
             //重新查询，得到id
             Payment paymentcreated =this.paymentService.getById(paymentnew);

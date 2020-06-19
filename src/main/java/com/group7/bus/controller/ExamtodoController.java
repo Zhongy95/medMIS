@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.group7.bus.entity.*;
 import com.group7.bus.service.*;
+import com.group7.bus.vo.ExamVo;
 import com.group7.bus.vo.ExamtodoVo;
 import com.group7.sys.common.DataGridView;
 import com.group7.sys.common.ResultObj;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * <p>
@@ -96,5 +98,24 @@ public class ExamtodoController {
             throw new medMISException("删除失败", HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @RequestMapping("addExamToDo")
+    @RequiresRoles("DOCTOR")
+    public ResultObj addExamToDo(ExamVo examVo) throws medMISException {
+        try {
+            Examtodo examtodoadd = new ExamtodoVo();
+            examtodoadd.setExamId(examVo.getExamId());
+            examtodoadd.setCreatetime(new Date());
+            examtodoadd.setRegisterId(examVo.getRegisterId());
+            this.examtodoService.saveOrUpdate(examtodoadd);
+            return ResultObj.ADD_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new medMISException("添加失败", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+
+
 }
 

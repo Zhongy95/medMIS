@@ -11,6 +11,7 @@ import com.group7.bus.service.DoctortimeService;
 import com.group7.bus.service.PaymentService;
 import com.group7.bus.service.RegisterService;
 import com.group7.bus.service.RegisterqueueService;
+import com.group7.bus.vo.DoctortimeVo;
 import com.group7.bus.vo.RegisterVo;
 import com.group7.bus.vo.RegisterqueueVo;
 import com.group7.sys.common.DataGridView;
@@ -43,6 +44,8 @@ import java.util.Date;
 import java.util.List;
 import java.text.SimpleDateFormat;
 
+import static com.group7.sys.common.Constast.*;
+
 /**
  * <p>
  * 排队看病 前端控制器
@@ -62,32 +65,78 @@ public class RegisterqueueController {
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
-    @RequestMapping("loadAllRegisterqueue")
-    public DataGridView loadAllRegisterqueue(RegisterqueueVo registerqueueVo) {
+    @RequestMapping("loadAllRegisterqueuePatient")
+    public DataGridView loadAllRegisterqueuePatient(RegisterqueueVo registerqueueVo) {
         IPage<Registerqueue> page = new Page<>(registerqueueVo.getPage(), registerqueueVo.getLimit());
         QueryWrapper<Registerqueue> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByAsc("create_time");// 排序依据
         this.registerqueueService.page(page, queryWrapper);
-        queryWrapper.orderByDesc("queue_number"); // 排序依据
         User user = (User) WebUtils.getSession().getAttribute("user");
         IPage<Registerqueue> resultPage = new Page<>(registerqueueVo.getPage(), registerqueueVo.getLimit());
         List<Registerqueue> list = new ArrayList<Registerqueue>();
+        Integer targetDoctorid =null;//设置要看的目标医生
+        for(Registerqueue registerqueue:page.getRecords()){
+            Register register = this.registerService.getById(registerqueue.getRegisterId());
+            if(user.getUserId().equals(register.getPatientId()))
+            {
+                if(targetDoctorid==null) {
+                    targetDoctorid = register.getDoctorId();
+                    break;
+                }
+
+            }
+        }
+        Integer queuenumbernow = 0; //设置队列排序初始值为0
         for(Registerqueue registerqueue:page.getRecords()){
             Register register = registerService.getById(registerqueue.getRegisterId());
             registerqueue.setPatientId(register.getPatientId());
             registerqueue.setDoctorId(register.getDoctorId());
-            User userPatient = userService.getById(registerqueue.getPatientId());
-            registerqueue.setPatientName(userPatient.getName());
-            User userDoctor = userService.getById(registerqueue.getDoctorId());
-            registerqueue.setDeptId(Integer.parseInt(userDoctor.getDeptId()));
-            Dept dept = deptService.getById(userDoctor.getDeptId());
-            registerqueue.setDeptName((dept.getDeptName()));
-            registerqueue.setDoctorName(userDoctor.getName());
-            if(Integer.parseInt(userDoctor.getDeptId())>=1)
-                if(user.getUserId().equals(registerqueue.getDoctorId()))
-                    list.add(registerqueue);
-            else
-                if(user.getUserId().equals(registerqueue.getPatientId()))
-                    list.add(registerqueue);
+            if(registerqueue.getDoctorId().equals(targetDoctorid)&& !registerqueue.getSituation().equals(QUEUE_AFTERRECORD)){
+                User userPatient = userService.getById(registerqueue.getPatientId());
+                registerqueue.setPatientName(userPatient.getName());
+                User userDoctor = userService.getById(registerqueue.getDoctorId());
+                registerqueue.setDeptId(Integer.parseInt(userDoctor.getDeptId()));
+                Dept dept = deptService.getById(userDoctor.getDeptId());
+                registerqueue.setDeptName((dept.getDeptName()));
+                registerqueue.setDoctorName(userDoctor.getName());
+                queuenumbernow++;
+                registerqueue.setQueueNum(queuenumbernow);
+                list.add(registerqueue);
+            }
+        }
+        resultPage.setRecords(list);
+        resultPage.setTotal(page.getTotal());
+        resultPage.setPages(page.getPages());
+        return new DataGridView(resultPage.getTotal(), resultPage.getRecords());
+    }
+
+    @RequestMapping("loadAllRegisterqueueDoctor")
+    public DataGridView loadAllRegisterqueueDoctor(RegisterqueueVo registerqueueVo) {
+        IPage<Registerqueue> page = new Page<>(registerqueueVo.getPage(), registerqueueVo.getLimit());
+        QueryWrapper<Registerqueue> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByAsc("create_time");// 排序依据
+        this.registerqueueService.page(page, queryWrapper);
+        User user = (User) WebUtils.getSession().getAttribute("user");
+        IPage<Registerqueue> resultPage = new Page<>(registerqueueVo.getPage(), registerqueueVo.getLimit());
+        List<Registerqueue> list = new ArrayList<Registerqueue>();
+        Integer queuenumbernow = 0; //设置队列排序初始值为0
+        for(Registerqueue registerqueue:page.getRecords()){
+            Register register = registerService.getById(registerqueue.getRegisterId());
+            registerqueue.setPatientId(register.getPatientId());
+            registerqueue.setDoctorId(register.getDoctorId());
+            if(user.getUserId().equals(registerqueue.getDoctorId())&& !registerqueue.getSituation().equals(QUEUE_AFTERRECORD))
+            {
+                User userPatient = userService.getById(registerqueue.getPatientId());
+                registerqueue.setPatientName(userPatient.getName());
+                User userDoctor = userService.getById(registerqueue.getDoctorId());
+                registerqueue.setDeptId(Integer.parseInt(userDoctor.getDeptId()));
+                Dept dept = deptService.getById(userDoctor.getDeptId());
+                registerqueue.setDeptName((dept.getDeptName()));
+                registerqueue.setDoctorName(userDoctor.getName());
+                list.add(registerqueue);
+                queuenumbernow++;
+                registerqueue.setQueueNum(queuenumbernow);
+            }
         }
         resultPage.setRecords(list);
         resultPage.setTotal(page.getTotal());
@@ -112,6 +161,122 @@ public class RegisterqueueController {
             e.printStackTrace();
             throw new medMISException("呼叫失败",HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @RequestMapping("recordRegisterQueue")
+    public ResultObj recordRegisterQueue(RegisterqueueVo registerqueueVo) throws medMISException {
+        try {
+            User user = (User) WebUtils.getSession().getAttribute("user");
+            IPage<Registerqueue> page = new Page<>(registerqueueVo.getPage(), registerqueueVo.getLimit());
+            QueryWrapper<Registerqueue> queryWrapper = new QueryWrapper<>();
+            queryWrapper.orderByAsc("create_time");// 排序依据
+            this.registerqueueService.page(page, queryWrapper);
+            IPage<Registerqueue> resultPage = new Page<>(registerqueueVo.getPage(), registerqueueVo.getLimit());
+            List<Registerqueue> list = new ArrayList<Registerqueue>();
+            Integer queuenumbernow = 0; //设置队列排序初始值为0
+            for(Registerqueue registerqueue:page.getRecords()){
+                Register register = registerService.getById(registerqueue.getRegisterId());
+                registerqueue.setPatientId(register.getPatientId());
+                registerqueue.setDoctorId(register.getDoctorId());
+                if(user.getUserId().equals(registerqueue.getDoctorId()))//只有医生确认后，才开始操作
+                {
+                    if(registerqueue.getSituation().equals(QUEUE_INQUEUE))
+                        registerqueue.setSituation(QUEUE_INRECORD);
+                    this.registerqueueService.updateById(registerqueue);
+                    break;
+                }
+            }
+
+            return ResultObj.UPDATE_SUCCESS;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new medMISException("呼叫失败",HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+
+    @RequestMapping("addRegisterqueue")
+    public ResultObj addRegisterqueue(RegisterVo registerVo) throws medMISException {
+        try {
+            if(!registerVo.getAvailable())
+                throw new medMISException("添加失败", HttpStatus.FORBIDDEN);
+            if(!registerVo.getPaymentIfdone())
+                throw new medMISException("添加失败", HttpStatus.BAD_REQUEST);
+            Register registerin = this.registerService.getById(registerVo);
+            Registerqueue registerqueue = new Registerqueue();
+
+            registerqueue.setRegisterId(registerin.getRegisterId());
+            IPage<Registerqueue> page = new Page<>();
+            QueryWrapper<Registerqueue> queryWrapper = new QueryWrapper<>();
+            queryWrapper.orderByAsc("create_time");// 排序依据
+            //queryWrapper.last("limit 1");
+            this.registerqueueService.page(page, queryWrapper);//获得排最后的一条记录
+
+            this.registerqueueService.save(registerqueue);
+            registerin.setAvailable(false);//完成后，将可用状态改为否
+            this.registerService.updateById(registerin);
+            return ResultObj.ADD_SUCCESS;
+        }catch(Exception e) {
+            e.printStackTrace();
+            throw new medMISException("添加失败", HttpStatus.UNAUTHORIZED);
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @RequestMapping("loadRegisterToRecord")
+    public Registerqueue loadRegisterToRecord() throws medMISException {
+
+        try {
+            Registerqueue registerqueuetoload = new Registerqueue();
+
+            QueryWrapper<Registerqueue> queryWrapper = new QueryWrapper<>();
+            queryWrapper.orderByAsc("create_time");// 排序依据
+            List<Registerqueue> list = new ArrayList<Registerqueue>();
+            list=this.registerqueueService.list(queryWrapper);
+            User user = (User) WebUtils.getSession().getAttribute("user");
+
+            Integer queuenumbernow = 0; //设置队列排序初始值为0
+            for(Registerqueue registerqueue:list){
+                Register register = registerService.getById(registerqueue.getRegisterId());
+                registerqueue.setPatientId(register.getPatientId());
+                registerqueue.setDoctorId(register.getDoctorId());
+                if(user.getUserId().equals(registerqueue.getDoctorId())&& registerqueue.getSituation().equals(QUEUE_INRECORD))
+                {
+                    User userPatient = userService.getById(registerqueue.getPatientId());
+                    registerqueue.setPatientName(userPatient.getName());
+                    User userDoctor = userService.getById(registerqueue.getDoctorId());
+                    registerqueue.setDeptId(Integer.parseInt(userDoctor.getDeptId()));
+                    Dept dept = deptService.getById(userDoctor.getDeptId());
+                    registerqueue.setDeptName((dept.getDeptName()));
+                    registerqueue.setDoctorName(userDoctor.getName());
+                    registerqueuetoload=registerqueue;
+                }
+            }
+
+            return registerqueuetoload;
+
+
+        }catch(Exception e) {
+            e.printStackTrace();
+            throw new medMISException("获取失败", HttpStatus.UNAUTHORIZED);
+        }
+
+
     }
 
 

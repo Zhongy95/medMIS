@@ -4,17 +4,20 @@ package com.group7.bus.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.group7.bus.entity.Record;
-import com.group7.bus.service.RecordService;
+import com.group7.bus.entity.*;
+import com.group7.bus.service.*;
 import com.group7.bus.service.impl.RecordServiceImpl;
 import com.group7.bus.vo.RecordVo;
 import com.group7.sys.common.DataGridView;
+import com.group7.sys.common.ResultObj;
 import com.group7.sys.common.WebUtils;
 import com.group7.sys.entity.Dept;
 import com.group7.sys.entity.User;
 import com.group7.sys.exception.medMISException;
 import com.group7.sys.service.DeptService;
 import com.group7.sys.service.UserService;
+import com.group7.sys.vo.UserVo;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static com.group7.sys.common.Constast.QUEUE_AFTERRECORD;
+import static com.group7.sys.common.Constast.QUEUE_INRECORD;
 
 /**
  * <p>
@@ -43,6 +49,11 @@ public class RecordController {
     private RecordService recordService;
     private UserService userService;
     private DeptService deptService;
+    @Autowired private ExamtodoService examtodoService;
+    @Autowired private TreattodoService treattodoService;
+    @Autowired private MedtodoService medtodoService;
+    @Autowired private RegisterqueueService registerqueueService;
+
 
     @Autowired
     public RecordController(RecordServiceImpl recordServiceImpl, RecordService recordService, UserService userService, DeptService deptService) {
@@ -58,8 +69,8 @@ public class RecordController {
         IPage<Record> page = new Page<>(recordVo.getPage(), recordVo.getLimit());
         QueryWrapper<Record> queryWrapper = new QueryWrapper<>();
         QueryWrapper<User> doctorqw = new QueryWrapper<>();
-        List<User> doctors = new ArrayList();
-        List<Integer> doctorIds = new ArrayList();
+        List<User> doctors = new ArrayList<>();
+        List<Integer> doctorIds = new ArrayList<>();
         User patient = (User) WebUtils.getSession().getAttribute("user");
         if (StringUtils.isNotBlank(recordVo.getDoctorName())) {
             doctorqw.like("user_name", recordVo.getDoctorName());
@@ -90,8 +101,8 @@ public class RecordController {
         IPage<Record> page = new Page<>(recordVo.getPage(), recordVo.getLimit());
         QueryWrapper<Record> queryWrapper = new QueryWrapper<>();
         QueryWrapper<User> patientqw = new QueryWrapper<>();
-        List<User> patients = new ArrayList();
-        List<Integer> patientIds = new ArrayList();
+        List<User> patients = new ArrayList<>();
+        List<Integer> patientIds = new ArrayList<>();
         User doctor = (User) WebUtils.getSession().getAttribute("user");
         if (StringUtils.isNotBlank(recordVo.getDoctorName())) {
             patientqw.like("user_name", recordVo.getDoctorName());
@@ -127,16 +138,75 @@ public class RecordController {
 
     @RequestMapping("addRecord")
     @RequiresRoles("DOCTOR")
-    public RecordVo addRecord(RecordVo recordVo) throws medMISException {
+    public ResultObj addRecord(RecordVo recordVo) throws medMISException {
         try {
             User doctor = (User) WebUtils.getSession().getAttribute("user");
             recordVo.setCreatetime(new Date());
             recordVo.setDoctorId(doctor.getUserId());
             recordService.save(recordVo);
-            return recordVo;
+            Record recordnow = this.recordService.getById(recordVo);
+            //更新ExamToDo内容,因为之前没有recordId
+            QueryWrapper<Examtodo> queryWrapperExam = new QueryWrapper<>();
+            queryWrapperExam.eq("register_id",recordnow.getRegisterId());
+            List<Examtodo> examtodoList= this.examtodoService.list(queryWrapperExam);
+            if(examtodoList.size()!=0){
+                for(Examtodo examtodo:examtodoList){
+                    if(examtodo.getRecordId()==null)
+                        examtodo.setRecordId(recordnow.getRecordId());
+                }
+                this.examtodoService.updateBatchById(examtodoList);
+                recordnow.setIfexam(true);
+                this.recordService.updateById(recordnow);
+            }
+            //更新TreatToDo内容,因为之前没有recordId
+            QueryWrapper<Treattodo> queryWrapperTreat = new QueryWrapper<>();
+            queryWrapperTreat.eq("register_id",recordnow.getRegisterId());
+            List<Treattodo> treattodoList= this.treattodoService.list(queryWrapperTreat);
+            if(treattodoList.size()!=0){
+                for(Treattodo treattodo:treattodoList){
+                    if(treattodo.getRecordId()==null)
+                        treattodo.setRecordId(recordnow.getRecordId());
+                }
+                this.treattodoService.updateBatchById(treattodoList);
+                recordnow.setIftreat(true);
+                this.recordService.updateById(recordnow);
+            }
+            //更新MedToDo内容,因为之前没有recordId
+            QueryWrapper<Medtodo> queryWrapperMed = new QueryWrapper<>();
+            queryWrapperMed.eq("register_id",recordnow.getRegisterId());
+            List<Medtodo> medtodoList= this.medtodoService.list(queryWrapperMed);
+            if(medtodoList.size()!=0){
+                for(Medtodo medtodo:medtodoList){
+                    if(medtodo.getRecordId()==null)
+                        medtodo.setRecordId(recordnow.getRecordId());
+                }
+                this.medtodoService.updateBatchById(medtodoList);
+                recordnow.setIfdrug(true);
+                this.recordService.updateById(recordnow);
+            }
+
+            //将该排队置为不可用
+            Registerqueue registerqueuenow = this.registerqueueService.getById(recordVo.getQueueId());
+            registerqueuenow.setSituation(QUEUE_AFTERRECORD);
+            this.registerqueueService.updateById(registerqueuenow);
+
+
+            return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {
             throw new medMISException("添加病历失败", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @RequestMapping("loadPatient")
+
+    public User loadPatient(UserVo userVo) throws medMISException {
+        try {
+            return this.userService.getById(userVo);
+        } catch (Exception e) {
+            throw new medMISException("读取病人信息失败", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 }
 

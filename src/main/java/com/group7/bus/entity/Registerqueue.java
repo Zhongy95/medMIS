@@ -34,11 +34,6 @@ public class Registerqueue implements Serializable {
     private Integer queueId;
 
     /**
-     * 当前排在第几位
-     */
-    private Integer queueNumber;
-
-    /**
      * 挂号单号
      */
     private Integer registerId;
@@ -46,8 +41,17 @@ public class Registerqueue implements Serializable {
     /**
      * 是否可用
      */
-    private Integer available;
+    private boolean available;
 
+    /**
+     * 问诊状态
+     */
+    private Integer situation;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 
     /*医生ID*/
     @TableField(exist = false)
@@ -67,6 +71,9 @@ public class Registerqueue implements Serializable {
     /*科室*/
     @TableField(exist = false)
     private String deptName;
+    /*即时排序*/
+    @TableField(exist = false)
+    private Integer queueNum;
 
 
 }

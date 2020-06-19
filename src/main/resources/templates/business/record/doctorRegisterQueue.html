@@ -166,18 +166,24 @@
             elem: "#registerTable",
             cellMinWidth: 80,
             title: "挂号表",
-            url: "/api/bus/registerqueue/loadAllRegisterqueue",
+            url: "/api/bus/registerqueue/loadAllRegisterqueueDoctor",
             toolbar: "#registerToolBar",
             page: true,
             height: "full-190",
             cols: [ [
                 {type: 'checkbox', fixed: 'left'},
                 {field: 'queueId', title: '队列号', align: 'center'},
-                {field: 'queueNumber', title: '当前队列位置', align: 'center'},
+                {field: 'queueNum', title: '当前队列位置', align: 'center'},
                 {field: 'registerId', title: '挂号单号', align: 'center'},
                 {field: 'patientName', title: '病人姓名', align: 'center'},
                 {field: 'doctorName', title: '医生姓名', align: 'center'},
                 {field: 'deptName', title: '科室', align: 'center'},
+                {field: 'situation', title: '挂号状态', align: 'center', width: 150, templet: function (d) {
+                        if(d.situation === 1)
+                            return "<font color='red'>排队中</font>";
+                        else if (d.situation ===2)
+                            return "<font color='blue'>治疗中</font>";
+                    }},
                 // {field: 'createtime', title: '创建时间', align: 'center',width:'200'},
                 // {field: 'paymentIfdone', title: '缴费状态', align: 'center', width: 200, templet: function (d) {
                 //         if(d.paymentIfdone == false)
@@ -327,11 +333,12 @@
         //删除
         function callNext(data) {
             layer.confirm('你确定要呼叫下一位病人吗？',{icon: 3,title:'提示'},function (index) {
-                $.post("/api/bus/registerqueue/popRegisterQueue",function (res) {
+                $.post("/api/bus/registerqueue/recordRegisterQueue",function (res) {
                     if (res.code==200){
                         tableIns.reload({
                             where:"",
                         });
+                        window.top.onlyjump("/bus/doctor/toRecordWriter");
                     }
                     layer.msg(res.msg);
                 });

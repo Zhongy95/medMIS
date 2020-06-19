@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 public class MedtodoVo extends Medtodo {
     private static final long serialVersionUID = 1L;
 
+
+
     private Integer Page = 1;
 
     private Integer limit = 10;

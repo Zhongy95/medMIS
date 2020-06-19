@@ -41,11 +41,12 @@ public class Treattodo implements Serializable {
      */
     private Integer treatmentId;
 
-    private String createtime;
+    private Date createtime;
 
-    private Integer available;
+    private Boolean available;
 
-    private Boolean payIfdone;
+
+    private Integer registerId;
 
     /**
      * 治疗项目名称

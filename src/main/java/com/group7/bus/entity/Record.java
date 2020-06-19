@@ -46,6 +46,11 @@ public class Record implements Serializable {
     private Integer doctorId;
 
     /**
+     * 挂号id
+     */
+    private Integer registerId;
+
+    /**
      * 诊断详情
      */
     private String diagnosis;
@@ -58,27 +63,27 @@ public class Record implements Serializable {
     /**
      * 是否需要检查
      */
-    private Integer ifexam;
+    private Boolean ifexam;
 
     /**
      * 是否需要用药
      */
-    private Integer ifdrug;
+    private Boolean ifdrug;
 
     /**
      * 是否需要治疗
      */
-    private Integer iftreat;
+    private Boolean iftreat;
 
     /**
      * 是否可用
      */
-    private Integer available;
+    private Boolean available;
 
     /**
      * 是否完成整个治疗流程
      */
-    private Integer ifdone;
+    private Boolean ifdone;
 
     @TableField(exist = false)
     private String doctorName;

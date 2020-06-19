@@ -87,7 +87,8 @@
     <div id="registerRowBar"style="display: none;">
         <button type="button" lay-event="pay" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-edit"></span>缴费</button>
         <button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
-        <button type="button" lay-event="show" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-about"></span>查看</button>
+        <button type="button" lay-event="show" class="layui-btn layui-btn-sm layui-btn-normal"><span class="layui-icon layui-icon-about"></span>查看</button>
+        <button type="button" lay-event="queue" class="layui-btn layui-btn-sm layui-btn-warm"><span class="layui-icon layui-icon-about"></span>排队</button>
     </div>
 </div>
 
@@ -275,6 +276,8 @@
                     break;
                 case 'show':
                     showRegister(data);
+                case 'queue':
+                    joinQueue(data);
                     break;
             }
         });
@@ -388,6 +391,32 @@
                         window.parent.parent.parent.parent.onlyreload(doctortimeurl);
                     }
                     layer.msg(res.msg);
+                });
+                layer.close(index);
+            });
+        }
+
+        //加入队列
+        function joinQueue(data) {
+            layer.confirm('你确定要使【'+data.registerId+'】这条挂号记录进入队列吗？',{icon: 3,title:'提示'},function (index) {
+                $.post("/api/bus/registerqueue/addRegisterqueue",{registerId:data.registerId},function (res) {
+                    if (res.code==200){
+                        tableIns.reload({
+                            //删除成功加载表格时，要重置查询条件
+                            where:"",
+                        });
+                        // var payurl ='/bus/patient/toPaymentManager';
+                        // window.parent.parent.parent.parent.onlyreload(payurl);
+                        // var doctortimeurl ='/bus/patient/toDoctortimeRight';
+                        // window.parent.parent.parent.parent.onlyreload(doctortimeurl);
+                        layer.msg(res.msg);
+                    }
+                    else if (res.code==403 ){
+                        layer.msg("本挂号记录已使用过")
+                    }
+                    else if (res.code==400) {
+                        layer.msg("未付款");
+                    }
                 });
                 layer.close(index);
             });

@@ -119,7 +119,7 @@
                 {field: 'diagnosis', title: '诊断结果', align: 'center', width: 250},
                 {
                     field: 'ifexam', title: '后续检查', align: 'center', width: 100, templet: function (d) {
-                        if (d.ifexam === 0)
+                        if (d.ifexam === false)
                             return "<font color='grey'>不需要</font>";
                         else
                             return "<font color='blue'>需要</font>";
@@ -127,7 +127,7 @@
                 },
                 {
                     field: 'ifdrug', title: '后续用药', align: 'center', width: 100, templet: function (d) {
-                        if (d.ifdrug === 0)
+                        if (d.ifdrug === false)
                             return "<font color='grey'>不需要</font>";
                         else
                             return "<font color='blue'>需要</font>";
@@ -135,10 +135,18 @@
                 },
                 {
                     field: 'iftreat', title: '后续治疗', align: 'center', width: 100, templet: function (d) {
-                        if (d.iftreat === 0)
+                        if (d.iftreat === false)
                             return "<font color='grey'>不需要</font>";
                         else
                             return "<font color='blue'>需要</font>";
+                    }
+                },
+                {
+                    field: 'ifdone', title: '完成问诊', align: 'center', width: 100, templet: function (d) {
+                        if (d.ifdone === false)
+                            return "<font color='grey'>未完成</font>";
+                        else
+                            return "<font color='blue'>已完成</font>";
                     }
                 },
                 {fixed: 'right', title: '操作', toolbar: '#recordRowBar', align: 'center', width: 180}

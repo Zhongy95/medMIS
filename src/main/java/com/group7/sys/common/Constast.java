@@ -44,4 +44,11 @@ public interface Constast {
   public static final Integer PAYMENT_EXAM = 2;
   public static final Integer PAYMENT_TREATMENT = 3;
   public static final Integer PAYMENT_MEDICINE = 4;
+
+  /**队列状态*/
+  public static final Integer QUEUE_INQUEUE = 1;
+  public static final Integer QUEUE_INRECORD = 2;
+  public static final Integer QUEUE_AFTERRECORD = 3;
+
+
 }

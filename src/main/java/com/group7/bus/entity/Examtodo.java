@@ -40,11 +40,12 @@ public class Examtodo implements Serializable {
      */
     private Integer examId;
 
-    private String createtime;
+    private Date createtime;
 
     private Integer available;
 
-    private Boolean payIfdone;
+    private Integer registerId;
+
 
     /**
      * 检查项目名称

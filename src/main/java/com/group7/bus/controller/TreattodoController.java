@@ -3,10 +3,13 @@ package com.group7.bus.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.group7.bus.entity.Treattodo;
 import com.group7.bus.entity.Treatment;
 import com.group7.bus.entity.Treattodo;
 import com.group7.bus.service.TreatmentService;
 import com.group7.bus.service.TreattodoService;
+import com.group7.bus.vo.TreatmentVo;
+import com.group7.bus.vo.TreattodoVo;
 import com.group7.bus.vo.TreattodoVo;
 import com.group7.sys.common.DataGridView;
 import com.group7.sys.common.ResultObj;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * <p>
@@ -100,6 +104,23 @@ public class TreattodoController {
             throw new medMISException("删除失败", HttpStatus.UNAUTHORIZED);
         }
     }
+    
+    @RequestMapping("addTreatToDo")
+    @RequiresRoles("DOCTOR")
+    public ResultObj addTreatToDo(TreatmentVo treatmentVo) throws medMISException {
+        try {
+            Treattodo treattodoadd = new TreattodoVo();
+            treattodoadd.setTreatmentId(treatmentVo.getTreatmentId());
+            treattodoadd.setCreatetime(new Date());
+            treattodoadd.setRegisterId(treatmentVo.getRegisterId());
+            this.treattodoService.saveOrUpdate(treattodoadd);
+            return ResultObj.ADD_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new medMISException("添加失败", HttpStatus.UNAUTHORIZED);
+        }
+    }
+    
 }
 
 

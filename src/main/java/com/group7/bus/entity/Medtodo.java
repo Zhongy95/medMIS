@@ -41,11 +41,13 @@ public class Medtodo implements Serializable {
      */
     private Integer medId;
 
-    private String createtime;
+    private Date createtime;
 
     private Integer available;
 
     private Boolean payIfdone;
+
+    private Integer registerId;
 
     /**
      * 药物名称

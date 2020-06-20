@@ -486,9 +486,12 @@
                             //支付成功加载表格时，要重置查询条件
                             where:"",
                         });
-                        top.location.reload();
                     }
-                    layer.msg(res.msg);
+                    layer.msg(res.msg, {
+                        time: 1000
+                    }, function(){
+                        top.location.reload();
+                    });
                 });
                 layer.close(index);
             });
@@ -504,9 +507,12 @@
                         tableIns.reload({
                             where:"",
                         });
-                        top.location.reload();
                     }
-                    layer.msg(res.msg);
+                    layer.msg(res.msg, {
+                        time: 1000
+                    }, function(){
+                        top.location.reload();
+                    });
                 });
                 layer.close(index);
             });

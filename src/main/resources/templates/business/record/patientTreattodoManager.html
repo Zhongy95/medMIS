@@ -100,7 +100,7 @@
             <p>治疗单号&nbsp;&nbsp;&nbsp;&nbsp;<span id="id" ></span></p>
             <p>治疗名称&nbsp;&nbsp;&nbsp;&nbsp;<span id="name" ></span></p>
             <p>病人姓名&nbsp;&nbsp;&nbsp;&nbsp;<span id="pname" ></span></p>
-            <p>缴费状态&nbsp;&nbsp;&nbsp;&nbsp;<span id="ifpay" ></span></p>
+            <p>可用状态&nbsp;&nbsp;&nbsp;&nbsp;<span id="available" ></span></p>
         </div>
     </div>
 </div>
@@ -174,7 +174,7 @@
         tableIns = table.render({
             elem: "#treattodoTable",
             title: "公告数据表格",
-            url: "/api/bus/treattodo/loadAllTreattodo",
+            url: "/api/bus/treattodo/loadTreattodo",
             toolbar: "#treattodoToolBar",
             page: true,
             height: "full",
@@ -184,11 +184,11 @@
                 {field: 'treatName', title: '治疗名称', align: 'center', width: 200},
                 {field: 'patientName', title: '患者姓名', align: 'center', width: 150},
                 {field: 'createtime', title: '创建时间', align: 'center', width: 250},
-                {field: 'payIfdone', title: '缴费状态', align: 'center', width: 150, templet: function (d) {
-                        if(d.payIfdone == 0)
-                            return "<font color='red'>未完成</font>";
+                {field: 'available', title: '可用状态', align: 'center', width: 150, templet: function (d) {
+                        if(d.available == 0)
+                            return "<font color='red'>不可用</font>";
                         else
-                            return "<font color='blue'>已完成</font>";
+                            return "<font color='blue'>可用</font>";
                     }},
                 {fixed: 'right', title: '操作', toolbar: '#treattodoRowBar', align: 'center', width: 250}
             ] ],
@@ -320,13 +320,13 @@
                     $("#id").text(data.treattodoId);
                     $("#name").text(data.treatName);
                     $("#pname").text(data.patientName);
-                    if(data.payIfdone) {
-                        $("#ifpay").text("已完成");
-                        $("#ifpay").css("color", "blue");
+                    if(data.available) {
+                        $("#available").text("可用");
+                        $("#available").css("color", "blue");
                     }
                     else {
-                        $("#ifpay").text("未完成");
-                        $("#ifpay").css("color", "red");;
+                        $("#available").text("不可用");
+                        $("#available").css("color", "red");;
                     }
                 }
             });

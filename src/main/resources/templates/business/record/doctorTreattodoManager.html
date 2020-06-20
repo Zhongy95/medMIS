@@ -67,14 +67,14 @@
 
 <!--数据表格开始-->
 <div>
-    <table class="layui-hide" id="medtodoTable" lay-filter="medtodoTable">
+    <table class="layui-hide" id="treattodoTable" lay-filter="treattodoTable">
 
     </table>
-    <div id="medtodoToolBar" style="display: none;">
+    <div id="treattodoToolBar" style="display: none;">
         <!--<button type="button" lay-event="reload" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-refresh"></span>刷新</button>-->
         <button type="button" lay-event="batchDelete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>批量删除</button>
     </div>
-    <div id="medtodoRowBar" style="display: none;">
+    <div id="treattodoRowBar" style="display: none;">
         <!--<button type="button" lay-event="pay" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-rmb"></span>支付</button>-->
         <button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
         <button type="button" lay-event="show" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-about"></span>查看</button>
@@ -86,19 +86,19 @@
 <!--查看层组件-->
 <div class="layui-card" id="detailDiv" style="display: none">
     <!--<div class="layui-card-header" style="font-size: 16px; font-weight: bold; color: #2e2e2e">
-        药品单详情
-    </div>-->
+         治疗单详情
+     </div>-->
     <div class="layui-card-body">
         <!--<div style="font-size: 14px; color: darkslategrey">-->
         <div style="font-size: 14px;">
             <!--<p><b>创建时间&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="createtime" ></span></p>
-            <p><b>药品单号&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="id" ></span></p>
-            <p><b>药品名称&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="name" ></span></p>
+            <p><b>治疗单号&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="id" ></span></p>
+            <p><b>治疗名称&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="name" ></span></p>
             <p><b>病人姓名&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="pname" ></span></p>
             <p><b>缴费状态&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="ifpay" ></span></p>-->
             <p>创建时间&nbsp;&nbsp;&nbsp;&nbsp;<span id="createtime" ></span></p>
-            <p>药品单号&nbsp;&nbsp;&nbsp;&nbsp;<span id="id" ></span></p>
-            <p>药品名称&nbsp;&nbsp;&nbsp;&nbsp;<span id="name" ></span></p>
+            <p>治疗单号&nbsp;&nbsp;&nbsp;&nbsp;<span id="id" ></span></p>
+            <p>治疗名称&nbsp;&nbsp;&nbsp;&nbsp;<span id="name" ></span></p>
             <p>病人姓名&nbsp;&nbsp;&nbsp;&nbsp;<span id="pname" ></span></p>
             <p>可用状态&nbsp;&nbsp;&nbsp;&nbsp;<span id="available" ></span></p>
         </div>
@@ -172,16 +172,16 @@
 
         //初始化表格 加载数据
         tableIns = table.render({
-            elem: "#medtodoTable",
+            elem: "#treattodoTable",
             title: "公告数据表格",
-            url: "/api/bus/medtodo/loadMedtodo",
-            toolbar: "#medtodoToolBar",
+            url: "/api/bus/treattodo/loadAllTreattodo",
+            toolbar: "#treattodoToolBar",
             page: true,
             height: "full",
             cols: [ [
                 {type: 'checkbox', fixed: 'left', width: 50},
-                {field: 'medtodoId', title: '药品单号', align: 'center', width: 100},
-                {field: 'medName', title: '药品名称', align: 'center', width: 200},
+                {field: 'treattodoId', title: '治疗单号', align: 'center', width: 100},
+                {field: 'treatName', title: '治疗名称', align: 'center', width: 200},
                 {field: 'patientName', title: '患者姓名', align: 'center', width: 150},
                 {field: 'createtime', title: '创建时间', align: 'center', width: 250},
                 {field: 'available', title: '可用状态', align: 'center', width: 150, templet: function (d) {
@@ -190,7 +190,7 @@
                         else
                             return "<font color='blue'>可用</font>";
                     }},
-                {fixed: 'right', title: '操作', toolbar: '#medtodoRowBar', align: 'center', width: 250}
+                {fixed: 'right', title: '操作', toolbar: '#treattodoRowBar', align: 'center', width: 250}
             ] ],
             done:function (data, curr, count) {
                 if(data.data.length==0&&curr!=1){   //不是第一页时，如果当前返回的数据为0那么就返回上一页
@@ -227,10 +227,10 @@
         });*/
 
         //监控工具条事件
-        table.on("toolbar(medtodoTable)", function (obj) {
+        table.on("toolbar(treattodoTable)", function (obj) {
             switch (obj.event) {
                 case 'batchDelete':
-                    batchDeleteMedtodo(obj.data);
+                    batchDeleteTreattodo(obj.data);
                     break;
                 default:
                     break;
@@ -238,15 +238,15 @@
         });
 
         //监控行工具条事件
-        table.on("tool(medtodoTable)",function (obj) {
+        table.on("tool(treattodoTable)",function (obj) {
             //获取当前行数据
             var data = obj.data;
             switch (obj.event){
                 case 'delete':
-                    deleteMedtodo(data);
+                    deleteTreattodo(data);
                     break;
                 case 'show':
-                    showMedtodo(data);
+                    showTreattodo(data);
                     break;
                 default:
                     break;
@@ -308,17 +308,17 @@
                 */
 
         //打开查看的弹出层
-        function showMedtodo(data) {
+        function showTreattodo(data) {
             mainIndex = layer.open({
                 type:1,
                 content:$("#detailDiv"),
                 area:['500px','250px'],
                 skin:'layui-layer-molv',
-                title:'药品单信息',
+                title:'治疗单信息',
                 success:function () {
                     $("#createtime").text(data.createtime);
-                    $("#id").text(data.medtodoId);
-                    $("#name").text(data.medName);
+                    $("#id").text(data.treattodoId);
+                    $("#name").text(data.treatName);
                     $("#pname").text(data.patientName);
                     if(data.available) {
                         $("#available").text("可用");
@@ -332,10 +332,10 @@
             });
         }
 
-        //删除药品单
-        function deleteMedtodo(data) {
-            layer.confirm('确认删除这条药品单记录吗？',{icon: 3, title: '提示'},function (index) {
-                $.post("/api/bus/medtodo/deleteMedtodo",data,function (res) {
+        //删除治疗单
+        function deleteTreattodo(data) {
+            layer.confirm('确认删除这条治疗单记录吗？',{icon: 3, title: '提示'},function (index) {
+                $.post("/api/bus/treattodo/deleteTreattodo",data,function (res) {
                     if (res.code==200){
                         console.log("删除单条");
                         //重新刷新表格
@@ -351,23 +351,23 @@
         }
 
         //批量删除
-        function batchDeleteMedtodo() {
+        function batchDeleteTreattodo() {
             //得到选中行
-            var checkStatus = table.checkStatus('medtodoTable');
+            var checkStatus = table.checkStatus('treattodoTable');
             var dataLength = checkStatus.data.length;
             if (dataLength>0){
-                layer.confirm('确认删除这些药品单记录吗？',{icon: 3,title: '提示'},function (index) {
+                layer.confirm('确认删除这些治疗单记录吗？',{icon: 3,title: '提示'},function (index) {
                     //获取选中行数据
                     var data = checkStatus.data;
                     var ids = "";
                     $.each(data,function (index, item) {
                         if (index==0){
-                            ids+="ids="+item.medtodoId;
+                            ids+="ids="+item.treattodoId;
                         }else {
-                            ids+="&ids="+item.medtodoId;
+                            ids+="&ids="+item.treattodoId;
                         }
                     });
-                    $.post("/api/bus/medtodo/batchDeleteMedtodo",ids,function (res) {
+                    $.post("/api/bus/treattodo/batchDeleteTreattodo",ids,function (res) {
                         if (res.code==200){
                             //重新刷新表格
                             tableIns.reload({

@@ -121,6 +121,7 @@ CREATE TABLE `bus_examqueue` (
   `examregister_id` int(11) NOT NULL COMMENT '检查挂号id',
   `available` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否可用',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `situation` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`queue_id`),
   KEY `bus_examqueue_bus_examregister_examregister_id_fk` (`examregister_id`),
   CONSTRAINT `bus_examqueue_bus_examregister_examregister_id_fk` FOREIGN KEY (`examregister_id`) REFERENCES `bus_examregister` (`examregister_id`)
@@ -878,4 +879,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-20 16:00:36
+-- Dump completed on 2020-06-20 16:05:56

@@ -101,6 +101,7 @@
             <p>检查单号&nbsp;&nbsp;&nbsp;&nbsp;<span id="id" ></span></p>
             <p>检查名称&nbsp;&nbsp;&nbsp;&nbsp;<span id="name" ></span></p>
             <p>病人姓名&nbsp;&nbsp;&nbsp;&nbsp;<span id="pname" ></span></p>
+            <p>可用状态&nbsp;&nbsp;&nbsp;&nbsp;<span id="available" ></span></p>
         </div>
     </div>
 </div>
@@ -142,7 +143,7 @@
         tableIns = table.render({
             elem: "#examtodoTable",
             title: "公告数据表格",
-            url: "/api/bus/examtodo/loadAllExamtodo",
+            url: "/api/bus/examtodo/loadExamtodo",
             toolbar: "#examtodoToolBar",
             page: true,
             height: "full",
@@ -152,6 +153,12 @@
                 {field: 'examName', title: '检查名称', align: 'center', width: 200},
                 {field: 'patientName', title: '患者姓名', align: 'center', width: 150},
                 {field: 'createtime', title: '创建时间', align: 'center', width: 250},
+                {field: 'available', title: '可用状态', align: 'center', width: 150, templet: function (d) {
+                        if(d.available == 0)
+                            return "<font color='red'>不可用</font>";
+                        else
+                            return "<font color='blue'>可用</font>";
+                    }},
                 {fixed: 'right', title: '操作', toolbar: '#examtodoRowBar', align: 'center', width: 250}
             ] ],
             done:function (data, curr, count) {
@@ -286,6 +293,14 @@
                     $("#id").text(data.examtodoId);
                     $("#name").text(data.examName);
                     $("#pname").text(data.patientName);
+                    if(data.available) {
+                        $("#available").text("可用");
+                        $("#available").css("color", "blue");
+                    }
+                    else {
+                        $("#available").text("不可用");
+                        $("#available").css("color", "red");;
+                    }
                 }
             });
         }

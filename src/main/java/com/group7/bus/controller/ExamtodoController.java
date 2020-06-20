@@ -1,5 +1,6 @@
 package com.group7.bus.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.group7.bus.entity.*;
@@ -11,6 +12,7 @@ import com.group7.sys.common.ResultObj;
 import com.group7.sys.common.WebUtils;
 import com.group7.sys.entity.User;
 import com.group7.sys.exception.medMISException;
+import com.group7.sys.service.UserService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +42,18 @@ public class ExamtodoController {
 
     @Autowired private ExamtodoService examtodoService;
 
+    @Autowired private RecordService recordService;
+
+    @Autowired private UserService userService;
+
     /**
      * 查询指定病人的所有待做检查信息
      *
      * @param examtodoVo
      * @return
      */
-    @RequestMapping("loadAllExamtodo")
-    public DataGridView loadAllExamtodo(ExamtodoVo examtodoVo) {
+    @RequestMapping("loadExamtodo")
+    public DataGridView loadExamtodo(ExamtodoVo examtodoVo) {
         User user = (User) WebUtils.getSession().getAttribute("user");
         IPage<Examtodo> page = examtodoService.getExamtodoByPatientId(
                 new Page<>(examtodoVo.getPage(), examtodoVo.getLimit()), user.getUserId());
@@ -115,7 +121,30 @@ public class ExamtodoController {
         }
     }
 
+    /**
+     * 查询-所有病人
+     *
+     * @param examtodoVo
+     * @return
+     */
+    @RequestMapping("loadAllExamtodo")
+    public DataGridView loadAllExamtodo(ExamtodoVo examtodoVo) {
+        IPage<Examtodo> page = new Page<>(examtodoVo.getPage(), examtodoVo.getLimit());
+        QueryWrapper<Examtodo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("createtime");
 
+        this.examtodoService.page(page,queryWrapper);
+
+        for(Examtodo examtodo : page.getRecords()) {
+            Exam exam = this.examService.getById(examtodo.getExamId());
+            examtodo.setExamName(exam.getExamName());
+            Record record = this.recordService.getById(examtodo.getRecordId());
+            User user = this.userService.getById(record.getPatientId());
+            examtodo.setPatientName(user.getName());
+        }
+
+        return new DataGridView(page.getTotal(), page.getRecords());
+    }
 
 }
 

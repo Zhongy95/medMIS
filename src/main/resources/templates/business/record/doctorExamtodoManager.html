@@ -67,17 +67,17 @@
 
 <!--数据表格开始-->
 <div>
-    <table class="layui-hide" id="medtodoTable" lay-filter="medtodoTable">
+    <table class="layui-hide" id="examtodoTable" lay-filter="examtodoTable">
 
     </table>
-    <div id="medtodoToolBar" style="display: none;">
+    <div id="examtodoToolBar" style="display: none;">
         <!--<button type="button" lay-event="reload" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-refresh"></span>刷新</button>-->
         <button type="button" lay-event="batchDelete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>批量删除</button>
     </div>
-    <div id="medtodoRowBar" style="display: none;">
+    <div id="examtodoRowBar" style="display: none;">
         <!--<button type="button" lay-event="pay" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-rmb"></span>支付</button>-->
-        <button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
         <button type="button" lay-event="show" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-about"></span>查看</button>
+        <button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
     </div>
 </div>
 
@@ -86,70 +86,38 @@
 <!--查看层组件-->
 <div class="layui-card" id="detailDiv" style="display: none">
     <!--<div class="layui-card-header" style="font-size: 16px; font-weight: bold; color: #2e2e2e">
-        药品单详情
+        检查单详情
     </div>-->
     <div class="layui-card-body">
         <!--<div style="font-size: 14px; color: darkslategrey">-->
         <div style="font-size: 14px;">
             <!--<p><b>创建时间&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="createtime" ></span></p>
-            <p><b>药品单号&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="id" ></span></p>
-            <p><b>药品名称&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="name" ></span></p>
+            <p><b>检查单号&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="id" ></span></p>
+            <p><b>检查名称&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="name" ></span></p>
             <p><b>病人姓名&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="pname" ></span></p>
             <p><b>缴费状态&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="ifpay" ></span></p>-->
             <p>创建时间&nbsp;&nbsp;&nbsp;&nbsp;<span id="createtime" ></span></p>
-            <p>药品单号&nbsp;&nbsp;&nbsp;&nbsp;<span id="id" ></span></p>
-            <p>药品名称&nbsp;&nbsp;&nbsp;&nbsp;<span id="name" ></span></p>
+            <p>检查单号&nbsp;&nbsp;&nbsp;&nbsp;<span id="id" ></span></p>
+            <p>检查名称&nbsp;&nbsp;&nbsp;&nbsp;<span id="name" ></span></p>
             <p>病人姓名&nbsp;&nbsp;&nbsp;&nbsp;<span id="pname" ></span></p>
             <p>可用状态&nbsp;&nbsp;&nbsp;&nbsp;<span id="available" ></span></p>
         </div>
     </div>
 </div>
 
-<!--
-&lt;!&ndash;添加和修改弹出层&ndash;&gt;
 <div id="addOrUpdateDiv" style="display: none;padding: 10px;margin-right: 4%">
-    <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
-        <div class="layui-form-item">
-            <label class="layui-form-label">公告标题</label>
-            <div class="layui-input-block">
-                <input type="hidden" name="noticeId">
-                <input type="text" name="title" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入公告标题">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">公告内容</label>
-            <div class="layui-input-block">
-                <textarea class="layui-textarea" name="content" id="content" placeholder="请输入公告内容" ></textarea>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block" style="text-align: center;padding-right: 7%">
-                <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit">
-                    <i class="layui-icon layui-icon-search layui-icon-normal"></i>提交
-                </button>
-                <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm">
-                    <i class="layui-icon layui-icon-refresh"></i><span>重置</span>
-                </button>
-            </div>
-        </div>
-    </form>
-</div>
-
-&lt;!&ndash;查看层&ndash;&gt;
-<div id="showNoticeDiv" style="display: none;padding: 10px">
-    <h3 id="notice_title" style="text-align: center"></h3>
-    <div style="text-align: right;margin-top: 2%">
-        发布人：<span id="notice_operName"></span>
-        发布时间：<span id="notice_createTime"></span>
+    <table class="layui-hide" id="examtimeTable" lay-filter="examtimeTable">
+    </table>
+    <div id="examtimeRowBar" style="display: none;">
+        <button type="button" lay-event="register" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-ok"></span>预约</button>
     </div>
-    <hr>
-    <div id="notice_content"></div>
-</div>-->
+</div>
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript" src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript">
     var tableIns;
+    var tableLayer;
 
     layui.use(['jquery', 'form', 'layer', 'laydate', 'table','layedit'], function () {
         var $ = layui.jquery;
@@ -172,16 +140,16 @@
 
         //初始化表格 加载数据
         tableIns = table.render({
-            elem: "#medtodoTable",
+            elem: "#examtodoTable",
             title: "公告数据表格",
-            url: "/api/bus/medtodo/loadMedtodo",
-            toolbar: "#medtodoToolBar",
+            url: "/api/bus/examtodo/loadAllExamtodo",
+            toolbar: "#examtodoToolBar",
             page: true,
             height: "full",
             cols: [ [
                 {type: 'checkbox', fixed: 'left', width: 50},
-                {field: 'medtodoId', title: '药品单号', align: 'center', width: 100},
-                {field: 'medName', title: '药品名称', align: 'center', width: 200},
+                {field: 'examtodoId', title: '检查单号', align: 'center', width: 100},
+                {field: 'examName', title: '检查名称', align: 'center', width: 200},
                 {field: 'patientName', title: '患者姓名', align: 'center', width: 150},
                 {field: 'createtime', title: '创建时间', align: 'center', width: 250},
                 {field: 'available', title: '可用状态', align: 'center', width: 150, templet: function (d) {
@@ -190,7 +158,7 @@
                         else
                             return "<font color='blue'>可用</font>";
                     }},
-                {fixed: 'right', title: '操作', toolbar: '#medtodoRowBar', align: 'center', width: 250}
+                {fixed: 'right', title: '操作', toolbar: '#examtodoRowBar', align: 'center', width: 250}
             ] ],
             done:function (data, curr, count) {
                 if(data.data.length==0&&curr!=1){   //不是第一页时，如果当前返回的数据为0那么就返回上一页
@@ -215,6 +183,7 @@
         });
 
 
+
         /*//监控模糊查询按钮事件
         form.on("submit(doSearch)", function (data) {
             tableIns.reload({
@@ -227,10 +196,10 @@
         });*/
 
         //监控工具条事件
-        table.on("toolbar(medtodoTable)", function (obj) {
+        table.on("toolbar(examtodoTable)", function (obj) {
             switch (obj.event) {
                 case 'batchDelete':
-                    batchDeleteMedtodo(obj.data);
+                    batchDeleteExamtodo(obj.data);
                     break;
                 default:
                     break;
@@ -238,15 +207,15 @@
         });
 
         //监控行工具条事件
-        table.on("tool(medtodoTable)",function (obj) {
+        table.on("tool(examtodoTable)",function (obj) {
             //获取当前行数据
             var data = obj.data;
             switch (obj.event){
                 case 'delete':
-                    deleteMedtodo(data);
+                    deleteExamtodo(data);
                     break;
                 case 'show':
-                    showMedtodo(data);
+                    showExamtodo(data);
                     break;
                 default:
                     break;
@@ -308,17 +277,17 @@
                 */
 
         //打开查看的弹出层
-        function showMedtodo(data) {
+        function showExamtodo(data) {
             mainIndex = layer.open({
                 type:1,
                 content:$("#detailDiv"),
                 area:['500px','250px'],
                 skin:'layui-layer-molv',
-                title:'药品单信息',
+                title:'检查单信息',
                 success:function () {
                     $("#createtime").text(data.createtime);
-                    $("#id").text(data.medtodoId);
-                    $("#name").text(data.medName);
+                    $("#id").text(data.examtodoId);
+                    $("#name").text(data.examName);
                     $("#pname").text(data.patientName);
                     if(data.available) {
                         $("#available").text("可用");
@@ -332,10 +301,10 @@
             });
         }
 
-        //删除药品单
-        function deleteMedtodo(data) {
-            layer.confirm('确认删除这条药品单记录吗？',{icon: 3, title: '提示'},function (index) {
-                $.post("/api/bus/medtodo/deleteMedtodo",data,function (res) {
+        //删除检查单
+        function deleteExamtodo(data) {
+            layer.confirm('确认删除这条检查单记录吗？',{icon: 3, title: '提示'},function (index) {
+                $.post("/api/bus/examtodo/deleteExamtodo",data,function (res) {
                     if (res.code==200){
                         console.log("删除单条");
                         //重新刷新表格
@@ -351,23 +320,23 @@
         }
 
         //批量删除
-        function batchDeleteMedtodo() {
+        function batchDeleteExamtodo() {
             //得到选中行
-            var checkStatus = table.checkStatus('medtodoTable');
+            var checkStatus = table.checkStatus('examtodoTable');
             var dataLength = checkStatus.data.length;
             if (dataLength>0){
-                layer.confirm('确认删除这些药品单记录吗？',{icon: 3,title: '提示'},function (index) {
+                layer.confirm('确认删除这些检查单记录吗？',{icon: 3,title: '提示'},function (index) {
                     //获取选中行数据
                     var data = checkStatus.data;
                     var ids = "";
                     $.each(data,function (index, item) {
                         if (index==0){
-                            ids+="ids="+item.medtodoId;
+                            ids+="ids="+item.examtodoId;
                         }else {
-                            ids+="&ids="+item.medtodoId;
+                            ids+="&ids="+item.examtodoId;
                         }
                     });
-                    $.post("/api/bus/medtodo/batchDeleteMedtodo",ids,function (res) {
+                    $.post("/api/bus/examtodo/batchDeleteExamtodo",ids,function (res) {
                         if (res.code==200){
                             //重新刷新表格
                             tableIns.reload({
@@ -382,7 +351,6 @@
                 layer.msg("请选中操作行")
             }
         }
-
 
     });
 

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.group7.bus.entity.*;
+import com.group7.bus.entity.Record;
 import com.group7.bus.service.*;
 import com.group7.bus.service.impl.RecordServiceImpl;
 import com.group7.bus.vo.RecordVo;

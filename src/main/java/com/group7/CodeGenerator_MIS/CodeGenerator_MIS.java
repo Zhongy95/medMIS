@@ -36,7 +36,7 @@ public class CodeGenerator_MIS {
     GlobalConfig gc = new GlobalConfig();
     String projectPath = System.getProperty("user.dir");
     //        gc.setOutputDir(projectPath + "/src/main/java");
-    gc.setOutputDir("D:\\projects\\GitHub\\medMIS\\src\\main\\java");
+    gc.setOutputDir("D:\\projects\\GitHub\\medMIS\\medMIS\\src\\main\\java");
     gc.setAuthor("Robin");
     gc.setOpen(true); // 当代码生成完毕后是否打开所在文件夹
     // gc.setSwagger2(true); 实体属性 Swagger2 注解

@@ -17,7 +17,7 @@ public class LaboratorianController {
 
     /**跳转到检查挂号排队 */
     @RequestMapping("toExamRegisterQueue")
-    public String toExamRegisterQueue(){return  "business/exam/doctorExamQueue";}
+    public String toExamRegisterQueue(){return  "business/exam/doctorExamQueueManager";}
 
     /**跳转到检查挂号排队 */
     @RequestMapping("toExamManager")

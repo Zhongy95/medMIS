@@ -56,7 +56,10 @@ public class PatientController {
     public String toExamToDoManager() {
         return "business/record/patientExamtodoManager";
     }
-
+    /** 跳转到病人检查排队 */
+    @RequestMapping("toExamRegisterQueue")
+    public String toExamRegisterQueue() { return "business/exam/patientExamQueueManager";
+    }
 
     /** 跳转到待领药品 */
     @RequestMapping("toMedToDoManager")

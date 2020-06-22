@@ -33,4 +33,6 @@ public class DoctorController {
     @RequestMapping("toMedToDoManager")
     public String toMedtodoManager() { return "business/record/doctorMedtodoManager"; }
 
+
+
 }

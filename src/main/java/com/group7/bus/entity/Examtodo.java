@@ -65,4 +65,10 @@ public class Examtodo implements Serializable {
     @TableField(exist = false)
     private String patientId;
 
+    @TableField(exist = false)
+    private String examDoctorName;
+
+    @TableField(exist = false)
+    private Integer examDoctorId;
+
 }

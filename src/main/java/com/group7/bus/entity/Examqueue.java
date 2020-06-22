@@ -8,72 +8,45 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.Date;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 检查预约单
+ * 排队看病
  * </p>
  *
  * @author Robin
- * @since 2020-06-19
+ * @since 2020-06-21
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("bus_examregister")
-public class Examregister implements Serializable {
+@TableName("bus_examqueue")
+public class Examqueue implements Serializable {
 
     private static final long serialVersionUID=1L;
+
+
+    /**
+     * 检查队列id
+     */
+      @TableId(value = "queue_id", type = IdType.AUTO)
+    private Integer queueId;
 
     /**
      * 检查挂号id
      */
-      @TableId(value = "examregister_id", type = IdType.AUTO)
     private Integer examregisterId;
-
-    /**
-     * 检查项目id
-     */
-    private Integer examId;
-
-    /**
-     * 创建时间
-     */
-    private Date createtime;
-
-    /**
-     * 付款单id
-     */
-    private Integer paymentId;
-
-    /**
-     * 是否付款
-     */
-    private Integer paymentIfdone;
 
     /**
      * 是否可用
      */
-    private Integer available;
-
-    /**
-     * 检查时间id
-     */
-    private Integer examtimeId;
-
-    /**
-     * 检查单id
-     */
-    private Integer examtodoId;
+    private Boolean available;
 
 
-    @TableField(exist = false)
-    private String examName;
+    private Integer situation;
 
     @TableField(exist = false)
     private String patientName;
@@ -85,17 +58,12 @@ public class Examregister implements Serializable {
     private String examDoctorName;
 
     @TableField(exist = false)
-    private Integer examDoctorId;
-
-    @TableField(exist = false)
-    private String laboratorianName;
-
+    private Integer queueNum;
 
     @TableField(exist = false)
     private BigDecimal price;
 
-//    @TableField(exist = false)
-//    private Integer examDoctorId;
-
+    @TableField(exist = false)
+    private String examName;
 
 }

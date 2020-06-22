@@ -23,5 +23,9 @@ public class LaboratorianController {
     @RequestMapping("toExamManager")
     public String toExamManage(){return  "business/exam/doctorExamManager";}
 
+    /**跳转到检查结果查看 */
+    @RequestMapping("toExamDocManager")
+    public String toExamDocManage(){return  "business/exam/doctorExamDocManager";}
+
 
 }

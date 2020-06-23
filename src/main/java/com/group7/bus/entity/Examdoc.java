@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -50,7 +52,7 @@ public class Examdoc implements Serializable {
     /**
      * 创建时间
      */
-    private String createtime;
+    private Date createtime;
 
     /**
      * 是否可用
@@ -61,6 +63,11 @@ public class Examdoc implements Serializable {
      * 检查的结果
      */
     private String content;
+
+    /**
+     * 检查是否完成
+     */
+    private Boolean ifdone;
 
     /**
      * 检查项目名称
@@ -78,7 +85,7 @@ public class Examdoc implements Serializable {
      * 患者id
      */
     @TableField(exist = false)
-    private String patientId;
+    private Integer patientId;
 
     /**
      * 检验医师姓名

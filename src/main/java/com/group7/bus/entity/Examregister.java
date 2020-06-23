@@ -54,12 +54,12 @@ public class Examregister implements Serializable {
     /**
      * 是否付款
      */
-    private Integer paymentIfdone;
+    private Boolean paymentIfdone;
 
     /**
      * 是否可用
      */
-    private Integer available;
+    private Boolean available;
 
     /**
      * 检查时间id

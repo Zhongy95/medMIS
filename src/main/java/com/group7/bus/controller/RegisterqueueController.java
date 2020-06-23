@@ -69,6 +69,8 @@ public class RegisterqueueController {
     public DataGridView loadAllRegisterqueuePatient(RegisterqueueVo registerqueueVo) {
         IPage<Registerqueue> page = new Page<>(registerqueueVo.getPage(), registerqueueVo.getLimit());
         QueryWrapper<Registerqueue> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("available",true);
+        queryWrapper.ne("situation",QUEUE_AFTERRECORD);
         queryWrapper.orderByAsc("create_time");// 排序依据
         this.registerqueueService.page(page, queryWrapper);
         User user = (User) WebUtils.getSession().getAttribute("user");
@@ -86,6 +88,7 @@ public class RegisterqueueController {
 
             }
         }
+        System.out.println("***********"+targetDoctorid);
         Integer queuenumbernow = 0; //设置队列排序初始值为0
         for(Registerqueue registerqueue:page.getRecords()){
             Register register = registerService.getById(registerqueue.getRegisterId());
@@ -114,6 +117,8 @@ public class RegisterqueueController {
     public DataGridView loadAllRegisterqueueDoctor(RegisterqueueVo registerqueueVo) {
         IPage<Registerqueue> page = new Page<>(registerqueueVo.getPage(), registerqueueVo.getLimit());
         QueryWrapper<Registerqueue> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("available",true);
+        queryWrapper.ne("situation",QUEUE_AFTERRECORD);
         queryWrapper.orderByAsc("create_time");// 排序依据
         this.registerqueueService.page(page, queryWrapper);
         User user = (User) WebUtils.getSession().getAttribute("user");
@@ -199,11 +204,12 @@ public class RegisterqueueController {
     @RequestMapping("addRegisterqueue")
     public ResultObj addRegisterqueue(RegisterVo registerVo) throws medMISException {
         try {
-            if(!registerVo.getAvailable())
-                throw new medMISException("添加失败", HttpStatus.FORBIDDEN);
-            if(!registerVo.getPaymentIfdone())
-                throw new medMISException("添加失败", HttpStatus.BAD_REQUEST);
+
             Register registerin = this.registerService.getById(registerVo);
+            if(!registerin.getAvailable())
+                throw new medMISException("添加失败", HttpStatus.FORBIDDEN);
+            if(!registerin.getPaymentIfdone())
+                throw new medMISException("添加失败", HttpStatus.BAD_REQUEST);
             Registerqueue registerqueue = new Registerqueue();
 
             registerqueue.setRegisterId(registerin.getRegisterId());
@@ -212,7 +218,7 @@ public class RegisterqueueController {
             queryWrapper.orderByAsc("create_time");// 排序依据
             //queryWrapper.last("limit 1");
             this.registerqueueService.page(page, queryWrapper);//获得排最后的一条记录
-
+            registerqueue.setAvailable(true);
             this.registerqueueService.save(registerqueue);
             registerin.setAvailable(false);//完成后，将可用状态改为否
             this.registerService.updateById(registerin);
@@ -224,18 +230,6 @@ public class RegisterqueueController {
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @RequestMapping("loadRegisterToRecord")

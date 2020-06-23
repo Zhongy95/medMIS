@@ -217,15 +217,15 @@
                 {field: 'createtime', title: '创建时间', align: 'center',width:'200'},
                 {field: 'paymentId', title: '缴费单号', align: 'center',width:'100'},
                 {field: 'paymentIfdone', title: '缴费状态', align: 'center', width: 200, templet: function (d) {
-                        if(d.paymentIfdone == false)
+                        if(d.paymentIfdone === false)
                             return "<font color='red'>未完成</font>";
                         else
                             return "<font color='blue'>已完成</font>";
                     }},
                 {field: 'icon', title: '是否可用', align: 'center',width:'100',templet:function (d) {
-                        return d.available==1?'<font color="blue">可用</font>':'<font color="red">不可用</font>';
+                        return d.available===true?'<font color="blue">可用</font>':'<font color="red">不可用</font>';
                     }},
-                {fixed: 'right', title: '操作', toolbar: '#registerRowBar', align: 'center',width:'280'}
+                {fixed: 'right', title: '操作', toolbar: '#registerRowBar', align: 'center',width:'350'}
             ] ],
             done:function (data, curr, count) {
                 if(data.data.length==0&&curr!=1){   //不是第一页时，如果当前返回的数据为0那么就返回上一页
@@ -276,6 +276,7 @@
                     break;
                 case 'show':
                     showRegister(data);
+                    break;
                 case 'queue':
                     joinQueue(data);
                     break;

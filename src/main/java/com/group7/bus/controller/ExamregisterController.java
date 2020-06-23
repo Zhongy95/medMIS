@@ -85,7 +85,7 @@ public class ExamregisterController {
             //重新查询，得到id
             Payment paymentcreated =this.paymentService.getById(paymentnew);
             registeradd.setPaymentId(paymentcreated.getPaymentId());
-            registeradd.setPaymentIfdone(paymentcreated.getIfdone()?1:0);
+            registeradd.setPaymentIfdone(paymentcreated.getIfdone());
 
             if(this.examtimeService.getById(examtimeVo).getRemain()<=0){
                 throw new medMISException("添加失败", HttpStatus.BAD_REQUEST);
@@ -155,12 +155,40 @@ public class ExamregisterController {
             examregister.setExamName(exam.getExamName());
             examregister.setPatientName(user.getName());
             Payment payment =paymentService.getById(examregister.getPaymentId());
-            examregister.setPaymentIfdone(payment.getIfdone()?1:0);
+            examregister.setPaymentIfdone(payment.getIfdone());
             this.examregisterService.updateById(examregister);
         }
         System.out.println(page.getRecords());
         return new DataGridView(page.getTotal(), page.getRecords());
     }
+
+    @RequestMapping("loadAllRegisterDoc")
+    @RequiresRoles("LABORATORIAN")
+    public DataGridView loadAllRegisterDoc(ExamregisterVo examregisterVo) {
+        IPage<Examregister> page = new Page<>(examregisterVo.getPage(), examregisterVo.getLimit());
+        QueryWrapper<Examregister> queryWrapper = new QueryWrapper<>();
+        User user = (User) WebUtils.getSession().getAttribute("user");
+        queryWrapper.like((examregisterVo.getPaymentId()!=null), "payment_id", examregisterVo.getPaymentId());
+        queryWrapper.ge(examregisterVo.getStartTime() != null, "createtime", examregisterVo.getStartTime());
+        queryWrapper.le(examregisterVo.getEndTime() != null, "createtime", examregisterVo.getEndTime());
+        queryWrapper.orderByDesc("createtime"); // 排序依据
+
+        this.examregisterService.page(page, queryWrapper);
+        for(Examregister examregister:page.getRecords()){
+            Exam exam = examService.getById(examregister.getExamId());
+            examregister.setExamName(exam.getExamName());
+            Payment payment =paymentService.getById(examregister.getPaymentId());
+            User user1 = this.userService.getById( payment.getPatientId());
+            examregister.setPatientName(user1.getName());
+            examregister.setPaymentIfdone(payment.getIfdone());
+            this.examregisterService.updateById(examregister);
+        }
+//        System.out.println(page.getRecords());
+        return new DataGridView(page.getTotal(), page.getRecords());
+    }
+
+
+
 }
 
 

@@ -4,26 +4,24 @@ package com.group7.bus.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.group7.bus.entity.Exam;
-import com.group7.bus.entity.Examdoc;
-import com.group7.bus.entity.Examtodo;
-import com.group7.bus.entity.Record;
-import com.group7.bus.service.ExamService;
-import com.group7.bus.service.ExamdocService;
-import com.group7.bus.service.ExamtodoService;
-import com.group7.bus.service.RecordService;
+import com.group7.bus.entity.*;
+import com.group7.bus.service.*;
 import com.group7.bus.vo.ExamdocVo;
 import com.group7.sys.common.DataGridView;
 import com.group7.sys.common.ResultObj;
 import com.group7.sys.common.WebUtils;
 import com.group7.sys.entity.User;
+import com.group7.sys.exception.medMISException;
 import com.group7.sys.service.UserService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.group7.sys.common.Constast.QUEUE_AFTERRECORD;
 
 
 /**
@@ -48,6 +46,10 @@ public class ExamdocController {
 
     @Autowired private ExamtodoService examtodoService;
 
+    @Autowired private ExamregisterService examregisterService;
+
+    @Autowired private ExamqueueService examqueueService;
+
     /**
      * 查询-指定病人
      *
@@ -55,6 +57,7 @@ public class ExamdocController {
      * @return
      */
     @RequestMapping("loadExamdoc")
+    @RequiresRoles("PATIENT")
     public DataGridView loadExamdoc(ExamdocVo examdocVo) {
         User user = (User) WebUtils.getSession().getAttribute("user");
         IPage<Examdoc> page = examdocService.getExamdocByPatientId(
@@ -117,6 +120,7 @@ public class ExamdocController {
      * @return
      */
     @RequestMapping("loadAllExamdoc")
+    @RequiresRoles("LABORATORIAN")
     public DataGridView loadAllExamdoc(ExamdocVo examdocVo) {
         IPage<Examdoc> page = new Page<>(examdocVo.getPage(), examdocVo.getLimit());
         QueryWrapper<Examdoc> queryWrapper = new QueryWrapper<>();
@@ -137,6 +141,32 @@ public class ExamdocController {
         }
 
         return new DataGridView(page.getTotal(), page.getRecords());
+    }
+
+    @RequestMapping("UpdateExamdoc")
+    @RequiresRoles("LABORATORIAN")
+    public ResultObj UpdateExamdoc(ExamdocVo examdocVo) throws medMISException {
+        try {
+            this.examdocService.updateById(examdocVo);
+            if(examdocVo.getIfdone()!=null){
+                if(examdocVo.getIfdone())
+                {
+                    //如果完成检查，则更改队列状态
+                    QueryWrapper<Examregister> examregisterQueryWrapper =new QueryWrapper<>();
+                    examregisterQueryWrapper.eq("examtodo_id",examdocVo.getExamtodoId());
+                    Examregister targetExamRegister = this.examregisterService.getOne(examregisterQueryWrapper);
+                    QueryWrapper<Examqueue>queryWrapper=new QueryWrapper<>();
+                    queryWrapper.eq("examregister_id",targetExamRegister.getExamregisterId());
+                    Examqueue examqueue = this.examqueueService.getOne(queryWrapper);
+                    examqueue.setSituation(QUEUE_AFTERRECORD);
+                    this.examqueueService.updateById(examqueue);
+                }
+            }
+            return ResultObj.UPDATE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new medMISException("更新失败", HttpStatus.UNAUTHORIZED);
+        }
     }
 
 }

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="registerHtml" lang="en" xmlns:th="http://www.thymeleaf.com">
+<head>
+    <meta charset="utf-8">
+    <title>病历编写</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="https://img.icons8.com/android/48/000000/hospital.png">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/resources/css/public.css" media="all"/>
+</head>
+<body class="WriteRecordBody">
+
+<form class="layui-form" action="" id="dataFrm" lay-filter="dataFrm">
+    <div class="layui-form-item">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>病历编写</legend>
+        </fieldset>
+    </div>
+    <div class="layui-row">
+
+            <div class="layui-form-item">
+                <button type="button"  id="Getinfo" name="Getinfo" class="layui-btn layui-btn-normal "><span class="layui-icon layui-icon-add-1">获取看病人信息</span></button>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">检查报告编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="examdocId" id="examdocId" required lay-verify="required" placeholder=""
+                           readonly="readonly" class="layui-input">
+                </div>
+                <label class="layui-form-label">待做单编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="examtodoId" id="examtodoId" required lay-verify="required" placeholder=""
+                            readonly="readonly" class="layui-input">
+                </div>
+                <label class="layui-form-label">检查项目</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="examName" id="examName" required lay-verify="required" placeholder=""
+                           readonly="readonly" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" id="name" required lay-verify="required" placeholder=""
+                           autocomplete="new-name" readonly="readonly"
+                           class="layui-input">
+                </div>
+                <label class="layui-form-label">诊号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="patientId" id="patientId" required lay-verify="required" placeholder="" readonly="readonly"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="sex" id="sex" required lay-verify="required" placeholder="" readonly="readonly"
+                           class="layui-input">
+                </div>
+                <label class="layui-form-label">出生日期</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="birthday" id="birthday"
+                           readonly="readonly" autocomplete="off" class="layui-input">
+                </div>
+
+            </div>
+            <div class="layui-form-item">
+
+                    <label class="layui-form-label">身份证号码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="idNum" id="idNum"
+                               readonly="readonly" autocomplete="off" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">医保卡号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="medNum" id="medNum"
+                               readonly="readonly" autocomplete="off" class="layui-input">
+                    </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">诊断结果</label>
+                <div class="layui-input-block">
+                    <textarea name="content" id="content" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">是否完成全套检查</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="ifdone" lay-skin="switch"lay-text="是|否"value="1" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="doSubmit" id="doSubmit">立即提交</button>
+                    <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+
+</form>
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript" src="/resources/js/cache.js"></script>
+<script type="text/javascript">
+    var examtableIns;
+    var medtableIns;
+    var treattableIns;
+    layui.use(['form', 'layer', 'jquery', 'laydate','table'], function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        var laydate = layui.laydate;
+        var $ = layui.jquery;
+        var table = layui.table;
+
+
+        
+
+        getinfo();//获取正在看病的患者信息
+        $("#Getinfo").click(getinfo());
+        function getinfo () {
+            $.get("/api/bus/examqueue/loadUndoneExamDoc",function (result) {
+                console.log(result)
+                $('#examdocId').val(result.examdocId);
+                $('#name').val(result.patientName);
+                $('#examtodoId').val(result.examtodoId);
+                $('#patientId').val(result.patientId);
+                $('#examName').val(result.examName);
+                $('#content').val(result.content);
+                $.get("/api/bus/examqueue/loadPatient",{userId:result.patientId},function(patientresult){
+                    console.log(patientresult);
+                    if (patientresult.gender===1)
+                        $('#sex').val("男");
+                    else if (patientresult.gender===0)
+                        $('#sex').val("女");
+                    $('#birthday').val(patientresult.birthday);
+                    $('#addr').val(patientresult.addr);
+                    $('#idNum').val(patientresult.idNum);
+                    $('#medNum').val(patientresult.medNum);
+                })
+            })
+
+        }
+        //更新examdoc
+        $("#doSubmit").click(function () {
+            var data = $("#dataFrm").serialize();
+            console.log(data);
+            $.post("/api/bus/examdoc/UpdateExamdoc",data,function(res){
+                if (res.code ===200)
+                {
+                    window.top.reload();
+                }
+                layer.msg(res.msg);
+            })
+        })
+
+
+        
+
+    })
+
+</script>
+</body>
+</html>

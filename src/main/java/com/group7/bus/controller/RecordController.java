@@ -199,7 +199,7 @@ public class RecordController {
     }
 
     @RequestMapping("loadPatient")
-
+    @RequiresRoles("DOCTOR")
     public User loadPatient(UserVo userVo) throws medMISException {
         try {
             return this.userService.getById(userVo);

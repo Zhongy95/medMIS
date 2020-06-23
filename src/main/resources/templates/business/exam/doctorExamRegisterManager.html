@@ -63,10 +63,9 @@
 
     </table>
     <div id="registerRowBar"style="display: none;">
-        <button type="button" lay-event="pay" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-edit"></span>缴费</button>
+<!--        <button type="button" lay-event="pay" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-edit"></span>缴费</button>-->
         <button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
         <button type="button" lay-event="show" class="layui-btn layui-btn-sm layui-btn-normal"><span class="layui-icon layui-icon-about"></span>查看</button>
-        <button type="button" lay-event="queue" class="layui-btn layui-btn-sm layui-btn-warm"><span class="layui-icon layui-icon-about"></span>排队</button>
     </div>
 </div>
 <!--数据表格结束-->
@@ -119,7 +118,7 @@
         tableIns = table.render({
             elem: "#registerTable",
             title: "检查挂号表",
-            url: "/api/bus/examregister/loadAllRegister",
+            url: "/api/bus/examregister/loadAllRegisterDoc",
             toolbar: "#registerToolBar",
             page: true,
             height: "full-190",
@@ -139,7 +138,7 @@
                 {field: 'icon', title: '是否可用', align: 'center',width:'100',templet:function (d) {
                         return d.available==1?'<font color="blue">可用</font>':'<font color="red">不可用</font>';
                     }},
-                {fixed: 'right', title: '操作', toolbar: '#registerRowBar', align: 'center',width:'350'}
+                {fixed: 'right', title: '操作', toolbar: '#registerRowBar', align: 'center',width:'280'}
             ] ],
             done:function (data, curr, count) {
                 if(data.data.length==0&&curr!=1){   //不是第一页时，如果当前返回的数据为0那么就返回上一页
@@ -189,61 +188,32 @@
                 case 'show':
                     showRegister(data);
                     break;
-                case 'queue':
-                    joinQueue(data);
-                    break;
             }
         });
 
         var mainIndex;
         var url;
 
-        // //打开添加的弹出层
-        // function openAddLayer() {
-        //     mainIndex = layer.open({
-        //         type:1,
-        //         content : $("#addOrUpdateDiv"),
-        //         area:['800px','550px'],
-        //         title:'添加挂号单',
-        //         success:function () {
-        //             //$("#dataFrm")[0].reset();
-        //             //重置富文本编译器的内容为空
-        //             layedit.setContent(editIndex,"");
-        //             // 感觉没用所以接口没写，后期需要可以加上 by lyh
-        //             url="/api/bus/examregister/addRegister";
-        //         }
-        //     });
-        // };
+        //打开添加的弹出层
+        function openAddLayer() {
+            mainIndex = layer.open({
+                type:1,
+                content : $("#addOrUpdateDiv"),
+                area:['800px','550px'],
+                title:'添加挂号单',
+                success:function () {
+                    //$("#dataFrm")[0].reset();
+                    //重置富文本编译器的内容为空
+                    layedit.setContent(editIndex,"");
+                    // 感觉没用所以接口没写，后期需要可以加上 by lyh
+                    url="/api/bus/examregister/addRegister";
+                }
+            });
+        };
         function payRegister(data){
-            layer.confirm('你确定要缴费编号为【'+data.examregisterId+'】的预约单吗？',{icon: 3,title:'提示'},function (index) {
+            layer.confirm('你确定要缴费【'+data.registerId+'】吗？',{icon: 3,title:'提示'},function (index) {
                 var targeturl ='/bus/patient/toPaymentManager';
                 window.top.reload(targeturl);
-                layer.close(index);
-            });
-        }
-
-        //加入队列
-        function joinQueue(data) {
-            layer.confirm('你确定要使【'+data.examregisterId+'】这条预约记录进入队列吗？',{icon: 3,title:'提示'},function (index) {
-                $.post("/api/bus/examqueue/addExamqueue",{examregisterId:data.examregisterId},function (res) {
-                    if (res.code==200){
-                        tableIns.reload({
-                            //删除成功加载表格时，要重置查询条件
-                            where:"",
-                        });
-                        // var payurl ='/bus/patient/toPaymentManager';
-                        // window.parent.parent.parent.parent.onlyreload(payurl);
-                        // var doctortimeurl ='/bus/patient/toDoctortimeRight';
-                        // window.parent.parent.parent.parent.onlyreload(doctortimeurl);
-                        layer.msg(res.msg);
-                    }
-                    else if (res.code==403 ){
-                        layer.msg("本挂号记录已使用过")
-                    }
-                    else if (res.code==400) {
-                        layer.msg("未付款");
-                    }
-                });
                 layer.close(index);
             });
         }

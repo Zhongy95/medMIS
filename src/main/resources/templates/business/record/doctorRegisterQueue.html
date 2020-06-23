@@ -44,7 +44,7 @@
     </table>
         <div id="registerToolBar"style="display: none;">
             <button type="button" lay-event="callNext" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1"></span>呼叫下一位</button>
-<!--            <button type="button" lay-event="refresh" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>刷新</button>-->
+            <button type="button" lay-event="refresh" class="layui-btn layui-btn-sm layui-btn-warm"><span class="layui-icon layui-icon-refresh"></span>刷新</button>
         </div>
     <!--    <div id="registerRowBar"style="display: none;">-->
     <!--        <button type="button" lay-event="pay" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-edit"></span>缴费</button>-->
@@ -223,9 +223,9 @@
         //监控工具条事件
         table.on("toolbar(registerTable)", function (obj) {
             switch (obj.event) {
-                // case 'refresh':
-                //     refresh();
-                //     break;
+                case 'refresh':
+                    refresh();
+                    break;
                 case 'callNext':
                     callNext();
                     break;
@@ -330,7 +330,7 @@
             });
         }
 
-        //删除
+        //呼叫
         function callNext(data) {
             layer.confirm('你确定要呼叫下一位病人吗？',{icon: 3,title:'提示'},function (index) {
                 $.post("/api/bus/registerqueue/recordRegisterQueue",function (res) {
@@ -345,53 +345,56 @@
                 layer.close(index);
             });
         }
-        // function refresh(data) {
-        //         $.post("/api/bus/registerqueue/loadAllRegisterqueue",function () {
-        //            {
-        //                 tableIns.reload({
-        //         });
-        //         layer.close(index);
-        //     };
-
-        //批量删除
-        function batchDelete() {
-            //得到选中行
-            var checkStatus = table.checkStatus('registerTable');
-            var dataLength = checkStatus.data.length;
-            if (dataLength>0){
-                layer.confirm('你确定要删除吗？',{icon: 3,title: '提示'},function (index) {
-                    //获取选中行数据
-                    var data = checkStatus.data;
-                    var registerIds = "";
-                    $.each(data,function (index, item) {
-                        if (index==0){
-                            registerIds+="registerIds="+item.registerId;
-                        }else {
-                            registerIds+="&registerIds="+item.registerId;
-                        }
-                    });
-                    $.post("/api/bus/register/batchDeleteRegister",registerIds,function (res) {
-                        if (res.code==200){
-                            //重新刷新表格
-                            tableIns.reload({
-                                where:"",
-                            });
-                        }
-                        layer.msg(res.msg);
-                    });
+        function refresh(data) {
+            $.post("/api/bus/registerqueue/loadAllRegisterqueueDoctor", function () {
+                {
+                    tableIns.reload({});
                     layer.close(index);
-                });
-            }else {
-                layer.msg("请选中操作行")
-            }
+                }
+                ;
+            })
         }
 
-    });
-    function reloadTable() {
-        tableIns.reload({
-            where:""
-        });
-    }
+                //批量删除
+                function batchDelete() {
+                    //得到选中行
+                    var checkStatus = table.checkStatus('registerTable');
+                    var dataLength = checkStatus.data.length;
+                    if (dataLength > 0) {
+                        layer.confirm('你确定要删除吗？', {icon: 3, title: '提示'}, function (index) {
+                            //获取选中行数据
+                            var data = checkStatus.data;
+                            var registerIds = "";
+                            $.each(data, function (index, item) {
+                                if (index == 0) {
+                                    registerIds += "registerIds=" + item.registerId;
+                                } else {
+                                    registerIds += "&registerIds=" + item.registerId;
+                                }
+                            });
+                            $.post("/api/bus/register/batchDeleteRegister", registerIds, function (res) {
+                                if (res.code == 200) {
+                                    //重新刷新表格
+                                    tableIns.reload({
+                                        where: "",
+                                    });
+                                }
+                                layer.msg(res.msg);
+                            });
+                            layer.close(index);
+                        });
+                    } else {
+                        layer.msg("请选中操作行")
+                    }
+                }
+
+            });
+
+            function reloadTable() {
+                tableIns.reload({
+                    where: ""
+                });
+            }
 
 </script>
 </body>

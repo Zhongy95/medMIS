@@ -64,7 +64,7 @@
 </div>
 
 <!--数据表格结束-->
-
+<!-- 查看表格-->
 <div id="showRecord" style="display: none;padding: 10px">
     <h3 id="recordTitle" style="text-align: left"></h3>
     <div style="text-align: left">
@@ -81,6 +81,25 @@
     <p style="margin: 10px 0;">后续检查：    <span id="recordIfexam"></span></p>
     <p style="margin: 10px 0;">后续用药：    <span id="recordIfdrug"></span></p>
     <p style="margin: 10px 0;">后续治疗：    <span id="recordIftreat"></span></p>
+</div>
+
+<!-- 修改表格-->
+<div id="updateRecord" style="display: none;padding: 10px">
+    <h3 id="UpdaterecordTitle" style="text-align: left"></h3>
+    <div style="text-align: left">
+        <p style="margin: 10px 0;">病人姓名：    <span id="recordPatientNameUpdate"></span></p>
+        <p style="margin: 10px 0;">医生姓名：    <span id="recordDoctorNameUpdate"></span></p>
+        <p style="margin: 10px 0;">科室：  <span id="recordDeptNameUpdate"></span></p>
+        <p style="margin: 10px 0;">创建时间：    <span id="recordCreatetimeUpdate"></span></p>
+    </div>
+    <hr>
+    <div id="register_contentUpdate">
+        <p>诊断结果：<span id="recordDiagnosisUpdate"></span></p>
+    </div>
+    <hr>
+    <p style="margin: 10px 0;">后续检查：    <span id="recordIfexamUpdate"></span></p>
+    <p style="margin: 10px 0;">后续用药：    <span id="recordIfdrugUpdate"></span></p>
+    <p style="margin: 10px 0;">后续治疗：    <span id="recordIftreatUpdate"></span></p>
 </div>
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
@@ -192,7 +211,7 @@
                     showRecord(data);
                     break;
                 case 'modify':
-                    layer.msg("TODO");
+                    updateRecord(data);
                     break;
                 default:
                     break;
@@ -237,6 +256,44 @@
                 } else {
                     $("#recordIftreat").html("不需要");
                     $("#recordIftreat").css("color", "grey");
+                }
+            }
+        });
+    }
+    //打开修改的弹出层
+    function updateRecord(data) {
+        mainIndex = layer.open({
+            type: 1,
+            content: $("#updateRecord"),
+            area: ['600px', '350px'],
+            title: '病历信息',
+            skin: 'layui-layer-molv',
+            success: function () {
+                $("#recordPatientNameUpdate").html(data.patientName);
+                $("#recordDoctorNameUpdate").html(data.doctorName);
+                $("#recordDeptNameUpdate").html(data.deptName);
+                $("#recordCreatetimeUpdate").html(data.createtime);
+                $("#recordDiagnosisUpdate").html(data.diagnosis);
+                if (data.ifdrug) {
+                    $("#recordIfdrugUpdate").html("需要");
+                    $("#recordIfdrugUpdate").css("color", "blue");
+                } else {
+                    $("#recordIfdrugUpdate").html("不需要");
+                    $("#recordIfdrugUpdate").css("color", "grey");
+                }
+                if (data.ifexam) {
+                    $("#recordIfexamUpdate").html("需要");
+                    $("#recordIfexamUpdate").css("color", "blue");
+                } else {
+                    $("#recordIfexamUpdate").html("不需要");
+                    $("#recordIfexamUpdate").css("color", "grey");
+                }
+                if (data.iftreat) {
+                    $("#recordIftreatUpdate").html("需要");
+                    $("#recordIftreatUpdate").css("color", "blue");
+                } else {
+                    $("#recordIftreatUpdate").html("不需要");
+                    $("#recordIftreatUpdate").css("color", "grey");
                 }
             }
         });

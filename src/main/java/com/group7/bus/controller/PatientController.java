@@ -85,4 +85,15 @@ public class PatientController {
         return "business/exam/patientExamDocManager";
     }
 
+    /** 跳转到治疗排队 */
+    @RequestMapping("toTreatQueueManage")
+    public String toTreatQueue() {
+        return "business/exam/patientTreatQueueManager";
+    }
+
+    /** 跳转到治疗结果查看 */
+    @RequestMapping("toTreatDocManager")
+    public String toTreatDocManager() {
+        return "business/exam/patientTreatDocManager";
+    }
 }

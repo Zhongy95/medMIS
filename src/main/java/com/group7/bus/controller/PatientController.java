@@ -86,9 +86,9 @@ public class PatientController {
     }
 
     /** 跳转到治疗排队 */
-    @RequestMapping("toTreatQueueManage")
+    @RequestMapping("toTreatQueueManager")
     public String toTreatQueue() {
-        return "business/exam/patientTreatQueueManager";
+        return "business/treat/patientTreatQueueManager";
     }
 
     /** 跳转到治疗结果查看 */

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class NurseController {
 
     /** 跳转到治疗排队 */
-    @RequestMapping("toTreatQueueManage")
+    @RequestMapping("toTreatQueueManager")
     public String toTreatQueue() {
         return "business/treat/doctorTreatQueueManager";
     }

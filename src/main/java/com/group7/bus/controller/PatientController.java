@@ -88,12 +88,12 @@ public class PatientController {
     /** 跳转到治疗排队 */
     @RequestMapping("toTreatQueueManage")
     public String toTreatQueue() {
-        return "business/exam/patientTreatQueueManager";
+        return "business/treat/patientTreatQueueManager";
     }
 
     /** 跳转到治疗结果查看 */
     @RequestMapping("toTreatDocManager")
     public String toTreatDocManager() {
-        return "business/exam/patientTreatDocManager";
+        return "business/treat/patientTreatDocManager";
     }
 }

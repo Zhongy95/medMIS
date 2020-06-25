@@ -14,35 +14,35 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 检查报告
+ * 治疗报告
  * </p>
  *
  * @author TT
- * @since 2020-06-20
+ * @since 2020-06-24
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("bus_examdoc")
-public class Examdoc implements Serializable {
+@TableName("bus_treatdoc")
+public class Treatdoc implements Serializable {
 
     private static final long serialVersionUID=1L;
 
     /**
-     * 检查报告文档id
+     * 治疗报告文档id
      */
-      @TableId(value = "examdoc_id", type = IdType.AUTO)
-    private Integer examdocId;
+      @TableId(value = "treatdoc_id", type = IdType.AUTO)
+    private Integer treatdocId;
 
     /**
-     * 生成该报告的检查单
+     * 生成该报告的治疗单
      */
-    private Integer examtodoId;
+    private Integer treattodoId;
 
     /**
-     * 检查医生的id
+     * 护士的id
      */
-    private Integer laboratorianId;
+    private Integer nurseId;
 
     /**
      * 生成该报告的病历
@@ -57,24 +57,23 @@ public class Examdoc implements Serializable {
     /**
      * 是否可用
      */
-    private Boolean available;
+    private Integer available;
 
     /**
-     * 检查的结果
+     * 治疗的结果
      */
     private String content;
 
     /**
-     * 检查是否完成
+     * 是否完成治疗
      */
-    @TableField(exist = false)
-    private Boolean ifdone;
+    private Integer ifdone;
 
     /**
-     * 检查项目名称
+     * 治疗项目名称
      */
     @TableField(exist = false)
-    private String examName;
+    private String treatName;
 
     /**
      * 患者姓名
@@ -89,8 +88,8 @@ public class Examdoc implements Serializable {
     private Integer patientId;
 
     /**
-     * 检验医师姓名
+     * 护士姓名
      */
     @TableField(exist = false)
-    private String laboratorianName;
+    private String nurseName;
 }

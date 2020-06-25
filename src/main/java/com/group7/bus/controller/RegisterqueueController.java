@@ -174,6 +174,7 @@ public class RegisterqueueController {
             User user = (User) WebUtils.getSession().getAttribute("user");
             IPage<Registerqueue> page = new Page<>(registerqueueVo.getPage(), registerqueueVo.getLimit());
             QueryWrapper<Registerqueue> queryWrapper = new QueryWrapper<>();
+            queryWrapper.ne("situation",QUEUE_AFTERRECORD);
             queryWrapper.orderByAsc("create_time");// 排序依据
             this.registerqueueService.page(page, queryWrapper);
             IPage<Registerqueue> resultPage = new Page<>(registerqueueVo.getPage(), registerqueueVo.getLimit());

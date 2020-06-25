@@ -4,25 +4,29 @@ package com.group7.bus.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.group7.bus.entity.Treatment;
-import com.group7.bus.entity.Treatdoc;
-import com.group7.bus.entity.Treattodo;
-import com.group7.bus.entity.Record;
+import com.group7.bus.entity.*;
 import com.group7.bus.service.*;
 import com.group7.bus.vo.TreatdocVo;
+import com.group7.bus.vo.TreatdocVo;
 import com.group7.sys.common.DataGridView;
+import com.group7.sys.common.ResultObj;
 import com.group7.sys.common.WebUtils;
 import com.group7.sys.entity.User;
+import com.group7.sys.exception.medMISException;
 import com.group7.sys.service.UserService;
+import com.group7.sys.vo.UserVo;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.group7.sys.common.Constast.QUEUE_AFTERRECORD;
 
 /**
  * <p>
@@ -50,6 +54,9 @@ public class TreatdocController {
 
     @Autowired
     private TreattodoService treattodoService;
+
+    @Autowired
+    private TreatqueueService treatqueueService;
 
     /**
      * 查询-指定病人
@@ -176,5 +183,68 @@ public class TreatdocController {
         page.setRecords(list);
 
         return new DataGridView(page.getTotal(), page.getRecords());
+    }
+
+    @RequestMapping("loadUndoneTreatDoc")
+    @RequiresRoles("NURSE")
+    public Treatdoc loadUndoneTreatDoc() throws medMISException {
+        try {
+            User user = (User) WebUtils.getSession().getAttribute("user");
+            QueryWrapper<Treatdoc> queryWrapper = new QueryWrapper<>();
+            queryWrapper.orderByAsc("createtime");
+            queryWrapper.eq("ifdone",false);
+            queryWrapper.eq("nurse_id",user.getUserId());
+            List<Treatdoc> list = this.treatdocService.list(queryWrapper);
+            if(list.size()>1)
+                throw new medMISException("有多个待办检查", HttpStatus.FORBIDDEN);
+            Treatdoc treatdoc=list.get(0);
+
+            Treattodo treattodo=this.treattodoService.getById(treatdoc.getTreattodoId());
+            Record record = this.recordService.getById(treattodo.getRecordId());
+            User patient = this.userService.getById(record.getPatientId());
+            treatdoc.setPatientId(user.getUserId());
+            treatdoc.setPatientName(patient.getName());
+            treatdoc.setNurseName(user.getName());
+            Treatment treat = this.treatmentService.getById(treattodo.getTreatmentId());
+            treatdoc.setTreatName(treat.getTreatmentName());
+
+            return treatdoc;
+        } catch (Exception e) {
+            throw new medMISException("读取失败", HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping("UpdateTreatdoc")
+    @RequiresRoles("NURSE")
+    public ResultObj UpdateTreatdoc(TreatdocVo treatdocVo) throws medMISException {
+        try {
+            this.treatdocService.updateById(treatdocVo);
+            if(treatdocVo.getIfdone()!=null){
+                if(treatdocVo.getIfdone())
+                {
+                    //如果完成检查，则更改队列状态
+                    QueryWrapper<Treattodo> treattodoqueryWrapper =new QueryWrapper<>();
+                    treattodoqueryWrapper.eq("treattodo_id",treatdocVo.getTreattodoId());
+                    Treattodo targetTreatToDo = this.treattodoService.getOne(treattodoqueryWrapper);
+                    QueryWrapper<Treatqueue>queryWrapper=new QueryWrapper<>();
+                    queryWrapper.eq("treattodo_id",targetTreatToDo.getTreattodoId());
+                    Treatqueue treatqueue = this.treatqueueService.getOne(queryWrapper);
+                    treatqueue.setSituation(QUEUE_AFTERRECORD);
+                    this.treatqueueService.updateById(treatqueue);
+                }
+            }
+            return ResultObj.UPDATE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new medMISException("更新失败", HttpStatus.UNAUTHORIZED);
+        }
+    }
+    @RequestMapping("loadPatient")
+    @RequiresRoles("NURSE")
+    public User loadPatient(UserVo userVo) throws medMISException {
+        try {
+            return this.userService.getById(userVo);
+        } catch (Exception e) {
+            throw new medMISException("读取病人信息失败", HttpStatus.BAD_REQUEST);
+        }
     }
 }

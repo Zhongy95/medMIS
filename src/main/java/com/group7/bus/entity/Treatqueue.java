@@ -37,6 +37,7 @@ public class Treatqueue implements Serializable {
     /**
      * 治疗排队号
      */
+    @TableField(exist = false)
     private Integer queueNumber;
 
     /**
@@ -44,10 +45,14 @@ public class Treatqueue implements Serializable {
      */
     private Integer treattodoId;
 
+    private Integer situation;
+
+    private Date createTime;
+
     /**
      * 是否可用
      */
-    private Integer available;
+    private Boolean available;
 
     @TableField(exist = false)
     private String treatmentName;
@@ -60,11 +65,10 @@ public class Treatqueue implements Serializable {
     @TableField(exist = false)
     private Integer registerId;
     @TableField(exist = false)
-    private BigDecimal price;
+    private Float price;
 
     @TableField(exist = false)
     private Integer recordId;
-    @TableField(exist = false)
-    private Integer situation;
+
 
 }

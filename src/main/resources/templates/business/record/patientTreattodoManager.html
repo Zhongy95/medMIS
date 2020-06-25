@@ -75,9 +75,10 @@
         <button type="button" lay-event="batchDelete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>批量删除</button>
     </div>
     <div id="treattodoRowBar" style="display: none;">
-        <!--<button type="button" lay-event="pay" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-rmb"></span>支付</button>-->
-        <button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
-        <button type="button" lay-event="show" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-about"></span>查看</button>
+        <button type="button" lay-event="pay" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-rmb"></span>支付</button>
+<!--        <button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>-->
+        <button type="button" lay-event="show" class="layui-btn layui-btn-sm layui-btn-normal"><span class="layui-icon layui-icon-about"></span>查看</button>
+        <button type="button" lay-event="queue" class="layui-btn layui-btn-sm layui-btn-warm"><span class="layui-icon layui-icon-about"></span>排队</button>
     </div>
 </div>
 
@@ -100,6 +101,7 @@
             <p>治疗单号&nbsp;&nbsp;&nbsp;&nbsp;<span id="id" ></span></p>
             <p>治疗名称&nbsp;&nbsp;&nbsp;&nbsp;<span id="name" ></span></p>
             <p>病人姓名&nbsp;&nbsp;&nbsp;&nbsp;<span id="pname" ></span></p>
+            <p>缴费状态&nbsp;&nbsp;&nbsp;&nbsp;<span id="payIfdone" ></span></p>
             <p>可用状态&nbsp;&nbsp;&nbsp;&nbsp;<span id="available" ></span></p>
         </div>
     </div>
@@ -184,8 +186,14 @@
                 {field: 'treatName', title: '治疗名称', align: 'center', width: 200},
                 {field: 'patientName', title: '患者姓名', align: 'center', width: 150},
                 {field: 'createtime', title: '创建时间', align: 'center', width: 250},
+                {field: 'payIfdone', title: '缴费状态', align: 'center', width: 200, templet: function (d) {
+                        if(d.payIfdone === false)
+                            return "<font color='red'>未完成</font>";
+                        else
+                            return "<font color='blue'>已完成</font>";
+                    }},
                 {field: 'available', title: '可用状态', align: 'center', width: 150, templet: function (d) {
-                        if(d.available == 0)
+                        if(d.available == false)
                             return "<font color='red'>不可用</font>";
                         else
                             return "<font color='blue'>可用</font>";
@@ -247,6 +255,12 @@
                     break;
                 case 'show':
                     showTreattodo(data);
+                    break;
+                case 'pay':
+                    pay(data);
+                    break;
+                case 'queue':
+                    joinQueue(data);
                     break;
                 default:
                     break;
@@ -328,6 +342,14 @@
                         $("#available").text("不可用");
                         $("#available").css("color", "red");;
                     }
+                    if(data.payIfdone) {
+                        $("#payIfdone").text("可用");
+                        $("#payIfdone").css("color", "blue");
+                    }
+                    else {
+                        $("#payIfdone").text("不可用");
+                        $("#payIfdone").css("color", "red");;
+                    }
                 }
             });
         }
@@ -348,6 +370,39 @@
                 layer.close(index);
             });
 
+        }
+
+        function pay(data){
+            layer.confirm('你确定要缴费单号为【'+data.treattodoId+'】的治疗单吗？',{icon: 3,title:'提示'},function (index) {
+                var targeturl ='/bus/patient/toPaymentManager';
+                window.top.reload(targeturl);
+                layer.close(index);
+            });
+        }
+
+        function joinQueue(data) {
+            layer.confirm('你确定要使单号为【'+data.treattodoId+'】治疗预约进入排队吗？',{icon: 3,title:'提示'},function (index) {
+                $.post("/api/bus/treatqueue/addTreatqueue",{treattodoId:data.treattodoId},function (res) {
+                    if (res.code==200){
+                        tableIns.reload({
+                            //删除成功加载表格时，要重置查询条件
+                            where:"",
+                        });
+                        // var payurl ='/bus/patient/toPaymentManager';
+                        // window.parent.parent.parent.parent.onlyreload(payurl);
+                        // var doctortimeurl ='/bus/patient/toDoctortimeRight';
+                        // window.parent.parent.parent.parent.onlyreload(doctortimeurl);
+                        layer.msg(res.msg);
+                    }
+                    else if (res.code==403 ){
+                        layer.msg("本治疗记录已使用过")
+                    }
+                    else if (res.code==400) {
+                        layer.msg("未付款");
+                    }
+                });
+                layer.close(index);
+            });
         }
 
         //批量删除

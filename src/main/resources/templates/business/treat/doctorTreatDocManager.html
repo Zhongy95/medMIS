@@ -61,14 +61,14 @@
 
 <!--数据表格开始-->
 <div>
-    <table class="layui-hide" id="examdocTable" lay-filter="examdocTable">
+    <table class="layui-hide" id="treatdocTable" lay-filter="treatdocTable">
 
     </table>
-    <div id="examdocToolBar" style="display: none;">
+    <div id="treatdocToolBar" style="display: none;">
         <!--<button type="button" lay-event="reload" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-refresh"></span>刷新</button>-->
         <button type="button" lay-event="batchDelete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>批量删除</button>
     </div>
-    <div id="examdocRowBar" style="display: none;">
+    <div id="treatdocRowBar" style="display: none;">
         <!--<button type="button" lay-event="pay" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-rmb"></span>支付</button>-->
         <!--<button type="button" lay-event="register" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-ok"></span>预约</button>
         --><button type="button" lay-event="show" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-about"></span>查看</button>
@@ -82,21 +82,21 @@
 <!--查看层组件-->
 <div class="layui-card" id="detailDiv" style="display: none">
     <!--<div class="layui-card-header" style="font-size: 16px; font-weight: bold; color: #2e2e2e">
-        检查结果详情
+        治疗结果详情
     </div>-->
     <div class="layui-card-body">
         <!--<div style="font-size: 14px; color: darkslategrey">-->
         <div style="font-size: 14px;">
             <!--<p><b>创建时间&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="createtime" ></span></p>
-            <p><b>检查结果号&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="id" ></span></p>
-            <p><b>检查名称&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="name" ></span></p>
+            <p><b>治疗结果号&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="id" ></span></p>
+            <p><b>治疗名称&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="name" ></span></p>
             <p><b>病人姓名&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="pname" ></span></p>
             <p><b>缴费状态&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="ifpay" ></span></p>-->
             <p>创建时间&nbsp;&nbsp;&nbsp;&nbsp;<span id="createtime" ></span></p>
             <p>报告编号&nbsp;&nbsp;&nbsp;&nbsp;<span id="id" ></span></p>
-            <p>检查名称&nbsp;&nbsp;&nbsp;&nbsp;<span id="name" ></span></p>
+            <p>治疗名称&nbsp;&nbsp;&nbsp;&nbsp;<span id="name" ></span></p>
             <p>病人姓名&nbsp;&nbsp;&nbsp;&nbsp;<span id="pname" ></span></p>
-            <p>检验医师&nbsp;&nbsp;&nbsp;&nbsp;<span id="lname" ></span></p>
+            <p>护士&nbsp;&nbsp;&nbsp;&nbsp;<span id="lname" ></span></p>
             <p>可用状态&nbsp;&nbsp;&nbsp;&nbsp;<span id="available" ></span></p>
         </div>
     </div>
@@ -110,9 +110,9 @@
 </div>
 
 <div id="addOrUpdateDiv" style="display: none;padding: 10px;margin-right: 4%">
-    <table class="layui-hide" id="examtimeTable" lay-filter="examtimeTable">
+    <table class="layui-hide" id="treattimeTable" lay-filter="treattimeTable">
     </table>
-    <div id="examtimeRowBar" style="display: none;">
+    <div id="treattimeRowBar" style="display: none;">
         <button type="button" lay-event="register" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-ok"></span>预约</button>
     </div>
 </div>
@@ -144,19 +144,19 @@
 
         //初始化表格 加载数据
         tableIns = table.render({
-            elem: "#examdocTable",
+            elem: "#treatdocTable",
             title: "公告数据表格",
-            url: "/api/bus/examdoc/loadAllExamdoc",
-            //toolbar: "#examdocToolBar",
+            url: "/api/bus/treatdoc/loadAllTreatdoc",
+            //toolbar: "#treatdocToolBar",
             page: true,
             height: "full",
             cols: [ [
                 //{type: 'checkbox', fixed: 'left', width: 50},
-                {field: 'examdocId', title: '报告编号', align: 'center', width: 100},
-                {field: 'examName', title: '检查名称', align: 'center', width: 150},
-                {field: 'content', title: '检查结果', align: 'center', width: 200},
+                {field: 'treatdocId', title: '报告编号', align: 'center', width: 100},
+                {field: 'treatName', title: '治疗名称', align: 'center', width: 150},
+                {field: 'content', title: '治疗结果', align: 'center', width: 200},
                 {field: 'patientName', title: '患者姓名', align: 'center', width: 150},
-                {field: 'laboratorianName', title: '检验医师', align: 'center', width: 150},
+                {field: 'nurseName', title: '护士', align: 'center', width: 150},
                 {field: 'createtime', title: '创建时间', align: 'center', width: 250},
                 {field: 'available', title: '可用状态', align: 'center', width: 150, templet: function (d) {
                         if(d.available == 0)
@@ -164,7 +164,7 @@
                         else
                             return "<font color='blue'>可用</font>";
                     }},
-                {fixed: 'right', title: '操作', toolbar: '#examdocRowBar', align: 'center', width: 150}
+                {fixed: 'right', title: '操作', toolbar: '#treatdocRowBar', align: 'center', width: 150}
             ] ],
             done:function (data, curr, count) {
                 if(data.data.length==0&&curr!=1){   //不是第一页时，如果当前返回的数据为0那么就返回上一页
@@ -202,10 +202,10 @@
         });
 
         /*//监控工具条事件
-        table.on("toolbar(examdocTable)", function (obj) {
+        table.on("toolbar(treatdocTable)", function (obj) {
             switch (obj.event) {
                 case 'batchDelete':
-                    batchDeleteExamdoc(obj.data);
+                    batchDeleteTreatdoc(obj.data);
                     break;
                 default:
                     break;
@@ -213,18 +213,18 @@
         });*/
 
         //监控行工具条事件
-        table.on("tool(examdocTable)",function (obj) {
+        table.on("tool(treatdocTable)",function (obj) {
             //获取当前行数据
             var data = obj.data;
             switch (obj.event){
                 case 'delete':
-                    //deleteExamdoc(data);
+                    //deleteTreatdoc(data);
                     break;
                 case 'show':
-                    showExamdoc(data);
+                    showTreatdoc(data);
                     break;
                 case 'register':
-                    //registerExamdoc(data);
+                    //registerTreatdoc(data);
                     break;
                 default:
                     break;
@@ -286,19 +286,19 @@
                 */
 
         //打开查看的弹出层
-        function showExamdoc(data) {
+        function showTreatdoc(data) {
             mainIndex = layer.open({
                 type:1,
                 content:$("#detailDiv"),
                 area:['500px','400px'],
                 skin:'layui-layer-molv',
-                title:'检查结果信息',
+                title:'治疗结果信息',
                 success:function () {
                     $("#createtime").text(data.createtime);
-                    $("#id").text(data.examdocId);
-                    $("#name").text(data.examName);
+                    $("#id").text(data.treatdocId);
+                    $("#name").text(data.treatName);
                     $("#pname").text(data.patientName);
-                    $("#lname").text(data.laboratorianName);
+                    $("#lname").text(data.nurseName);
                     $("#content").text(data.content);
                     if(data.available) {
                         $("#available").text("可用");
@@ -313,10 +313,10 @@
         }
 
         /*
-        //删除检查结果
-        function deleteExamdoc(data) {
-            layer.confirm('确认删除这条检查结果记录吗？',{icon: 3, title: '提示'},function (index) {
-                $.post("/api/bus/examdoc/deleteExamdoc",data,function (res) {
+        //删除治疗结果
+        function deleteTreatdoc(data) {
+            layer.confirm('确认删除这条治疗结果记录吗？',{icon: 3, title: '提示'},function (index) {
+                $.post("/api/bus/treatdoc/deleteTreatdoc",data,function (res) {
                     if (res.code==200){
                         console.log("删除结果条");
                         //重新刷新表格
@@ -332,23 +332,23 @@
         }
 
         //批量删除
-        function batchDeleteExamdoc() {
+        function batchDeleteTreatdoc() {
             //得到选中行
-            var checkStatus = table.checkStatus('examdocTable');
+            var checkStatus = table.checkStatus('treatdocTable');
             var dataLength = checkStatus.data.length;
             if (dataLength>0){
-                layer.confirm('确认删除这些检查结果记录吗？',{icon: 3,title: '提示'},function (index) {
+                layer.confirm('确认删除这些治疗结果记录吗？',{icon: 3,title: '提示'},function (index) {
                     //获取选中行数据
                     var data = checkStatus.data;
                     var ids = "";
                     $.each(data,function (index, item) {
                         if (index==0){
-                            ids+="ids="+item.examdocId;
+                            ids+="ids="+item.treatdocId;
                         }else {
-                            ids+="&ids="+item.examdocId;
+                            ids+="&ids="+item.treatdocId;
                         }
                     });
-                    $.post("/api/bus/examdoc/batchDeleteExamdoc",ids,function (res) {
+                    $.post("/api/bus/treatdoc/batchDeleteTreatdoc",ids,function (res) {
                         if (res.code==200){
                             //重新刷新表格
                             tableIns.reload({

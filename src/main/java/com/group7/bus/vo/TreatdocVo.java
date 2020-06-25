@@ -1,6 +1,6 @@
 package com.group7.bus.vo;
 
-import com.group7.bus.entity.Examdoc;
+import com.group7.bus.entity.Treatdoc;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class ExamdocVo extends Examdoc {
+public class TreatdocVo extends Treatdoc {
 
     private static final long serialVersionUID = 1L;
 

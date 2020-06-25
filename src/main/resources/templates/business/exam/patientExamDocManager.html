@@ -17,29 +17,33 @@
     <link rel="stylesheet" href="/static/resources/css/public.css" th:href="@{/resources/css/public.css}" media="all"/>
     <link rel="stylesheet" href="/static/resources/css/invoice.css" th:href="@{/resources/css/invoice.css}" media="all"/>
 </head>
+
 <body class="childrenBody">
-<!--查询条件开始
+<!-- 查询条件开始-->
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <legend>查询条件</legend>
 </fieldset>
 <blockquote class="layui-elem-quote">
     <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form layui-form-pane">
         <div class="layui-form-item">
-
             <div class="layui-inline">
                 <label class="layui-form-label">检验医师</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="laboratorianName"   autocomplete="off" class="layui-input">
+                    <input type="text" name="laboratorianName"  autocomplete="off" class="layui-input">
                 </div>
             </div>
-
             <div class="layui-inline">
-                <label class="layui-form-label" style="width: auto;">创建时间（查询该时间后的检查报告）</label>
+                <label class="layui-form-label">开始时间</label>
                 <div class="layui-input-inline">
-                    <input type="tel" name="createime" id="createime" readonly="readonly" placeholder="点击选择创建时间"  class="layui-input">
+                    <input type="tel" name="startTime" id="startTime" readonly="readonly" placeholder="点击选择开始时间" class="layui-input">
                 </div>
             </div>
-
+            <div class="layui-inline">
+                <label class="layui-form-label">结束时间</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="endTime" id="endTime" readonly="readonly" placeholder="点击选择结束时间" class="layui-input">
+                </div>
+            </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center;">
@@ -49,7 +53,7 @@
         </div>
 
     </form>
-</blockquote>-->
+</blockquote>
 
 
 <!--查询条件结束-->
@@ -188,6 +192,7 @@
 
         //监控模糊查询按钮事件
         form.on("submit(doSearch)", function (data) {
+            console.log(data.field);
             tableIns.reload({
                 where: data.field,
                 page: {

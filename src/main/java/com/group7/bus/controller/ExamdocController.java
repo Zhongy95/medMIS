@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.*;
+
 import static com.group7.sys.common.Constast.QUEUE_AFTERRECORD;
 
 
@@ -60,19 +62,41 @@ public class ExamdocController {
     @RequiresRoles("PATIENT")
     public DataGridView loadExamdoc(ExamdocVo examdocVo) {
         User user = (User) WebUtils.getSession().getAttribute("user");
-        IPage<Examdoc> page = examdocService.getExamdocByPatientId(
-                new Page<>(examdocVo.getPage(), examdocVo.getLimit()), user.getUserId());
+        IPage<Record> pagerR = new Page<>(examdocVo.getPage(), examdocVo.getLimit());
+        QueryWrapper<Record> queryWrapperR = new QueryWrapper<>();
+        queryWrapperR.eq("patient_id", user.getUserId());
+        this.recordService.page(pagerR, queryWrapperR);
+        Record record = pagerR.getRecords().get(0);
 
-        for(Examdoc examdoc : page.getRecords()) {
+        IPage<Examdoc> pageE = new Page<>(examdocVo.getPage(), examdocVo.getLimit());
+        QueryWrapper<Examdoc> queryWrapperE = new QueryWrapper<>();
+        queryWrapperE.eq("record_id", record.getRecordId())
+            .ge(examdocVo.getStartTime() != null, "createtime", examdocVo.getStartTime())
+            .le(examdocVo.getEndTime() != null, "createtime", examdocVo.getEndTime())
+            .orderByDesc("createtime"); // 排序依据
+        this.examdocService.page(pageE, queryWrapperE);
+
+        List<Examdoc> list = new ArrayList<>();
+        for(Examdoc examdoc : pageE.getRecords())
+            list.add(examdoc);
+
+        for(Examdoc examdoc : pageE.getRecords()) {
             Examtodo examtodo = this.examtodoService.getById(examdoc.getExamtodoId());
             Exam exam = this.examService.getById(examtodo.getExamId());
             examdoc.setExamName(exam.getExamName());
             examdoc.setPatientName(user.getName());
             User lab = userService.getById(examdoc.getLaboratorianId());
             examdoc.setLaboratorianName(lab.getName());
-        }
 
-        return new DataGridView(page.getTotal(), page.getRecords());
+            if(examdocVo.getLaboratorianName() != null){
+                if(!examdoc.getLaboratorianName().contains(examdocVo.getLaboratorianName())){
+                    list.remove(examdoc);
+                }
+            }
+        }
+        pageE.setRecords(list);
+
+        return new DataGridView(pageE.getTotal(), pageE.getRecords());
     }
 
     /**
@@ -124,9 +148,14 @@ public class ExamdocController {
     public DataGridView loadAllExamdoc(ExamdocVo examdocVo) {
         IPage<Examdoc> page = new Page<>(examdocVo.getPage(), examdocVo.getLimit());
         QueryWrapper<Examdoc> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("createtime");
+        queryWrapper.orderByDesc("createtime")
+            .ge(examdocVo.getStartTime() != null, "createtime", examdocVo.getStartTime())
+            .le(examdocVo.getEndTime() != null, "createtime", examdocVo.getEndTime());
 
         this.examdocService.page(page,queryWrapper);
+        List<Examdoc> list = new ArrayList<>();
+        for(Examdoc examdoc : page.getRecords())
+            list.add(examdoc);
 
         for(Examdoc examdoc : page.getRecords()) {
             Examtodo examtodo = this.examtodoService.getById(examdoc.getExamtodoId());
@@ -138,7 +167,14 @@ public class ExamdocController {
             examdoc.setExamName(exam.getExamName());
             User lab = userService.getById(examdoc.getLaboratorianId());
             examdoc.setLaboratorianName(lab.getName());
+
+            if(examdocVo.getPatientName() != null){
+                if(!examdoc.getPatientName().contains(examdocVo.getPatientName())){
+                    list.remove(examdoc);
+                }
+            }
         }
+        page.setRecords(list);
 
         return new DataGridView(page.getTotal(), page.getRecords());
     }

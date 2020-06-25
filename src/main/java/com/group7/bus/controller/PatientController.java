@@ -94,6 +94,6 @@ public class PatientController {
     /** 跳转到治疗结果查看 */
     @RequestMapping("toTreatDocManager")
     public String toTreatDocManager() {
-        return "business/exam/patientTreatDocManager";
+        return "business/treat/patientTreatDocManager";
     }
 }

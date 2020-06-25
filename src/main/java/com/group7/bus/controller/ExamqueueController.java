@@ -73,7 +73,7 @@ public class ExamqueueController {
             this.examqueueService.page(page, queryWrapper);
             Integer queuenumbernow = 0; //设置队列排序初始值为0
             for(Examqueue examqueue:page.getRecords()){
-                if(examqueue.getSituation()==QUEUE_AFTERRECORD){continue;}
+                if(examqueue.getSituation().equals(QUEUE_AFTERRECORD)){continue;}
                 Examregister examregister = examregisterService.getById(examqueue.getExamregisterId());
                 Exam exam = examService.getById(examregister.getExamId());
                 if (exam.getExamId()!=targetexam.getExamId()){continue;}//如果不属于该类，直接进下一个循环
@@ -175,7 +175,7 @@ public class ExamqueueController {
             Examqueue examqueue = this.examqueueService.getById(examqueueVo);
             if(!examqueue.getAvailable())
                 throw new medMISException("失效，无法添加", HttpStatus.FORBIDDEN);
-            if(examqueue.getSituation()!=QUEUE_INQUEUE)
+            if(!examqueue.getSituation().equals(QUEUE_INQUEUE))
                 throw new medMISException("不在排队状态", HttpStatus.BAD_REQUEST);
             examqueue.setSituation(QUEUE_INRECORD);
 

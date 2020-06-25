@@ -43,9 +43,11 @@ public class Medtodo implements Serializable {
 
     private Date createtime;
 
-    private Integer available;
+    private Boolean available;
 
     private Boolean payIfdone;
+
+    private Integer paymentId;
 
     private Integer registerId;
 

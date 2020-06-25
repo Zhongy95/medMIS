@@ -57,7 +57,7 @@ public class Treatdoc implements Serializable {
     /**
      * 是否可用
      */
-    private Integer available;
+    private Boolean available;
 
     /**
      * 治疗的结果
@@ -67,7 +67,7 @@ public class Treatdoc implements Serializable {
     /**
      * 是否完成治疗
      */
-    private Integer ifdone;
+    private Boolean ifdone;
 
     /**
      * 治疗项目名称

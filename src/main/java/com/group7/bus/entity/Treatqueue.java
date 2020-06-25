@@ -37,6 +37,7 @@ public class Treatqueue implements Serializable {
     /**
      * 治疗排队号
      */
+    @TableField(exist = false)
     private Integer queueNumber;
 
     /**
@@ -45,6 +46,8 @@ public class Treatqueue implements Serializable {
     private Integer treattodoId;
 
     private Integer situation;
+
+    private Date createTime;
 
     /**
      * 是否可用

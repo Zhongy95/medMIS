@@ -23,6 +23,6 @@ public class NurseController {
 
     /**跳转到治疗结果编写 */
     @RequestMapping("toTreatDocWriter")
-    public String toExamDocWriter(){return  "business/nurse/doctorTreatDocWriter";}
+    public String toExamDocWriter(){return  "business/treat/doctorTreatDocWriter";}
 
 }

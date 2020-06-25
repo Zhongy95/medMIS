@@ -4,11 +4,8 @@ package com.group7.bus.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.group7.bus.entity.Payment;
-import com.group7.bus.entity.Paymentitem;
-import com.group7.bus.entity.Register;
-import com.group7.bus.service.PaymentService;
-import com.group7.bus.service.PaymentitemService;
+import com.group7.bus.entity.*;
+import com.group7.bus.service.*;
 import com.group7.bus.vo.PaymentVo;
 import com.group7.sys.common.Constast;
 import com.group7.sys.common.DataGridView;
@@ -20,6 +17,7 @@ import com.group7.sys.exception.medMISException;
 import com.group7.sys.service.UserService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.crypto.JcaCipherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+
+import static com.group7.sys.common.Constast.*;
 
 /**
  * <p>
@@ -46,6 +46,11 @@ public class PaymentController {
 
     @Autowired private UserService userService;
 
+    @Autowired private TreattodoService treattodoService;
+
+    @Autowired private RegisterService registerService;
+
+    @Autowired private ExamregisterService examregisterService;
     /**
      * 查询指定病人的所有挂号缴费记录
      *
@@ -82,6 +87,33 @@ public class PaymentController {
             paymentVo.setIfdone(true);
             paymentVo.setDonetime(new Date());
             this.paymentService.saveOrUpdate(paymentVo);
+            if(paymentVo.getPaymentitemId().equals(PAYMENT_REGISTER))
+            {
+                //如果是挂号项，完成挂号项的更新
+                QueryWrapper<Register> queryWrapperRegister = new QueryWrapper<>();
+                queryWrapperRegister.eq("payment_id",paymentVo.getPaymentId());
+                Register registerUpdate = this.registerService.getOne(queryWrapperRegister);
+                registerUpdate.setPaymentIfdone(true);
+                this.registerService.updateById(registerUpdate);
+            }
+            else if(paymentVo.getPaymentitemId().equals(PAYMENT_EXAM))
+            {
+                QueryWrapper<Examregister> examregisterQueryWrapper = new QueryWrapper<>();
+                examregisterQueryWrapper.eq("payment_id",paymentVo.getPaymentId());
+                Examregister examregisterUpdate =this.examregisterService.getOne(examregisterQueryWrapper);
+                examregisterUpdate.setPaymentIfdone(true);
+                this.examregisterService.updateById(examregisterUpdate);
+            }
+            else if(paymentVo.getPaymentitemId().equals(PAYMENT_TREATMENT))
+            {
+                //如果是治疗项，完成treattodo的更新
+                QueryWrapper<Treattodo> queryWrapperTreat = new QueryWrapper<>();
+                queryWrapperTreat.eq("payment_id",paymentVo.getPaymentId());
+                Treattodo treattodoUpdate = this.treattodoService.getOne(queryWrapperTreat);
+                treattodoUpdate.setPayIfdone(true);
+                this.treattodoService.updateById(treattodoUpdate);
+            }
+
             return ResultObj.PAY_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,11 +142,37 @@ public class PaymentController {
             this.paymentService.list(queryWrapper);
             //遍历List，完成每一个payment更改
             for(Payment payment: this.paymentService.list()) {
-                //if(payment.getIfdone()!=true){
+                if(!payment.getIfdone()){
                     payment.setIfdone(true);
                     payment.setDonetime(new Date());
                     this.paymentService.updateById(payment);
-                //}
+                    if(payment.getPaymentitemId().equals(PAYMENT_REGISTER))
+                    {
+                        //如果是挂号项，完成挂号项的更新
+                        QueryWrapper<Register> queryWrapperRegister = new QueryWrapper<>();
+                        queryWrapperRegister.eq("payment_id",payment.getPaymentId());
+                        Register registerUpdate = this.registerService.getOne(queryWrapperRegister);
+                        registerUpdate.setPaymentIfdone(true);
+                        this.registerService.updateById(registerUpdate);
+                    }
+                    else if(payment.getPaymentitemId().equals(PAYMENT_EXAM))
+                    {
+                        QueryWrapper<Examregister> examregisterQueryWrapper = new QueryWrapper<>();
+                        examregisterQueryWrapper.eq("payment_id",payment.getPaymentId());
+                        Examregister examregisterUpdate =this.examregisterService.getOne(examregisterQueryWrapper);
+                        examregisterUpdate.setPaymentIfdone(true);
+                        this.examregisterService.updateById(examregisterUpdate);
+                    }
+                    else if(payment.getPaymentitemId().equals(PAYMENT_TREATMENT))
+                    {
+                        //如果是治疗项，完成treattodo的更新
+                        QueryWrapper<Treattodo> queryWrapperTreat = new QueryWrapper<>();
+                        queryWrapperTreat.eq("payment_id",payment.getPaymentId());
+                        Treattodo treattodoUpdate = this.treattodoService.getOne(queryWrapperTreat);
+                        treattodoUpdate.setPayIfdone(true);
+                        this.treattodoService.updateById(treattodoUpdate);
+                    }
+                }
             }
             //this.paymentService.updateBatchById(page.getRecords());
             return ResultObj.PAY_SUCCESS;

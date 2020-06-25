@@ -39,7 +39,7 @@ public class Treatment implements Serializable {
     /**
      * 每次治疗价格
      */
-    private BigDecimal price;
+    private Float price;
 
     /**
      * 治疗项目已用次数

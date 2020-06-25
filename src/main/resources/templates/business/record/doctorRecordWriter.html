@@ -87,7 +87,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">是否完成全套问诊</label>
                 <div class="layui-input-block">
-                    <input type="checkbox" name="ifdone" lay-skin="switch">
+                    <input type="checkbox" name="ifdone" lay-skin="switch" value="1">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -232,6 +232,7 @@
         //提交生成record
         $("#doSubmit").click(function () {
             var data = $("#dataFrm").serialize();
+
             $.post("/api/bus/record/addRecord",data,function(res){
                 layer.msg(res.msg);
             })

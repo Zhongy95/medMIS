@@ -102,9 +102,9 @@
                 {field: 'patientName', title: '病人姓名', align: 'center'},
                 {field: 'price', title: '价格', align: 'center'},
                 {field: 'situation', title: '当前状态', align: 'center', width: 150, templet: function (d) {
-                        if(d.situation === 2)
+                        if(d.situation === 1)
                             return "<font color='red'>排队中</font>";
-                        else if (d.situation ===1)
+                        else if (d.situation ===2)
                             return "<font color='blue'>治疗中</font>";
                     }},
                 // {field: 'icon', title: '是否可用', align: 'center',width:'100',templet:function (d) {

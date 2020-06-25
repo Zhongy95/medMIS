@@ -31,8 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.group7.sys.common.Constast.QUEUE_AFTERRECORD;
-import static com.group7.sys.common.Constast.QUEUE_INRECORD;
+import static com.group7.sys.common.Constast.*;
 
 /**
  * <p>
@@ -54,7 +53,8 @@ public class RecordController {
     @Autowired private TreattodoService treattodoService;
     @Autowired private MedtodoService medtodoService;
     @Autowired private RegisterqueueService registerqueueService;
-
+    @Autowired private TreatmentService treatmentService;
+    @Autowired private PaymentService paymentService;
 
     @Autowired
     public RecordController(RecordServiceImpl recordServiceImpl, RecordService recordService, UserService userService, DeptService deptService) {
@@ -159,14 +159,28 @@ public class RecordController {
                 recordnow.setIfexam(true);
                 this.recordService.updateById(recordnow);
             }
-            //更新TreatToDo内容,因为之前没有recordId
+            //更新TreatToDo内容,因为之前没有recordId，也没有治疗缴费单
             QueryWrapper<Treattodo> queryWrapperTreat = new QueryWrapper<>();
             queryWrapperTreat.eq("register_id",recordnow.getRegisterId());
             List<Treattodo> treattodoList= this.treattodoService.list(queryWrapperTreat);
+
             if(treattodoList.size()!=0){
                 for(Treattodo treattodo:treattodoList){
                     if(treattodo.getRecordId()==null)
+                    {
                         treattodo.setRecordId(recordnow.getRecordId());
+                        //新建缴费单
+                        Treatment treatment = this.treatmentService.getById( treattodo.getTreatmentId());
+                        Payment treatPayment = new Payment();
+                        treatPayment.setPaymentitemId(PAYMENT_TREATMENT);
+                        treatPayment.setPatientId(recordnow.getPatientId());
+                        treatPayment.setAmount(treatment.getPrice());
+                        treatPayment.setCreatetime(new Date());
+                        treatPayment.setInfo("缴费项目是治疗");
+                        this.paymentService.saveOrUpdate(treatPayment);
+                        Payment treatPaymentNow = this.paymentService.getById(treatPayment);
+                        treattodo.setPaymentId(treatPaymentNow.getPaymentId());
+                    }
                 }
                 this.treattodoService.updateBatchById(treattodoList);
                 recordnow.setIftreat(true);

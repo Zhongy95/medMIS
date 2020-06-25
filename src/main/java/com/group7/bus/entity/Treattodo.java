@@ -45,6 +45,9 @@ public class Treattodo implements Serializable {
 
     private Boolean available;
 
+    private Boolean payIfdone;
+
+    private Integer paymentId;
 
     private Integer registerId;
 
@@ -64,5 +67,5 @@ public class Treattodo implements Serializable {
      * 患者id
      */
     @TableField(exist = false)
-    private String patientId;
+    private Integer patientId;
 }

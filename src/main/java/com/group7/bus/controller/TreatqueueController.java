@@ -11,7 +11,9 @@ import com.group7.bus.entity.Record;
 import com.group7.bus.mapper.TreatqueueMapper;
 import com.group7.bus.service.*;
 import com.group7.bus.vo.ExamqueueVo;
+import com.group7.bus.vo.ExamregisterVo;
 import com.group7.bus.vo.TreatqueueVo;
+import com.group7.bus.vo.TreattodoVo;
 import com.group7.sys.common.DataGridView;
 import com.group7.sys.common.ResultObj;
 import com.group7.sys.common.WebUtils;
@@ -71,7 +73,7 @@ public class TreatqueueController {
             this.treatqueueService.page(page, queryWrapper);
             Integer queuenumbernow = 0; //设置队列排序初始值为0
             for(Treatqueue treatqueue:page.getRecords()){
-                if(treatqueue.getAvailable()==0){continue;}
+                if(!treatqueue.getAvailable()){continue;}
                 Treattodo treattodo = treattodoService.getById(treatqueue.getTreattodoId());
                 Treatment treatment = treatmentService.getById(treattodo.getTreatmentId());
                 Record record = recordService.getById(treattodo.getRecordId());
@@ -87,18 +89,12 @@ public class TreatqueueController {
                 treatqueue.setRegisterId(treattodo.getRegisterId());
                 queuenumbernow++;
                 treatqueue.setQueueNumber(queuenumbernow);
-                if(treatqueue.getQueueNumber()==1)
-                    treatqueue.setSituation(1);
-                if(treatqueue.getQueueNumber()!=1)
-                    treatqueue.setSituation(2);
-                if(!treatqueue.getAvailable().equals(0) && user.getUserId().equals(treatqueue.getPatientId())){
+                if(!treatqueue.getAvailable().equals(false) && user.getUserId().equals(treatqueue.getPatientId())){
                     //如果不是目标病人的，就查询不到
                     list.add(treatqueue);
                 }
             }
         }
-
-
 
         resultPage.setRecords(list);
         resultPage.setTotal(page.getTotal());
@@ -121,7 +117,7 @@ public DataGridView loadAllTreatqueueDoctor(TreatqueueVo treatqueueVo) {
         this.treatqueueService.page(page, queryWrapper);
         Integer queuenumbernow = 0; //设置队列排序初始值为0
         for(Treatqueue treatqueue:page.getRecords()){
-            if(treatqueue.getAvailable()==0){continue;}
+            if(!treatqueue.getAvailable()){continue;}
             Treattodo treattodo = treattodoService.getById(treatqueue.getTreattodoId());
             Treatment treatment = treatmentService.getById(treattodo.getTreatmentId());
             Record record = recordService.getById(treattodo.getRecordId());
@@ -137,10 +133,6 @@ public DataGridView loadAllTreatqueueDoctor(TreatqueueVo treatqueueVo) {
             treatqueue.setRegisterId(treattodo.getRegisterId());
             queuenumbernow++;
             treatqueue.setQueueNumber(queuenumbernow);
-            if(treatqueue.getQueueNumber()==1)
-                treatqueue.setSituation(1);
-            if(treatqueue.getQueueNumber()!=1)
-                treatqueue.setSituation(2);
             list.add(treatqueue);
         }
     }
@@ -149,16 +141,41 @@ public DataGridView loadAllTreatqueueDoctor(TreatqueueVo treatqueueVo) {
     resultPage.setPages(page.getPages());
     return new DataGridView(resultPage.getTotal(), resultPage.getRecords());
     }
+
+
+    @RequestMapping("addTreatqueue")
+    public ResultObj addTreatqueue(TreattodoVo treattodoVo) throws medMISException {
+        try {
+            Treattodo treattodoin = this.treattodoService.getById(treattodoVo);
+            if (!treattodoin.getAvailable())
+                throw new medMISException("添加失败", HttpStatus.FORBIDDEN);
+            if (!treattodoin.getPayIfdone())
+                throw new medMISException("添加失败", HttpStatus.BAD_REQUEST);
+            Treatqueue treatqueue =new Treatqueue();
+            treatqueue.setTreattodoId(treattodoin.getTreattodoId());
+            this.treatqueueService.save(treatqueue);
+            treattodoin.setAvailable(false);//完成后，将可用状态改为否
+            this.treattodoService.updateById(treattodoin);
+            return ResultObj.ADD_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new medMISException("添加失败", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+
+
+
     @RequestMapping("TreatRegisterQueue")
     @RequiresRoles("NURSE")
     public ResultObj TreatRegisterQueue (TreatqueueVo treatqueueVo) throws medMISException {
         try {
             Treatqueue treatqueue = this.treatqueueService.getById(treatqueueVo.getQueueId());
-            if(treatqueue.getAvailable()==0)
+            if(!treatqueue.getAvailable())
                 throw new medMISException("失效，无法添加", HttpStatus.FORBIDDEN);
             if(treatqueue.getQueueNumber()!=1)
                 throw new medMISException("不在队首", HttpStatus.BAD_REQUEST);
-            treatqueue.setAvailable(0);
+            treatqueue.setAvailable(false);
             this.treatqueueService.saveOrUpdate(treatqueue);
 //            this.examqueueService.updateById(examqueue);
 //            //检测是否有待办的检查报告

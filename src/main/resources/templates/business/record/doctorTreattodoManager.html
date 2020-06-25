@@ -184,8 +184,14 @@
                 {field: 'treatName', title: '治疗名称', align: 'center', width: 200},
                 {field: 'patientName', title: '患者姓名', align: 'center', width: 150},
                 {field: 'createtime', title: '创建时间', align: 'center', width: 250},
+                {field: 'payIfdone', title: '缴费状态', align: 'center', width: 200, templet: function (d) {
+                        if(d.payIfdone === false)
+                            return "<font color='red'>未完成</font>";
+                        else
+                            return "<font color='blue'>已完成</font>";
+                    }},
                 {field: 'available', title: '可用状态', align: 'center', width: 150, templet: function (d) {
-                        if(d.available == 0)
+                        if(d.available == false)
                             return "<font color='red'>不可用</font>";
                         else
                             return "<font color='blue'>可用</font>";

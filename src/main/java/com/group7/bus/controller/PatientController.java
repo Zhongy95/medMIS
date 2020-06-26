@@ -96,4 +96,17 @@ public class PatientController {
     public String toTreatDocManager() {
         return "business/treat/patientTreatDocManager";
     }
+
+    /** 跳转到取药排队 */
+    @RequestMapping("toMedQueueManager")
+    public String toMedQueue() {
+        return "business/med/patientMedQueueManager";
+    }
+
+    /** 跳转到治疗结果查看 */
+    @RequestMapping("toMedDocManager")
+    public String toMedDocManager() {
+        return "business/med/patientMedDocManager";
+    }
+
 }

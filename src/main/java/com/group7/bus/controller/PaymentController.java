@@ -84,10 +84,11 @@ public class PaymentController {
     @RequestMapping("payForOne")
     public ResultObj payForOne(PaymentVo paymentVo) throws medMISException {
         try {
-            paymentVo.setIfdone(true);
-            paymentVo.setDonetime(new Date());
-            this.paymentService.saveOrUpdate(paymentVo);
-            if(paymentVo.getPaymentitemId().equals(PAYMENT_REGISTER))
+            Payment payment =this.paymentService.getById(paymentVo);
+            payment.setIfdone(true);
+            payment.setDonetime(new Date());
+            this.paymentService.saveOrUpdate(payment);
+            if(payment.getPaymentitemId().equals(PAYMENT_REGISTER))
             {
                 //如果是挂号项，完成挂号项的更新
                 QueryWrapper<Register> queryWrapperRegister = new QueryWrapper<>();
@@ -96,7 +97,7 @@ public class PaymentController {
                 registerUpdate.setPaymentIfdone(true);
                 this.registerService.updateById(registerUpdate);
             }
-            else if(paymentVo.getPaymentitemId().equals(PAYMENT_EXAM))
+            else if(payment.getPaymentitemId().equals(PAYMENT_EXAM))
             {
                 QueryWrapper<Examregister> examregisterQueryWrapper = new QueryWrapper<>();
                 examregisterQueryWrapper.eq("payment_id",paymentVo.getPaymentId());
@@ -104,7 +105,7 @@ public class PaymentController {
                 examregisterUpdate.setPaymentIfdone(true);
                 this.examregisterService.updateById(examregisterUpdate);
             }
-            else if(paymentVo.getPaymentitemId().equals(PAYMENT_TREATMENT))
+            else if(payment.getPaymentitemId().equals(PAYMENT_TREATMENT))
             {
                 //如果是治疗项，完成treattodo的更新
                 QueryWrapper<Treattodo> queryWrapperTreat = new QueryWrapper<>();

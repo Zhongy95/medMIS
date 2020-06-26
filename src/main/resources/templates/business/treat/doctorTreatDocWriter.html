@@ -123,7 +123,9 @@
         
 
         getinfo();//获取正在看病的患者信息
-        $("#Getinfo").click(getinfo());
+        $("#Getinfo").click(function () {
+            getinfo();
+        });
         function getinfo () {
             $.get("/api/bus/treatdoc/loadUndoneTreatDoc",function (result) {
                 console.log(result)

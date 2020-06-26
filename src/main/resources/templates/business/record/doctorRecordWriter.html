@@ -24,7 +24,7 @@
     <div class="layui-row">
         <div class="layui-col-xs5">
             <div class="layui-form-item">
-                <button type="button"  id="Getinfo" name="Getinfo" class="layui-btn layui-btn-normal "><span class="layui-icon layui-icon-add-1">获取看病人信息</span></button>
+                <button type="button"  id="getInfo" name="getInfo" class="layui-btn layui-btn-normal "><span class="layui-icon layui-icon-add-1">获取看病人信息</span></button>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">队列编号</label>
@@ -206,8 +206,11 @@
         }
 
 
-        getinfo();//获取正在看病的患者信息
-        $("#Getinfo").click(getinfo());
+        getinfo();//获取正在看病的患者信息,页面打开时自动调用一次
+        $("#getInfo").click(function () {
+            getinfo();
+        });
+
         function getinfo () {
             $.get("/api/bus/registerqueue/loadRegisterToRecord",function (result) {
                 console.log(result)

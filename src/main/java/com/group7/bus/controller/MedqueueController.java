@@ -101,30 +101,27 @@ public class MedqueueController {
         IPage<Medqueue> resultPage = new Page<>(medqueueVo.getPage(), medqueueVo.getLimit());
         List<Medqueue> list = new ArrayList<Medqueue>();
         User user = (User) WebUtils.getSession().getAttribute("user");
-        //每个种类的检查都查询一遍
-        List<Medicine> medicineList = this.medicineService.list();
-        for(Medicine targetmedcine :medicineList){
-            QueryWrapper<Medqueue> queryWrapper = new QueryWrapper<>();
-            queryWrapper.orderByAsc("create_time");// 排序依据
-            this.medqueueService.page(page, queryWrapper);
-            Integer queuenumbernow = 0; //设置队列排序初始值为0
-            for(Medqueue medqueue:page.getRecords()){
-                if(medqueue.getSituation().equals(QUEUE_AFTERRECORD)){continue;}
-                Medtodo medtodo = medtodoService.getById(medqueue.getMedtodoId());
-                Medicine medicine = medicineService.getById(medtodo.getMedId());
-                if (medicine.getMedId()!=targetmedcine.getMedId()){continue;}//如果不属于该类，直接进下一个循环
-                Payment payment = paymentService.getById(medtodo.getPaymentId());
-                medqueue.setPatientId(payment.getPatientId());
-                medqueue.setMedName(medicine.getMedName());
-                medqueue.setPrice(medicine.getPrice());
-                medqueue.setRegisterId(medtodo.getRegisterId());
-                medqueue.setRecordId(medtodo.getRecordId());
-                queuenumbernow++;
-                medqueue.setQueueNumber(queuenumbernow);
-                medqueue.setPatientName((userService.getById(medqueue.getPatientId())).getName());
-                list.add(medqueue);
-                }
-            }
+
+        QueryWrapper<Medqueue> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByAsc("create_time");// 排序依据
+        this.medqueueService.page(page, queryWrapper);
+        Integer queuenumbernow = 0; //设置队列排序初始值为0
+        for(Medqueue medqueue:page.getRecords()){
+            if(medqueue.getSituation().equals(QUEUE_AFTERRECORD)){continue;}
+            Medtodo medtodo = medtodoService.getById(medqueue.getMedtodoId());
+            Medicine medicine = medicineService.getById(medtodo.getMedId());
+            Payment payment = paymentService.getById(medtodo.getPaymentId());
+            medqueue.setPatientId(payment.getPatientId());
+            medqueue.setMedName(medicine.getMedName());
+            medqueue.setPrice(medicine.getPrice());
+            medqueue.setRegisterId(medtodo.getRegisterId());
+            medqueue.setRecordId(medtodo.getRecordId());
+            queuenumbernow++;
+            medqueue.setQueueNumber(queuenumbernow);
+            medqueue.setPatientName((userService.getById(medqueue.getPatientId())).getName());
+            list.add(medqueue);
+        }
+
         resultPage.setRecords(list);
         resultPage.setTotal(page.getTotal());
         resultPage.setPages(page.getPages());

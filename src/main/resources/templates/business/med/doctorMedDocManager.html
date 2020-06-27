@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en"xmlns:th="http://www.thymeleaf.com">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="/static/resources/favicon.ico">
+    <!--<link rel="stylesheet" href="/static/resources/layui/css/layui.css" media="all" />-->
+    <link rel="stylesheet" href="/static/resources/layui/css/layui.css" th:href="@{/resources/layui/css/layui.css}"
+          media="all"/>
+    <link rel="stylesheet" href="/static/resources/css/public.css" th:href="@{/resources/css/public.css}" media="all"/>
+    <link rel="stylesheet" href="/static/resources/css/invoice.css" th:href="@{/resources/css/invoice.css}" media="all"/>
+</head>
+<body class="childrenBody">
+
+<!-- 查询条件开始-->
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>查询条件</legend>
+</fieldset>
+<blockquote class="layui-elem-quote">
+    <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form layui-form-pane">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">病人姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="patientName"  autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">开始时间</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="startTime" id="startTime" readonly="readonly" placeholder="点击选择开始时间" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">结束时间</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="endTime" id="endTime" readonly="readonly" placeholder="点击选择结束时间" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="text-align: center;">
+                <button type="button" class="layui-btn" lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>查询</button>
+                <button type="reset" class="layui-btn layui-btn-warm"><span class="layui-icon layui-icon-refresh"></span>重置</button>
+            </div>
+        </div>
+
+    </form>
+</blockquote>
+
+
+<!--查询条件结束-->
+
+
+<!--数据表格开始-->
+<div>
+    <table class="layui-hide" id="meddocTable" lay-filter="meddocTable">
+
+    </table>
+    <div id="meddocToolBar" style="display: none;">
+        <!--<button type="button" lay-event="reload" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-refresh"></span>刷新</button>-->
+        <button type="button" lay-event="batchDelete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>批量删除</button>
+    </div>
+    <div id="meddocRowBar" style="display: none;">
+        <!--<button type="button" lay-event="pay" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-rmb"></span>支付</button>-->
+        <!--<button type="button" lay-event="register" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-ok"></span>预约</button>
+        --><button type="button" lay-event="show" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-about"></span>查看</button>
+        <!--<button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
+    -->
+    </div>
+</div>
+
+<!--数据表格结束-->
+
+<!--查看层组件-->
+<div class="layui-card" id="detailDiv" style="display: none">
+    <!--<div class="layui-card-header" style="font-size: 16px; font-weight: bold; color: #2e2e2e">
+        药品结果详情
+    </div>-->
+    <div class="layui-card-body">
+        <!--<div style="font-size: 14px; color: darkslategrey">-->
+        <div style="font-size: 14px;">
+            <!--<p><b>创建时间&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="createtime" ></span></p>
+            <p><b>药品结果号&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="id" ></span></p>
+            <p><b>药品名称&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="name" ></span></p>
+            <p><b>病人姓名&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="pname" ></span></p>
+            <p><b>缴费状态&nbsp;&nbsp;&nbsp;&nbsp;</b><span id="ifpay" ></span></p>-->
+            <p>创建时间&nbsp;&nbsp;&nbsp;&nbsp;<span id="createtime" ></span></p>
+            <p>报告编号&nbsp;&nbsp;&nbsp;&nbsp;<span id="id" ></span></p>
+            <p>药品名称&nbsp;&nbsp;&nbsp;&nbsp;<span id="name" ></span></p>
+            <p>病人姓名&nbsp;&nbsp;&nbsp;&nbsp;<span id="pname" ></span></p>
+            <p>药剂师&nbsp;&nbsp;&nbsp;&nbsp;<span id="lname" ></span></p>
+            <p>可用状态&nbsp;&nbsp;&nbsp;&nbsp;<span id="available" ></span></p>
+            <p>选择邮寄&nbsp;&nbsp;&nbsp;&nbsp;<span id="ifdelivery" ></span></p>
+            <p>邮寄地址&nbsp;&nbsp;&nbsp;&nbsp;<span id="deliveryaddr" ></span></p>
+        </div>
+    </div>
+    <!--<hr>
+    <div class="layui-card-body">
+        &lt;!&ndash;<div style="font-size: 14px; color: darkslategrey">&ndash;&gt;
+        <div style="font-size: 14px;">
+            <p>结果详情&nbsp;&nbsp;&nbsp;&nbsp;<span id="content" ></span></p>
+        </div>
+    </div>-->
+</div>
+
+<!--<div id="addOrUpdateDiv" style="display: none;padding: 10px;margin-right: 4%">
+    <table class="layui-hide" id="medtimeTable" lay-filter="medtimeTable">
+    </table>
+    <div id="medtimeRowBar" style="display: none;">
+        <button type="button" lay-event="register" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-ok"></span>预约</button>
+    </div>
+</div>-->
+
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+    var tableIns;
+    var tableLayer;
+
+    layui.use(['jquery', 'form', 'layer', 'laydate', 'table','layedit'], function () {
+        var $ = layui.jquery;
+        var form = layui.form;
+        var layer = layui.layer;
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var layedit = layui.layedit;
+
+        //初始化时间选择器
+        laydate.render({
+            elem: "#startTime",
+            type: "datetime"
+        });
+        laydate.render({
+            elem: "#endTime",
+            type: "datetime"
+        });
+
+
+        //初始化表格 加载数据
+        tableIns = table.render({
+            elem: "#meddocTable",
+            title: "公告数据表格",
+            url: "/api/bus/meddoc/loadAllMeddoc",
+            //toolbar: "#meddocToolBar",
+            page: true,
+            height: "full",
+            cols: [ [
+                //{type: 'checkbox', fixed: 'left', width: 50},
+                {field: 'meddocId', title: '报告编号', align: 'center', width: 100},
+                {field: 'medName', title: '药品名称', align: 'center', width: 150},
+                {field: 'patientName', title: '患者姓名', align: 'center', width: 150},
+                {field: 'pharmacistName', title: '药剂师', align: 'center', width: 150},
+                {field: 'createtime', title: '创建时间', align: 'center', width: 250},
+                {field: 'available', title: '可用状态', align: 'center', width: 150, templet: function (d) {
+                        if(d.available == 0)
+                            return "<font color='red'>不可用</font>";
+                        else
+                            return "<font color='blue'>可用</font>";
+                    }},
+                {field: 'ifdelivery', title: '选择邮寄', align: 'center', width: 150, templet: function (d) {
+                        if(d.ifdelivery == 0)
+                            return "<font color='red'>否</font>";
+                        else
+                            return "<font color='blue'>是</font>";
+                    }},
+                {field: 'deliveryaddr', title: '邮寄地址', align: 'center', width: 200},
+                {fixed: 'right', title: '操作', toolbar: '#meddocRowBar', align: 'center', width: 150}
+            ] ],
+            done:function (data, curr, count) {
+                if(data.data.length==0&&curr!=1){   //不是第一页时，如果当前返回的数据为0那么就返回上一页
+                    tableIns.reload({
+                        page:{
+                            curr:curr-1
+                        }
+                    });
+                }
+
+                /*var Total=0;//统计结算后余额
+                layui.each(data.data,function(index,d){
+                    // console.log(d);
+                    if(!d.ifdone)
+                        Total+=Number(d.amount);
+                    // console.log(" " + Total + "\n");
+                });
+                //修改 结算后余额 统计结果元格文本
+                this.elem.next().find('.layui-table-total td[data-field="amount"] .layui-table-cell').text(Total.toFixed(1));
+            */
+            }
+        });
+
+
+
+        //监控模糊查询按钮事件
+        form.on("submit(doSearch)", function (data) {
+            tableIns.reload({
+                where: data.field,
+                page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+
+        /*//监控工具条事件
+        table.on("toolbar(meddocTable)", function (obj) {
+            switch (obj.event) {
+                case 'batchDelete':
+                    batchDeleteMeddoc(obj.data);
+                    break;
+                default:
+                    break;
+            }
+        });*/
+
+        //监控行工具条事件
+        table.on("tool(meddocTable)",function (obj) {
+            //获取当前行数据
+            var data = obj.data;
+            switch (obj.event){
+                case 'delete':
+                    //deleteMeddoc(data);
+                    break;
+                case 'show':
+                    showMeddoc(data);
+                    break;
+                case 'register':
+                    //registerMeddoc(data);
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        /*
+                var mainIndex;
+                var url;
+
+                //打开添加的弹出层
+                function openAddLayer() {
+                    mainIndex = layer.open({
+                        type:1,
+                        content : $("#addOrUpdateDiv"),
+                        area:['800px','550px'],
+                        title:'添加公告',
+                        success:function () {
+                            $("#dataFrm")[0].reset();
+                            //重置富文本编译器的内容为空
+                            layedit.setContent(editIndex,"");
+                            url="/api/notice/addNotice";
+                        }
+                    });
+                };
+
+                //打开修改的弹出层
+                function updateNotice(data) {
+                    //console.log(data);
+                    mainIndex = layer.open({
+                        type:1,
+                        content:$("#addOrUpdateDiv"),
+                        area:['800px','550px'],
+                        title:'修改公告',
+                        success:function () {
+                            $("#dataFrm")[0].reset();
+                            //装载新的数据
+                            form.val("dataFrm",data);
+                            layedit.setContent(editIndex,data.content);
+                            url="/api/notice/updateNotice";
+                        }
+                    });
+                };
+
+                $("#doSubmit").click(function () {
+                    //alert(url);
+                    //同步富文本和textarea里面的内容
+                    layedit.sync(editIndex);
+                    var data = $("#dataFrm").serialize();
+                    $.post(url,data,function (res) {
+                        if (res.code==200){
+                            tableIns.reload();
+                        }
+                        //提示操作是否成功，且关闭弹出层
+                        layer.msg(res.msg);
+                        layer.close(mainIndex);
+                    });
+                });
+                */
+
+        //打开查看的弹出层
+        function showMeddoc(data) {
+            mainIndex = layer.open({
+                type:1,
+                content:$("#detailDiv"),
+                area:['500px','350px'],
+                skin:'layui-layer-molv',
+                title:'药品报告信息',
+                success:function () {
+                    $("#createtime").text(data.createtime);
+                    $("#id").text(data.meddocId);
+                    $("#name").text(data.medName);
+                    $("#pname").text(data.patientName);
+                    $("#lname").text(data.pharmacistName);
+                    if(data.available) {
+                        $("#available").text("可用");
+                        $("#available").css("color", "blue");
+                    }
+                    else {
+                        $("#available").text("不可用");
+                        $("#available").css("color", "red");;
+                    }
+                    if(data.ifdelivery) {
+                        $("#ifdelivery").text("是");
+                        $("#ifdelivery").css("color", "blue");
+                    }
+                    else {
+                        $("#ifdelivery").text("否");
+                        $("#ifdelivery").css("color", "red");;
+                    }
+                    $("#deliveryaddr").text(data.deliveryaddr);
+                }
+            });
+        }
+
+        /*
+        //删除药品结果
+        function deleteMeddoc(data) {
+            layer.confirm('确认删除这条药品结果记录吗？',{icon: 3, title: '提示'},function (index) {
+                $.post("/api/bus/meddoc/deleteMeddoc",data,function (res) {
+                    if (res.code==200){
+                        console.log("删除结果条");
+                        //重新刷新表格
+                        tableIns.reload({
+                            where:"",
+                        });
+                    }
+                    layer.msg(res.msg);
+                });
+                layer.close(index);
+            });
+
+        }
+
+        //批量删除
+        function batchDeleteMeddoc() {
+            //得到选中行
+            var checkStatus = table.checkStatus('meddocTable');
+            var dataLength = checkStatus.data.length;
+            if (dataLength>0){
+                layer.confirm('确认删除这些药品结果记录吗？',{icon: 3,title: '提示'},function (index) {
+                    //获取选中行数据
+                    var data = checkStatus.data;
+                    var ids = "";
+                    $.each(data,function (index, item) {
+                        if (index==0){
+                            ids+="ids="+item.meddocId;
+                        }else {
+                            ids+="&ids="+item.meddocId;
+                        }
+                    });
+                    $.post("/api/bus/meddoc/batchDeleteMeddoc",ids,function (res) {
+                        if (res.code==200){
+                            //重新刷新表格
+                            tableIns.reload({
+                                where:"",
+                            });
+                        }
+                        layer.msg(res.msg);
+                    });
+                    layer.close(index);
+                });
+            }else {
+                layer.msg("请选中操作行")
+            }
+        }*/
+
+
+    });
+
+</script>
+
+<!--<script type="text/html" id="paymentRowBar">
+    {{#if (d.ifdone == 0) { }}
+    <button type="button" lay-event="pay" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-rmb"></span>支付</button>
+    {{# }else{ }}
+    <button type="button" lay-event="print" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-print"></span>打印发票</button>
+    {{# } }}
+</script>-->
+</body>
+</html>

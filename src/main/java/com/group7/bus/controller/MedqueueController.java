@@ -141,7 +141,6 @@ public class MedqueueController {
                 throw new medMISException("不在队首", HttpStatus.BAD_REQUEST);
             medqueue.setSituation(QUEUE_INRECORD);
             this.medqueueService.saveOrUpdate(medqueue);
-
 //            //检测是否有待办的检查报告
 //            User nurse = (User) WebUtils.getSession().getAttribute("user");
 //            QueryWrapper<Treatdoc> queryWrapper = new QueryWrapper<>();

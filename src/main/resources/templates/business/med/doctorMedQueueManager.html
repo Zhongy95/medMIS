@@ -245,10 +245,10 @@
             }
             else {
                 layer.confirm('你确定要呼叫队列编号为' + data.queueId + '的病人吗？', {icon: 3, title: '提示'}, function (index) {
-                    $.post("/api/bus/medqueue/TreatRegisterQueue", {queueId: data.queueId}, function (res) {
+                    $.post("/api/bus/medqueue/MedRegisterQueue", {queueId: data.queueId}, function (res) {
                         if (res.code == 200) {
                             tableIns.reload({
-                                where: "",
+                                where: "成功",
                             });
                             // window.top.onlyjump("/bus/nurse/toTreatDocWriter");
                         }

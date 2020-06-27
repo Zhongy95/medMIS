@@ -91,9 +91,6 @@ public class ExamqueueController {
                 }
             }
         }
-
-
-
         resultPage.setRecords(list);
         resultPage.setTotal(page.getTotal());
         resultPage.setPages(page.getPages());

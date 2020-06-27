@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.group7.bus.entity.*;
 import com.group7.bus.entity.Medtodo;
+import com.group7.bus.entity.Record;
 import com.group7.bus.service.MedicineService;
 import com.group7.bus.service.MedtodoService;
 import com.group7.bus.service.RecordService;

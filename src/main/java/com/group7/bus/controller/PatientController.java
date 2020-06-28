@@ -50,6 +50,9 @@ public class PatientController {
         return "business/record/patientRecordManager";
     }
 
+    /** 跳转到取药单查看 */
+    @RequestMapping("toMedRecordManager")
+    public String toMedRecordManager() { return "business/record/patientMedRecordManager"; }
 
     /** 跳转到待做检查 */
     @RequestMapping("toExamToDoManager")

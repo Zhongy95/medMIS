@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -97,4 +98,18 @@ public class Record implements Serializable {
     @TableField(exist = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private java.util.Date startTime;
+
+    @TableField(exist = false)
+    private HashMap<Integer,Integer> medtodoList;
+
+    @TableField(exist = false)
+    private String medContent;
+
+    //是否可以取药
+    @TableField(exist = false)
+    private Boolean medAvailable;
+
+    //是否完成支付
+    @TableField(exist = false)
+    private Boolean medPayIfdone;
 }

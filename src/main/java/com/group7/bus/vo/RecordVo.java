@@ -16,4 +16,8 @@ public class RecordVo extends Record {
 
     private Integer limit = 10;
 
+    private Boolean ifdelivery;
+
+    private String deliveryaddr;
+
 }

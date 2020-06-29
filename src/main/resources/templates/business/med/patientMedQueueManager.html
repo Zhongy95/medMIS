@@ -96,7 +96,6 @@
                 {type: 'checkbox', fixed: 'left'},
                 {field: 'queueId', title: '队列号', align: 'center'},
                 {field: 'queueNumber', title: '当前队列位置', align: 'center'},
-                {field: 'registerId', title: '挂号单号', align: 'center'},
                 {field: 'recordId', title: '病历单号', align: 'center'},
                 {field: 'medName', title: '药品名称', align: 'center'},
                 {field: 'patientName', title: '病人姓名', align: 'center'},
@@ -107,6 +106,13 @@
                         else if (d.situation ===2)
                             return "<font color='blue'>取药中</font>";
                     }},
+                {field: 'ifdelivery', title: '选择邮寄', align: 'center', width: 150, templet: function (d) {
+                        if(d.ifdelivery == 0)
+                            return "<font color='red'>否</font>";
+                        else
+                            return "<font color='blue'>是</font>";
+                    }},
+                {field: 'deliveryaddr', title: '邮寄地址', align: 'center', width: 200},
                 // {field: 'icon', title: '是否可用', align: 'center',width:'100',templet:function (d) {
                 //         return d.available==1?'<font color="blue">可用</font>':'<font color="red">不可用</font>';
                 //     }},

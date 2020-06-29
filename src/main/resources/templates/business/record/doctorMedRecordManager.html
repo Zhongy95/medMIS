@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en"xmlns:th="http://www.thymeleaf.com">
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
 <head>
     <meta charset="UTF-8">
-    <title>病历</title>
+    <title>Med病历</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
@@ -89,12 +89,14 @@
     <div style="text-align: left">
         <p style="margin: 10px 0;">病人姓名：    <span id="recordPatientNameUpdate"></span></p>
         <p style="margin: 10px 0;">医生姓名：    <span id="recordDoctorNameUpdate"></span></p>
-        <p style="margin: 10px 0;">科室：  <span id="recordDeptNameUpdate"></span></p>
         <p style="margin: 10px 0;">创建时间：    <span id="recordCreatetimeUpdate"></span></p>
     </div>
     <hr>
     <div id="register_contentUpdate">
         <p>诊断结果：<span id="recordDiagnosisUpdate"></span></p>
+    </div>
+    <div id="register_medcontent">
+        <p>待取药单：<span id="recordContent"></span></p>
     </div>
     <hr>
     <p style="margin: 10px 0;">后续检查：    <span id="recordIfexamUpdate"></span></p>
@@ -125,25 +127,16 @@
         tableIns = table.render({
             elem: "#recordTable",
             title: "病历表格",
-            url: "/api/bus/record/loadAllRecordByDoctor",
+            url: "/api/bus/record/loadAllMedRecordByDoctor",
             toolbar: "#recordToolBar",
             page: true,
             height: "full",
             cols: [ [
-                {field: 'recordId', title: '病历号', align: 'center', width: 100},
+                {field: 'recordId', title: '病历编号', align: 'center', width: 100},
                 {field: 'patientName', title: '患者姓名', align: 'center', width: 100},
-                {field: 'doctorName', title: '医生姓名', align: 'center', width: 100},
-                {field: 'deptName', title: '科室', align: 'center', width: 100},
                 {field: 'createtime', title: '创建时间', align: 'center', width: 180},
                 {field: 'diagnosis', title: '诊断结果', align: 'center', width: 250},
-                {
-                    field: 'ifexam', title: '后续检查', align: 'center', width: 100, templet: function (d) {
-                        if (d.ifexam === false)
-                            return "<font color='grey'>不需要</font>";
-                        else
-                            return "<font color='blue'>需要</font>";
-                    }
-                },
+                {field: 'medContent', title: '待取药品', align: 'center', width: 250},
                 {
                     field: 'ifdrug', title: '后续用药', align: 'center', width: 100, templet: function (d) {
                         if (d.ifdrug === false)
@@ -153,19 +146,19 @@
                     }
                 },
                 {
-                    field: 'iftreat', title: '后续治疗', align: 'center', width: 100, templet: function (d) {
+                    field: 'medAvailable', title: '取药情况', align: 'center', width: 100, templet: function (d) {
                         if (d.iftreat === false)
-                            return "<font color='grey'>不需要</font>";
+                            return "<font color='blue'>待取药</font>";
                         else
-                            return "<font color='blue'>需要</font>";
+                            return "<font color='grey'>已取药</font>";
                     }
                 },
                 {
-                    field: 'ifdone', title: '完成问诊', align: 'center', width: 100, templet: function (d) {
-                        if (d.ifdone === false)
-                            return "<font color='grey'>未完成</font>";
+                    field: 'medPayIfdone', title: '支付情况', align: 'center', width: 150, templet: function (d) {
+                        if (d.medPayIfdone === false)
+                            return "<font color='red'>未完成支付</font>";
                         else
-                            return "<font color='blue'>已完成</font>";
+                            return "<font color='blue'>已完成支付</font>";
                     }
                 },
                 {fixed: 'right', title: '操作', toolbar: '#recordRowBar', align: 'center', width: 180}
@@ -233,9 +226,9 @@
             success: function () {
                 $("#recordPatientName").html(data.patientName);
                 $("#recordDoctorName").html(data.doctorName);
-                $("#recordDeptName").html(data.deptName);
                 $("#recordCreatetime").html(data.createtime);
                 $("#recordDiagnosis").html(data.diagnosis);
+                $("#recordContent").html(data.medContent);
                 if (data.ifdrug) {
                     $("#recordIfdrug").html("需要");
                     $("#recordIfdrug").css("color", "blue");

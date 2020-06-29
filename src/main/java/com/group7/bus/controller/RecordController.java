@@ -212,6 +212,22 @@ public class RecordController {
         }
     }
 
+    @RequestMapping("modifyRecord")
+    @RequiresRoles("DOCTOR")
+    public ResultObj modifyRecord(RecordVo recordVo) throws medMISException {
+        try {
+            QueryWrapper<Record> qw = new QueryWrapper<>();
+            qw.eq("record_id",recordVo.getRecordId());
+            Record record = recordService.getOne(qw);
+            record.setIfdone(recordVo.getIfdone());
+            record.setDiagnosis(recordVo.getDiagnosis());
+            recordService.updateById(record);
+            return ResultObj.ADD_SUCCESS;
+        } catch (Exception e) {
+            throw new medMISException("修改病历失败", HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @RequestMapping("loadPatient")
     @RequiresRoles("DOCTOR")
     public User loadPatient(UserVo userVo) throws medMISException {

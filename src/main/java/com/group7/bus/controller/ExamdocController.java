@@ -191,6 +191,10 @@ public class ExamdocController {
                     QueryWrapper<Examregister> examregisterQueryWrapper =new QueryWrapper<>();
                     examregisterQueryWrapper.eq("examtodo_id",examdocVo.getExamtodoId());
                     Examregister targetExamRegister = this.examregisterService.getOne(examregisterQueryWrapper);
+                    Exam exam = this.examService.getById(targetExamRegister.getExamId());
+                    //完成了之后，使用次数+1
+                    exam.setUsageCount(exam.getUsageCount()+1);
+                    this.examService.updateById(exam);
                     QueryWrapper<Examqueue>queryWrapper=new QueryWrapper<>();
                     queryWrapper.eq("examregister_id",targetExamRegister.getExamregisterId());
                     Examqueue examqueue = this.examqueueService.getOne(queryWrapper);

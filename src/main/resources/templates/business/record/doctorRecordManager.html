@@ -87,19 +87,32 @@
 <div id="updateRecord" style="display: none;padding: 10px">
     <h3 id="UpdaterecordTitle" style="text-align: left"></h3>
     <div style="text-align: left">
+        <p style="margin: 10px 0;">病历号：    <span id="recordRecordIdUpdate"></span></p>
         <p style="margin: 10px 0;">病人姓名：    <span id="recordPatientNameUpdate"></span></p>
         <p style="margin: 10px 0;">医生姓名：    <span id="recordDoctorNameUpdate"></span></p>
         <p style="margin: 10px 0;">科室：  <span id="recordDeptNameUpdate"></span></p>
         <p style="margin: 10px 0;">创建时间：    <span id="recordCreatetimeUpdate"></span></p>
     </div>
     <hr>
-    <div id="register_contentUpdate">
-        <p>诊断结果：<span id="recordDiagnosisUpdate"></span></p>
-    </div>
+    <form class="layui-form" action="" id="dataForm" lay-filter="dataForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">完成情况：    </label>
+            <p>已完成：    <input type="radio" name="ifdone" value="1"></p>
+            <p>未完成：    <input type="radio" name="ifdone" value="0"></p>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">诊断结果：    </label>
+            <div class="layui-input-block">
+                <textarea name="diagnosis" id="recordDiagnosisUpdate" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+    </form>
     <hr>
     <p style="margin: 10px 0;">后续检查：    <span id="recordIfexamUpdate"></span></p>
     <p style="margin: 10px 0;">后续用药：    <span id="recordIfdrugUpdate"></span></p>
     <p style="margin: 10px 0;">后续治疗：    <span id="recordIftreatUpdate"></span></p>
+    <hr>
+    <button class="layui-btn" lay-submit lay-filter="doSubmit" id="doSubmit">提交</button>
 </div>
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
@@ -227,7 +240,7 @@
         mainIndex = layer.open({
             type: 1,
             content: $("#showRecord"),
-            area: ['600px', '350px'],
+            area: ['800px', '550px'],
             title: '病历信息',
             skin: 'layui-layer-molv',
             success: function () {
@@ -265,10 +278,11 @@
         mainIndex = layer.open({
             type: 1,
             content: $("#updateRecord"),
-            area: ['600px', '350px'],
+            area: ['800px', '550px'],
             title: '病历信息',
             skin: 'layui-layer-molv',
             success: function () {
+                $("#recordRecordIdUpdate").html(data.recordId);
                 $("#recordPatientNameUpdate").html(data.patientName);
                 $("#recordDoctorNameUpdate").html(data.doctorName);
                 $("#recordDeptNameUpdate").html(data.deptName);
@@ -304,6 +318,18 @@
             where: "",
         });
     }
+
+    //提交修改record
+    $("#doSubmit").click(function () {
+        console.log($("#recordRecordIdUpdate").text());
+        var data = $("#dataForm").serialize();
+        data += "&recordId=";
+        data += $("#recordRecordIdUpdate").text();
+        $.post("/api/bus/record/modifyRecord",data,function(res){
+            layer.msg(res.msg);
+            reloadTable();
+        })
+    })
 
 
 </script>

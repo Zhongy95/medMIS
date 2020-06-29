@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -62,39 +64,36 @@ public class MeddocController {
     @RequiresRoles("PATIENT")
     public DataGridView loadMeddoc(MeddocVo meddocVo) {
         User user = (User) WebUtils.getSession().getAttribute("user");
-        IPage<Record> pagerR = new Page<>(meddocVo.getPage(), meddocVo.getLimit());
-        QueryWrapper<Record> queryWrapperR = new QueryWrapper<>();
-        queryWrapperR.eq("patient_id", user.getUserId());
-        this.recordService.page(pagerR, queryWrapperR);
-        Record record = pagerR.getRecords().get(0);
-
-        IPage<Meddoc> pageM = new Page<>(meddocVo.getPage(), meddocVo.getLimit());
+        List<Meddoc> meddocList = this.meddocService.list();
         QueryWrapper<Meddoc> queryWrapperE = new QueryWrapper<>();
-        queryWrapperE.eq("record_id", record.getRecordId())
-                .ge(meddocVo.getStartTime() != null, "createtime", meddocVo.getStartTime())
+        queryWrapperE.ge(meddocVo.getStartTime() != null, "createtime", meddocVo.getStartTime())
                 .le(meddocVo.getEndTime() != null, "createtime", meddocVo.getEndTime())
-                .orderByDesc("createtime"); // 排序依据
-        this.meddocService.page(pageM, queryWrapperE);
-
-        List<Meddoc> list = new ArrayList<>();
-        for (Meddoc meddoc : pageM.getRecords())
-            list.add(meddoc);
-
-        for (Meddoc meddoc : pageM.getRecords()) {
-            Medtodo medtodo = this.medtodoService.getById(meddoc.getMedtodoId());
-            Medicine medicine = this.medicineService.getById(medtodo.getMedId());
-            meddoc.setMedName(medicine.getMedName());
-            meddoc.setPatientName(user.getName());
-            User lab = userService.getById(meddoc.getPharmacistId());
-            meddoc.setPharmacistName(lab.getName());
-
-            if (meddocVo.getPharmacistName() != null) {
-                if (!meddoc.getPharmacistName().contains(meddocVo.getPharmacistName())) {
-                    list.remove(meddoc);
+                .orderByDesc("createtime");
+        for(Meddoc meddoc:meddocList)
+        {
+            Record medRecord = this.recordService.getById(meddoc.getRecordId());
+            if(medRecord.getPatientId().equals(user.getUserId()))
+            {
+                initialMedicineRecord(medRecord);
+                meddoc.setMedName(medRecord.getMedContent());
+                meddoc.setPatientName(user.getName());
+                User lab = userService.getById(meddoc.getPharmacistId());
+                meddoc.setPharmacistName(lab.getName());
+                if (meddocVo.getPharmacistName() != null) {
+                    if (!meddoc.getPharmacistName().contains(meddocVo.getPharmacistName())) {
+                        meddocList.remove(meddoc);
+                    }
                 }
             }
+            else {
+                meddocList.remove(meddoc);
+            }
         }
-        pageM.setRecords(list);
+
+        IPage<Meddoc> pageM = new Page<>(meddocVo.getPage(), meddocVo.getLimit());
+
+        pageM.setRecords(meddocList);
+
 
         return new DataGridView(pageM.getTotal(), pageM.getRecords());
     }
@@ -158,13 +157,11 @@ public class MeddocController {
             list.add(meddoc);
 
         for (Meddoc meddoc : page.getRecords()) {
-            Medtodo medtodo = this.medtodoService.getById(meddoc.getMedtodoId());
-            Medicine medicine = this.medicineService.getById(medtodo.getMedId());
-            meddoc.setMedName(medicine.getMedName());
-            Record record = this.recordService.getById(meddoc.getRecordId());
-            User user = this.userService.getById(record.getPatientId());
+            Record medRecord = this.recordService.getById(meddoc.getRecordId());
+            initialMedicineRecord(medRecord);
+            meddoc.setMedName(medRecord.getMedContent());
+            User user = this.userService.getById(medRecord.getPatientId());
             meddoc.setPatientName(user.getName());
-            meddoc.setMedName(medicine.getMedName());
             User lab = userService.getById(meddoc.getPharmacistId());
             meddoc.setPharmacistName(lab.getName());
 
@@ -178,6 +175,43 @@ public class MeddocController {
 
         return new DataGridView(page.getTotal(), page.getRecords());
     }
+
+    private Record initialMedicineRecord(Record record){
+        if(record.getIfdrug())
+        {
+            QueryWrapper<Medtodo> medtodoQueryWrapper =new QueryWrapper<>();
+            medtodoQueryWrapper.eq("record_id",record.getRecordId());
+            List<Medtodo> medtodoList = this.medtodoService.list(medtodoQueryWrapper);
+            String medName = null;
+            HashMap<Integer,Integer> recordMedMap=new HashMap<Integer, Integer>();
+            boolean payIfdone = true;
+            for(Medtodo medtodo:medtodoList){
+                if(!recordMedMap.containsKey(medtodo.getMedId()))
+                {
+                    //如果单里没有此类药物，则放入，初始值为1
+                    recordMedMap.put(medtodo.getMedId(),1);
+                }
+                else {
+                    //如果单里已有此类药物，则+1
+                    recordMedMap.put(medtodo.getMedId(),recordMedMap.get(medtodo.getMedId())+1);
+                }
+                //如果有一个未完成支付，则全单未完成支付
+                if(!medtodo.getPayIfdone())
+                    payIfdone =false;
+            }
+            record.setMedPayIfdone(payIfdone);
+            record.setMedAvailable(medtodoList.get(0).getAvailable());
+            String recordMedContent ="" ;
+            for(Map.Entry<Integer, Integer> set :recordMedMap.entrySet()){
+                Medicine medicine = this.medicineService.getById(set.getKey());
+                if(medicine!=null)
+                    recordMedContent=recordMedContent + " "+medicine.getMedName()+set.getValue()+"份";
+            }
+            record.setMedContent(recordMedContent);
+        }
+        return record;
+    }
+
 
 }
 

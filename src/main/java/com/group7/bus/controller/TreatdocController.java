@@ -230,6 +230,10 @@ public class TreatdocController {
                     Treatqueue treatqueue = this.treatqueueService.getOne(queryWrapper);
                     treatqueue.setSituation(QUEUE_AFTERRECORD);
                     this.treatqueueService.updateById(treatqueue);
+                    //如果完成检查，则treat项目使用次数+1
+                    Treatment targettreat = this.treatmentService.getById(targetTreatToDo.getTreatmentId());
+                    targettreat.setUsageCount(targettreat.getUsageCount()+1);
+                    this.treatmentService.updateById(targettreat);
                 }
             }
             return ResultObj.UPDATE_SUCCESS;

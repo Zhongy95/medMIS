@@ -39,7 +39,7 @@ public class Medicine implements Serializable {
     /**
      * 药品每份价格
      */
-    private BigDecimal price;
+    private Float price;
 
     /**
      * 药品剩余数量

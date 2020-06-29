@@ -197,6 +197,18 @@
                     break;
             }
         });
+
+        //监控工具条事件
+        table.on("toolbar(examTable)", function (obj) {
+            switch (obj.event) {
+                case 'refresh':
+                    examtableIns.reload({
+                        where:"",
+                    });
+                    break;
+            }
+        });
+
         function addExamToDo(data){
             data.registerId = $('#registerId').val();
             console.log(data);
@@ -261,7 +273,7 @@
             ] ],
             done:function (data, curr, count) {
                 if(data.data.length==0&&curr!=1){   //不是第一页时，如果当前返回的数据为0那么就返回上一页
-                    examtableIns.reload({
+                    treattableIns.reload({
                         page:{
                             curr:curr-1
                         }
@@ -281,6 +293,18 @@
                     break;
             }
         });
+
+        //监控工具条事件
+        table.on("toolbar(treatTable)", function (obj) {
+            switch (obj.event) {
+                case 'refresh':
+                    treattableIns.reload({
+                        where:"",
+                    });
+                    break;
+            }
+        });
+
         function addTreatToDo(data){
             data.registerId = $('#registerId').val();
             console.log(data);
@@ -290,9 +314,9 @@
         }
 
         //初始化表格 加载数据
-        treattableIns = table.render({
+        medtableIns = table.render({
             elem: "#medTable",
-            title: "治疗项目表",
+            title: "药品项目表",
             url: "/api/bus/medicine/loadAllMedicine",
             toolbar: "#treatToolBar",
             page: true,
@@ -308,7 +332,7 @@
             ] ],
             done:function (data, curr, count) {
                 if(data.data.length==0&&curr!=1){   //不是第一页时，如果当前返回的数据为0那么就返回上一页
-                    examtableIns.reload({
+                    medtableIns.reload({
                         page:{
                             curr:curr-1
                         }
@@ -328,6 +352,18 @@
                     break;
             }
         });
+
+        //监控工具条事件
+        table.on("toolbar(medTable)", function (obj) {
+            switch (obj.event) {
+                case 'refresh':
+                    medtableIns.reload({
+                        where:"",
+                    });
+                    break;
+            }
+        });
+
         function addMedToDo(data){
             data.registerId = $('#registerId').val();
             console.log(data);
@@ -336,7 +372,19 @@
             })
         }
 
-    })
+    });
+
+    function reloadTable(){
+        examtableIns.reload({
+            where:"",
+        });
+        medtableIns.reload({
+            where:"",
+        });
+        treattableIns.reload({
+            where:"",
+        });
+    }
 
 </script>
 </body>

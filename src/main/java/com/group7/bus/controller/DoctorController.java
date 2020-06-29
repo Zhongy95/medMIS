@@ -17,6 +17,10 @@ public class DoctorController {
     @RequestMapping("toRecordManager")
     public String toRecordManager() { return "business/record/doctorRecordManager"; }
 
+    /** 跳转到取药单查看 */
+    @RequestMapping("toMedRecordManager")
+    public String toMedRecordManager() { return "business/record/doctorMedRecordManager"; }
+
     /** 跳转到病历编写 */
     @RequestMapping("toRecordWriter")
     public String toRecordWriter() { return "business/record/doctorRecordWriter"; }

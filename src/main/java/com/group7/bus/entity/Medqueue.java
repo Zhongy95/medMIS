@@ -37,12 +37,22 @@ public class Medqueue implements Serializable {
     /**
      * 取药单id
      */
-    private Integer medtodoId;
+    private Integer recordId;
+
+    /**
+     * 是否选择快递
+     */
+    private Boolean ifdelivery;
+
+    /**
+     * 快递地址
+     */
+    private String deliveryaddr;
 
     /**
      * 是否可用
      */
-    private Integer available;
+    private Boolean available;
 
     private Integer situation;
 
@@ -58,10 +68,8 @@ public class Medqueue implements Serializable {
     @TableField(exist = false)
     private Integer registerId;
     @TableField(exist = false)
-    private BigDecimal price;
+    private Float price;
 
-    @TableField(exist = false)
-    private Integer recordId;
 
     @TableField(exist = false)
     private Integer queueNumber;

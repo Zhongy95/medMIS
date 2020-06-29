@@ -51,6 +51,8 @@ public class PaymentController {
     @Autowired private RegisterService registerService;
 
     @Autowired private ExamregisterService examregisterService;
+
+    @Autowired private MedtodoService medtodoService;
     /**
      * 查询指定病人的所有挂号缴费记录
      *
@@ -92,7 +94,7 @@ public class PaymentController {
             {
                 //如果是挂号项，完成挂号项的更新
                 QueryWrapper<Register> queryWrapperRegister = new QueryWrapper<>();
-                queryWrapperRegister.eq("payment_id",paymentVo.getPaymentId());
+                queryWrapperRegister.eq("payment_id",payment.getPaymentId());
                 Register registerUpdate = this.registerService.getOne(queryWrapperRegister);
                 registerUpdate.setPaymentIfdone(true);
                 this.registerService.updateById(registerUpdate);
@@ -100,7 +102,7 @@ public class PaymentController {
             else if(payment.getPaymentitemId().equals(PAYMENT_EXAM))
             {
                 QueryWrapper<Examregister> examregisterQueryWrapper = new QueryWrapper<>();
-                examregisterQueryWrapper.eq("payment_id",paymentVo.getPaymentId());
+                examregisterQueryWrapper.eq("payment_id",payment.getPaymentId());
                 Examregister examregisterUpdate =this.examregisterService.getOne(examregisterQueryWrapper);
                 examregisterUpdate.setPaymentIfdone(true);
                 this.examregisterService.updateById(examregisterUpdate);
@@ -109,10 +111,19 @@ public class PaymentController {
             {
                 //如果是治疗项，完成treattodo的更新
                 QueryWrapper<Treattodo> queryWrapperTreat = new QueryWrapper<>();
-                queryWrapperTreat.eq("payment_id",paymentVo.getPaymentId());
+                queryWrapperTreat.eq("payment_id",payment.getPaymentId());
                 Treattodo treattodoUpdate = this.treattodoService.getOne(queryWrapperTreat);
                 treattodoUpdate.setPayIfdone(true);
                 this.treattodoService.updateById(treattodoUpdate);
+            }
+            else if(payment.getPaymentitemId().equals(PAYMENT_MEDICINE))
+            {
+                //如果是治疗项，完成treattodo的更新
+                QueryWrapper<Medtodo> queryWrapperMed = new QueryWrapper<>();
+                queryWrapperMed.eq("payment_id",payment.getPaymentId());
+                Medtodo medtodoUpdate = this.medtodoService.getOne(queryWrapperMed);
+                medtodoUpdate.setPayIfdone(true);
+                this.medtodoService.updateById(medtodoUpdate);
             }
 
             return ResultObj.PAY_SUCCESS;
@@ -172,6 +183,15 @@ public class PaymentController {
                         Treattodo treattodoUpdate = this.treattodoService.getOne(queryWrapperTreat);
                         treattodoUpdate.setPayIfdone(true);
                         this.treattodoService.updateById(treattodoUpdate);
+                    }
+                    else if(payment.getPaymentitemId().equals(PAYMENT_MEDICINE))
+                    {
+                        //如果是治疗项，完成treattodo的更新
+                        QueryWrapper<Medtodo> queryWrapperMed = new QueryWrapper<>();
+                        queryWrapperMed.eq("payment_id",payment.getPaymentId());
+                        Medtodo medtodoUpdate = this.medtodoService.getOne(queryWrapperMed);
+                        medtodoUpdate.setPayIfdone(true);
+                        this.medtodoService.updateById(medtodoUpdate);
                     }
                 }
             }

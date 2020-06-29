@@ -34,10 +34,6 @@ public class Meddoc implements Serializable {
       @TableId(value = "meddoc_id", type = IdType.AUTO)
     private Integer meddocId;
 
-    /**
-     * 生成该报告的药品单
-     */
-    private Integer medtodoId;
 
     /**
      * 开药医生的id

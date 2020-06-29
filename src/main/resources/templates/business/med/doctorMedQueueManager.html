@@ -39,18 +39,18 @@
 
 <!--数据表格开始-->
 <div>
-    <table class="layui-hide" id="examQueueTable" lay-filter="examQueueTable">
+    <table class="layui-hide" id="medQueueTable" lay-filter="medQueueTable">
 
     </table>
-    <div id="examQueueToolBar"style="display: none;">
-        <!--        <button type="button" lay-event="callNext" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1"></span>呼叫下一位</button>-->
+    <div id="medQueueToolBar"style="display: none;">
+        <button type="button" lay-event="callNext" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1"></span>呼叫首位</button>
         <button type="button" lay-event="refresh" class="layui-btn layui-btn-sm layui-btn-warm"><span class="layui-icon layui-icon-refresh"></span>刷新</button>
     </div>
-    <div id="examQueueRowBar"style="display: none;">
-        <button type="button" lay-event="call" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1"></span>进行呼叫</button>
-        <!--            <button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>-->
-        <!--            <button type="button" lay-event="show" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-about"></span>查看</button>-->
-    </div>
+<!--    <div id="medQueueRowBar"style="display: none;">-->
+<!--        <button type="button" lay-event="call" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1"></span>进行呼叫</button>-->
+<!--        &lt;!&ndash;            <button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <button type="button" lay-event="show" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-about"></span>查看</button>&ndash;&gt;-->
+<!--    </div>-->
 </div>
 
 <!--数据表格结束-->
@@ -163,18 +163,17 @@
 
         //初始化表格 加载数据
         tableIns = table.render({
-            elem: "#examQueueTable",
+            elem: "#medQueueTable",
             cellMinWidth: 80,
             title: "挂号表",
             url: "/api/bus/medqueue/loadAllMedqueueDoctor",
-            toolbar: "#examQueueToolBar",
+            toolbar: "#medQueueToolBar",
             page: true,
             height: "full-190",
             cols: [ [
                 {type: 'checkbox', fixed: 'left'},
                 {field: 'queueId', title: '队列号', align: 'center'},
                 {field: 'queueNumber', title: '当前队列位置', align: 'center'},
-                {field: 'registerId', title: '挂号单号', align: 'center'},
                 {field: 'recordId', title: '病历单号', align: 'center'},
                 {field: 'medName', title: '药品名称', align: 'center'},
                 {field: 'patientName', title: '病人姓名', align: 'center'},
@@ -185,10 +184,17 @@
                         else if (d.situation ===2)
                             return "<font color='blue'>取药中</font>";
                     }},
+                {field: 'ifdelivery', title: '选择邮寄', align: 'center', width: 150, templet: function (d) {
+                        if(d.ifdelivery == 0)
+                            return "<font color='red'>否</font>";
+                        else
+                            return "<font color='blue'>是</font>";
+                    }},
+                {field: 'deliveryaddr', title: '邮寄地址', align: 'center', width: 200},
                 // {field: 'icon', title: '是否可用', align: 'center',width:'100',templet:function (d) {
                 //         return d.available==1?'<font color="blue">可用</font>':'<font color="red">不可用</font>';
                 //     }},
-                {fixed: 'right', title: '操作', toolbar: '#examQueueRowBar', align: 'center'}
+                {fixed: 'right', title: '操作', toolbar: '#medQueueRowBar', align: 'center'}
             ] ],
             done:function (data, curr, count) {
                 if(data.data.length==0&&curr!=1){   //不是第一页时，如果当前返回的数据为0那么就返回上一页
@@ -215,60 +221,52 @@
         });
 
         //监控工具条事件
-        table.on("toolbar(examQueueTable)", function (obj) {
+        table.on("toolbar(medQueueTable)", function (obj) {
             switch (obj.event) {
                 case 'refresh':
                     refresh();
                     break;
-                // case 'callNext':
-                //     callNext();
-                //     break;
+                case 'callNext':
+                    callNext();
+                    break;
             }
         });
 
 
         //监控行工具条事件
-        table.on("tool(examQueueTable)",function (obj) {
+        table.on("tool(medQueueTable)",function (obj) {
             //获取当前行数据
             var data = obj.data;
             switch (obj.event){
                 case 'call':
                     call(data);
                     break;
+                case 'medFinish':
+                    medFinish(data);
+                    break;
             }
         });
 
         //呼叫
         function call(data) {
-            if (data.queueNumber!==1){
-                layer.msg("当前病人不在队列第一位");
-            }
-            else {
-                layer.confirm('你确定要呼叫队列编号为' + data.queueId + '的病人吗？', {icon: 3, title: '提示'}, function (index) {
-                    $.post("/api/bus/medqueue/MedRegisterQueue", {queueId: data.queueId}, function (res) {
+                layer.confirm('你确定要呼叫队列编号为' + data.queueId + '的病人取药吗？', {icon: 3, title: '提示'}, function (index) {
+                    $.post("/api/bus/medqueue/MedQueue", {queueId: data.queueId}, function (res) {
                         if (res.code == 200) {
                             tableIns.reload({
-                                where: "成功",
+                                where: "",
                             });
                             // window.top.onlyjump("/bus/nurse/toTreatDocWriter");
+                            layer.msg("取药成功");
                         }
-                        else if (res.code == 409)
-                        {
-                            layer.msg("当前医生还有待检查事项")
-                        }
-
-                        layer.msg(res.msg);
+                        // layer.msg(res.msg);
                     });
                     layer.close(index);
                 });
             }
-        }
-
-
-        //呼叫
-        function callNext(data) {
-            layer.confirm('你确定要呼叫下一位病人做检查吗？',{icon: 3,title:'提示'},function (index) {
-                $.post("/api/bus/examqueue/recordRegisterQueue",function (res) {
+        //完成取药
+        function medFinish(data) {
+            layer.confirm('你确定病人完成队列编号为'+data.queueId+'取药吗？',{icon: 3,title:'提示'},function (index) {
+                $.post("/api/bus/medqueue/medTaken",{queueId: data.queueId},function (res) {
                     if (res.code==200){
                         tableIns.reload({
                             where:"",
@@ -280,8 +278,28 @@
                 layer.close(index);
             });
         }
+
+
+        //呼叫
+        function callNext(data) {
+            layer.confirm('你确定要呼叫队首病人取药吗？',{icon: 3,title:'提示'},function (index) {
+                $.post("/api/bus/medqueue/MedQueueFirst",function (res) {
+                    if (res.code==200){
+                        tableIns.reload({
+                            where:"",
+                        });
+                        layer.msg(res.msg);
+                    }
+                    else if (res.code== -1)
+                    {
+                        layer.msg("无可用药品单");
+                    }
+                });
+                layer.close(index);
+            });
+        }
         function refresh(data) {
-            $.post("/api/bus/examqueue/loadAllExamqueueDoctor", function () {
+            $.post("/api/bus/medqueue/loadAllMedqueueDoctor", function () {
                 {
                     tableIns.reload({});
                     layer.close(index);
@@ -409,7 +427,7 @@
         //批量删除
         function batchDelete() {
             //得到选中行
-            var checkStatus = table.checkStatus('examQueueTable');
+            var checkStatus = table.checkStatus('medQueueTable');
             var dataLength = checkStatus.data.length;
             if (dataLength>0){
                 layer.confirm('你确定要删除吗？',{icon: 3,title: '提示'},function (index) {
@@ -448,6 +466,13 @@
 
 
 
+</script>
+<script type="text/html" id="medQueueRowBar">
+    {{#if (d.situation == 1) { }}
+    <button type="button" lay-event="call" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1"></span>呼叫取药</button>
+    {{# }else{ }}
+    <button type="button" lay-event="medFinish" class="layui-btn layui-btn-sm layui-btn-warm"><span class="layui-icon layui-icon-close"></span>完成取药</button>
+    {{# } }}
 </script>
 </body>
 </html>

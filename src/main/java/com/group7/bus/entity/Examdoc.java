@@ -67,7 +67,7 @@ public class Examdoc implements Serializable {
     /**
      * 检查是否完成
      */
-    @TableField(exist = false)
+
     private Boolean ifdone;
 
     /**

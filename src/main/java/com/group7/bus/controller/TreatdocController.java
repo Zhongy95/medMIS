@@ -68,41 +68,41 @@ public class TreatdocController {
     @RequiresRoles("PATIENT")
     public DataGridView loadTreatdoc(TreatdocVo treatdocVo) {
         User user = (User) WebUtils.getSession().getAttribute("user");
-        IPage<Record> pagerR = new Page<>(treatdocVo.getPage(), treatdocVo.getLimit());
-        QueryWrapper<Record> queryWrapperR = new QueryWrapper<>();
-        queryWrapperR.eq("patient_id", user.getUserId());
-        this.recordService.page(pagerR, queryWrapperR);
-        Record record = pagerR.getRecords().get(0);
-
-        IPage<Treatdoc> pageT = new Page<>(treatdocVo.getPage(), treatdocVo.getLimit());
+        List<Treatdoc> treatdocList = this.treatdocService.list();
         QueryWrapper<Treatdoc> queryWrapperE = new QueryWrapper<>();
-        queryWrapperE.eq("record_id", record.getRecordId())
-                .ge(treatdocVo.getStartTime() != null, "createtime", treatdocVo.getStartTime())
+        queryWrapperE.ge(treatdocVo.getStartTime() != null, "createtime", treatdocVo.getStartTime())
                 .le(treatdocVo.getEndTime() != null, "createtime", treatdocVo.getEndTime())
-                .orderByDesc("createtime"); // 排序依据
-        this.treatdocService.page(pageT, queryWrapperE);
-
-        List<Treatdoc> list = new ArrayList<>();
-        for (Treatdoc treatdoc : pageT.getRecords())
-            list.add(treatdoc);
-
-        for (Treatdoc treatdoc : pageT.getRecords()) {
-            Treattodo treattodo = this.treattodoService.getById(treatdoc.getTreattodoId());
-            Treatment treatment = this.treatmentService.getById(treattodo.getTreatmentId());
-            treatdoc.setTreatName(treatment.getTreatmentName());
-            treatdoc.setPatientName(user.getName());
-            User lab = userService.getById(treatdoc.getNurseId());
-            treatdoc.setNurseName(lab.getName());
-
-            if (treatdocVo.getNurseName() != null) {
-                if (!treatdoc.getNurseName().contains(treatdocVo.getNurseName())) {
-                    list.remove(treatdoc);
+                .orderByDesc("createtime");
+        for(Treatdoc treatdoc:treatdocList)
+        {
+            Record treatRecord = this.recordService.getById(treatdoc.getRecordId());
+            if(treatRecord.getPatientId().equals(user.getUserId()))
+            {
+                Treattodo treattodo = this.treattodoService.getById(treatdoc.getTreattodoId());
+                Treatment treatment = this.treatmentService.getById(treattodo.getTreatmentId());
+                treatdoc.setTreatName(treatment.getTreatmentName());
+                Record record = this.recordService.getById(treatdoc.getRecordId());
+                treatdoc.setPatientName(user.getName());
+                treatdoc.setTreatName(treatment.getTreatmentName());
+                User lab = userService.getById(treatdoc.getNurseId());
+                treatdoc.setNurseName(lab.getName());
+                if (treatdocVo.getNurseName() != null) {
+                    if (!treatdoc.getNurseName().contains(treatdocVo.getNurseName())) {
+                        treatdocList.remove(treatdoc);
+                    }
                 }
             }
+            else {
+                treatdocList.remove(treatdoc);
+            }
         }
-        pageT.setRecords(list);
 
-        return new DataGridView(pageT.getTotal(), pageT.getRecords());
+        IPage<Treatdoc> pageM = new Page<>(treatdocVo.getPage(), treatdocVo.getLimit());
+
+        pageM.setRecords(treatdocList);
+
+
+        return new DataGridView(pageM.getTotal(), pageM.getRecords());
     }
 
     /**

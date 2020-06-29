@@ -31,6 +31,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -120,6 +121,27 @@ public class TreattodoController {
             treattodoadd.setCreatetime(new Date());
             treattodoadd.setRegisterId(treatmentVo.getRegisterId());
             this.treattodoService.saveOrUpdate(treattodoadd);
+            return ResultObj.ADD_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new medMISException("添加失败", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+
+    @RequestMapping("batchAddTreatToDo")
+    @RequiresRoles("DOCTOR")
+    public ResultObj batchAddTreatToDo(TreatmentVo treatmentVo) throws medMISException {
+        try {
+            List<Treattodo> treattodos = new ArrayList<>();
+            for (Integer id : treatmentVo.getIds()) {
+                Treattodo treattodoadd = new Treattodo();
+                treattodoadd.setTreatmentId(id);
+                treattodoadd.setCreatetime(new Date());
+                treattodoadd.setRegisterId(treatmentVo.getRegisterId());
+                treattodos.add(treattodoadd);
+            }
+            this.treattodoService.saveOrUpdateBatch(treattodos);
             return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();

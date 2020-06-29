@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -115,6 +116,26 @@ public class ExamtodoController {
             examtodoadd.setCreatetime(new Date());
             examtodoadd.setRegisterId(examVo.getRegisterId());
             this.examtodoService.saveOrUpdate(examtodoadd);
+            return ResultObj.ADD_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new medMISException("添加失败", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @RequestMapping("batchAddExamToDo")
+    @RequiresRoles("DOCTOR")
+    public ResultObj batchAddExamToDo(ExamVo examVo) throws medMISException {
+        try {
+            List<Examtodo> examtodos = new ArrayList<>();
+            for (Integer id : examVo.getIds()) {
+                Examtodo examtodoadd = new ExamtodoVo();
+                examtodoadd.setExamId(id);
+                examtodoadd.setCreatetime(new Date());
+                examtodoadd.setRegisterId(examVo.getRegisterId());
+                examtodos.add(examtodoadd);
+            }
+            this.examtodoService.saveOrUpdateBatch(examtodos);
             return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();

@@ -108,8 +108,8 @@
 
                 </table>
                 <div id="examToolBar"style="display: none;">
-                    <button type="button" lay-event="BatchAdd" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1">批量添加</span></button>
-                    <button type="button" lay-event="refresh" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>刷新</button>
+                    <button type="button" lay-event="examBatchAdd" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1">批量添加</span></button>
+                    <button type="button" lay-event="examRefresh" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-refresh"></span>刷新</button>
                 </div>
                     <div id="examRowBar"style="display: none;">
                         <button type="button" lay-event="addexamtodo" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-edit"></span>添加</button>
@@ -121,8 +121,8 @@
 
                 </table>
                 <div id="treatToolBar"style="display: none;">
-                    <button type="button" lay-event="BatchAdd" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1">批量添加</span></button>
-                    <button type="button" lay-event="refresh" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>刷新</button>
+                    <button type="button" lay-event="treatBatchAdd" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1">批量添加</span></button>
+                    <button type="button" lay-event="treatRefresh" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-refresh"></span>刷新</button>
                 </div>
                 <div id="treatRowBar"style="display: none;">
                     <button type="button" lay-event="addtreattodo" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-edit"></span>添加</button>
@@ -134,8 +134,8 @@
 
                 </table>
                 <div id="medToolBar"style="display: none;">
-                    <button type="button" lay-event="BatchAdd" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1">批量添加</span></button>
-                    <button type="button" lay-event="refresh" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>刷新</button>
+                    <button type="button" lay-event="medBatchAdd" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1">批量添加</span></button>
+                    <button type="button" lay-event="medRefresh" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-refresh"></span>刷新</button>
                 </div>
                 <div id="medRowBar"style="display: none;">
                     <button type="button" lay-event="addmedtodo" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-edit"></span>添加</button>
@@ -197,6 +197,52 @@
                     break;
             }
         });
+
+        //监控工具条事件
+        table.on("toolbar(examTable)", function (obj) {
+            switch (obj.event) {
+                case 'examRefresh':
+                    examtableIns.reload({
+                        where:"",
+                    });
+                    break;
+                case 'examBatchAdd':
+                    batchAddExamToDo();
+                    break;
+            }
+        });
+
+        //批量增加
+        function batchAddExamToDo() {
+            //得到选中行
+            var checkStatus = table.checkStatus('examTable');
+            var dataLength = checkStatus.data.length;
+            if (dataLength>0){
+                layer.confirm('确认新增这些检查单记录吗？',{icon: 3,title: '提示'},function (index) {
+                    //获取选中行数据
+                    var data = checkStatus.data;
+                    var ids = "registerId=";
+                    ids += $('#registerId').val();
+                    $.each(data,function (index, item) {
+                        ids += "&ids="+item.examId;
+                    });
+                    $.post("/api/bus/examtodo/batchAddExamToDo",ids,function (res) {
+                        if (res.code==200){
+                            //重新刷新表格
+                            examtableIns.reload({
+                                where:"",
+                            });
+                        }
+                        layer.msg(res.msg);
+                    });
+                    layer.close(index);
+                    reloadTable();
+                });
+            }else {
+                layer.msg("请选中操作行")
+            }
+        }
+
         function addExamToDo(data){
             data.registerId = $('#registerId').val();
             console.log(data);
@@ -261,7 +307,7 @@
             ] ],
             done:function (data, curr, count) {
                 if(data.data.length==0&&curr!=1){   //不是第一页时，如果当前返回的数据为0那么就返回上一页
-                    examtableIns.reload({
+                    treattableIns.reload({
                         page:{
                             curr:curr-1
                         }
@@ -281,6 +327,21 @@
                     break;
             }
         });
+
+        //监控工具条事件
+        table.on("toolbar(treatTable)", function (obj) {
+            switch (obj.event) {
+                case 'treatRefresh':
+                    treattableIns.reload({
+                        where:"",
+                    });
+                    break;
+                case 'treatBatchAdd':
+                    batchAddTreatToDo();
+                    break;
+            }
+        });
+
         function addTreatToDo(data){
             data.registerId = $('#registerId').val();
             console.log(data);
@@ -289,12 +350,44 @@
             })
         }
 
+        //批量增加
+        function batchAddTreatToDo() {
+            //得到选中行
+            var checkStatus = table.checkStatus('treatTable');
+            var dataLength = checkStatus.data.length;
+            if (dataLength>0){
+                layer.confirm('确认新增这些治疗单记录吗？',{icon: 3,title: '提示'},function (index) {
+                    //获取选中行数据
+                    var data = checkStatus.data;
+                    var ids = "registerId=";
+                    ids += $('#registerId').val();
+                    $.each(data,function (index, item) {
+                        ids += "&ids="+item.treatmentId;
+                    });
+                    $.post("/api/bus/treattodo/batchAddTreatToDo",ids,function (res) {
+                        if (res.code==200){
+                            //重新刷新表格
+                            treattableIns.reload({
+                                where:"",
+                            });
+                        }
+                        layer.msg(res.msg);
+                    });
+                    layer.close(index);
+                    reloadTable();
+                });
+            }else {
+                layer.msg("请选中操作行")
+            }
+        }
+
+
         //初始化表格 加载数据
-        treattableIns = table.render({
+        medtableIns = table.render({
             elem: "#medTable",
-            title: "治疗项目表",
+            title: "药品项目表",
             url: "/api/bus/medicine/loadAllMedicine",
-            toolbar: "#treatToolBar",
+            toolbar: "#medToolBar",
             page: true,
             height: 350,
             width:650,
@@ -308,7 +401,7 @@
             ] ],
             done:function (data, curr, count) {
                 if(data.data.length==0&&curr!=1){   //不是第一页时，如果当前返回的数据为0那么就返回上一页
-                    examtableIns.reload({
+                    medtableIns.reload({
                         page:{
                             curr:curr-1
                         }
@@ -328,6 +421,21 @@
                     break;
             }
         });
+
+        //监控工具条事件
+        table.on("toolbar(medTable)", function (obj) {
+            switch (obj.event) {
+                case 'medRefresh':
+                    medtableIns.reload({
+                        where:"",
+                    });
+                    break;
+                case 'medBatchAdd':
+                    batchAddMedToDo();
+                    break;
+            }
+        });
+
         function addMedToDo(data){
             data.registerId = $('#registerId').val();
             console.log(data);
@@ -336,7 +444,51 @@
             })
         }
 
-    })
+        //批量增加
+        function batchAddMedToDo() {
+            //得到选中行
+            var checkStatus = table.checkStatus('medTable');
+            var dataLength = checkStatus.data.length;
+            if (dataLength>0){
+                layer.confirm('确认新增这些治疗单记录吗？',{icon: 3,title: '提示'},function (index) {
+                    //获取选中行数据
+                    var data = checkStatus.data;
+                    var ids = "registerId=";
+                    ids += $('#registerId').val();
+                    $.each(data,function (index, item) {
+                        ids += "&ids="+item.medId;
+                    });
+                    $.post("/api/bus/medtodo/batchAddMedToDo",ids,function (res) {
+                        if (res.code==200){
+                            //重新刷新表格
+                            medtableIns.reload({
+                                where:"",
+                            });
+                        }
+                        layer.msg(res.msg);
+                    });
+                    layer.close(index);
+                    reloadTable();
+                });
+            }else {
+                layer.msg("请选中操作行")
+            }
+        }
+
+
+    });
+
+    function reloadTable(){
+        examtableIns.reload({
+            where:"",
+        });
+        medtableIns.reload({
+            where:"",
+        });
+        treattableIns.reload({
+            where:"",
+        });
+    }
 
 </script>
 </body>

@@ -13,6 +13,7 @@ import com.group7.bus.service.RecordService;
 import com.group7.bus.vo.MedtodoVo;
 import com.group7.bus.vo.MedicineVo;
 import com.group7.bus.vo.MedtodoVo;
+import com.group7.bus.vo.TreatmentVo;
 import com.group7.sys.common.DataGridView;
 import com.group7.sys.common.ResultObj;
 import com.group7.sys.common.WebUtils;
@@ -31,6 +32,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -128,6 +130,25 @@ public class MedtodoController {
         }
     }
 
+    @RequestMapping("batchAddMedToDo")
+    @RequiresRoles("DOCTOR")
+    public ResultObj batchAddMedToDo(MedicineVo medicineVo) throws medMISException {
+        try {
+            List<Medtodo> medtodos = new ArrayList<>();
+            for (Integer id : medicineVo.getIds()) {
+                MedtodoVo medtodoadd = new MedtodoVo();
+                medtodoadd.setMedId(id);
+                medtodoadd.setCreatetime(new Date());
+                medtodoadd.setRegisterId(medicineVo.getRegisterId());
+                medtodos.add(medtodoadd);
+            }
+            this.medtodoService.saveOrUpdateBatch(medtodos);
+            return ResultObj.ADD_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new medMISException("添加失败", HttpStatus.UNAUTHORIZED);
+        }
+    }
     /**
      * 查询-所有病人
      *

@@ -61,7 +61,7 @@ public class ExamdocController {
     @RequestMapping("loadExamdoc")
     @RequiresRoles("PATIENT")
     public DataGridView loadExamdoc(ExamdocVo examdocVo) {
-        User user = (User) WebUtils.getSession().getAttribute("user");
+        /*User user = (User) WebUtils.getSession().getAttribute("user");
         IPage<Record> pagerR = new Page<>(examdocVo.getPage(), examdocVo.getLimit());
         QueryWrapper<Record> queryWrapperR = new QueryWrapper<>();
         queryWrapperR.eq("patient_id", user.getUserId());
@@ -96,7 +96,42 @@ public class ExamdocController {
         }
         pageE.setRecords(list);
 
-        return new DataGridView(pageE.getTotal(), pageE.getRecords());
+        return new DataGridView(pageE.getTotal(), pageE.getRecords());*/
+        User user = (User) WebUtils.getSession().getAttribute("user");
+        List<Examdoc> examdocList = this.examdocService.list();
+        QueryWrapper<Examdoc> queryWrapperE = new QueryWrapper<>();
+        queryWrapperE.ge(examdocVo.getStartTime() != null, "createtime", examdocVo.getStartTime())
+                .le(examdocVo.getEndTime() != null, "createtime", examdocVo.getEndTime())
+                .orderByDesc("createtime");
+        for(Examdoc examdoc:examdocList)
+        {
+            Record examRecord = this.recordService.getById(examdoc.getRecordId());
+            if(examRecord.getPatientId().equals(user.getUserId()))
+            {
+                Examtodo examtodo = this.examtodoService.getById(examdoc.getExamtodoId());
+                Exam exam = this.examService.getById(examtodo.getExamId());
+                examdoc.setExamName(exam.getExamName());
+                examdoc.setPatientName(user.getName());
+                User lab = userService.getById(examdoc.getLaboratorianId());
+                examdoc.setLaboratorianName(lab.getName());
+
+                if(examdocVo.getLaboratorianName() != null){
+                    if(!examdoc.getLaboratorianName().contains(examdocVo.getLaboratorianName())){
+                        examdocList.remove(examdoc);
+                    }
+                }
+            }
+            else {
+                examdocList.remove(examdoc);
+            }
+        }
+
+        IPage<Examdoc> pageM = new Page<>(examdocVo.getPage(), examdocVo.getLimit());
+
+        pageM.setRecords(examdocList);
+
+
+        return new DataGridView(pageM.getTotal(), pageM.getRecords());
     }
 
     /**

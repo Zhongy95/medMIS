@@ -42,7 +42,7 @@ public class Examtodo implements Serializable {
 
     private Date createtime;
 
-    private Integer available;
+    private Boolean available;
 
     private Integer registerId;
 

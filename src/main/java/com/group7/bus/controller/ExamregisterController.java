@@ -63,6 +63,9 @@ public class ExamregisterController {
     @RequiresRoles("PATIENT")
     public ResultObj addRegister(ExamtimeVo examtimeVo) throws medMISException {
         try {
+            if(!this.examtodoService.getById(examtimeVo.getExamtodoId()).getAvailable()){
+                throw new medMISException("添加失败", HttpStatus.BAD_REQUEST);
+            }
             Examregister registeradd = new Examregister();
             registeradd.setExamtimeId(examtimeVo.getExamtimeId());
             registeradd.setExamId(examtimeVo.getExamId());
@@ -82,6 +85,11 @@ public class ExamregisterController {
             paymentnew.setCreatetime(new Date());
             this.paymentService.save(paymentnew);
 
+            //使得Examtodo失效
+            Examtodo examtodo = this.examtodoService.getById(examtimeVo.getExamtodoId());
+            examtodo.setAvailable(false);
+            this.examtodoService.updateById(examtodo);
+
             //重新查询，得到id
             Payment paymentcreated =this.paymentService.getById(paymentnew);
             registeradd.setPaymentId(paymentcreated.getPaymentId());
@@ -90,6 +98,7 @@ public class ExamregisterController {
             if(this.examtimeService.getById(examtimeVo).getRemain()<=0){
                 throw new medMISException("添加失败", HttpStatus.BAD_REQUEST);
             }
+
             //完成挂号后，减少1个余号
             examtimeVo.setRemain(examtimeVo.getRemain()-1);
             this.examtimeService.updateById(examtimeVo);

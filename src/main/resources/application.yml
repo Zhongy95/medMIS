@@ -4,8 +4,8 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/medmis?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC&useSSL=false
-      username: medmis
+      url: jdbc:mysql://127.0.0.1:3306/medmis?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
       password: 2208603
       max-active: 20
       max-wait: 5000

@@ -21,6 +21,6 @@ public interface PermissionMapper extends BaseMapper<Permission> {
     @Select("SELECT * FROM sys_permission\n" +
             "JOIN sys_role_permission\n" +
             "ON sys_permission.permission_id = sys_role_permission.permission_id\n" +
-            "WHERE role_id = #{role_id} and type = 'menu'\n")
+            "WHERE role_id = #{role_id} and type = 'menu' ORDER BY order_num\n")
     List<Permission> getMenu(Integer role_id);
 }

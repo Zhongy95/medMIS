@@ -65,6 +65,60 @@
 			"newsLook": "开放浏览",
 			"newsTop": "",
 			"newsTime": "2020-03-01 00:00:00"
+		},
+		{
+			"newsId": "1",
+			"newsName": "我院首例新冠肺炎患者出院：“我看到了希望，觉得能治好”",
+			"newsAuthor": "钟源",
+			"newsStatus": "0",
+			"newsLook": "开放浏览",
+			"newsTop": "",
+			"newsTime": "2020-03-03 00:00:00"
+		},
+		{
+			"newsId": "1",
+			"newsName": "又增一例出院病人！好医院院六天治愈新冠肺炎是因这套治疗方案…",
+			"newsAuthor": "钟源",
+			"newsStatus": "0",
+			"newsLook": "开放浏览",
+			"newsTop": "",
+			"newsTime": "2020-03-01 00:00:00"
+		},
+		{
+			"newsId": "1",
+			"newsName": "好医院院新冠肺炎高水平专家组赴莞会诊，开展“绣花式”精准治疗",
+			"newsAuthor": "李一宏",
+			"newsStatus": "0",
+			"newsLook": "钟源",
+			"newsTop": "",
+			"newsTime": "2020-03-01 00:00:00"
+		},
+		{
+			"newsId": "1",
+			"newsName": "好医院院的优质护理在“新冠病房”延伸",
+			"newsAuthor": "钟源",
+			"newsStatus": "0",
+			"newsLook": "开放浏览",
+			"newsTop": "",
+			"newsTime": "2020-03-01 00:00:00"
+		},
+		{
+			"newsId": "1",
+			"newsName": "一个都不能少！好医院集结10余学科“最强大脑”",
+			"newsAuthor": "钟源",
+			"newsStatus": "0",
+			"newsLook": "开放浏览",
+			"newsTop": "",
+			"newsTime": "2020-02-22 00:00:00"
+		},
+		{
+			"newsId": "1",
+			"newsName": "把危重症患者救下来！我院“硬核”打法攻克新冠危重症救治难题",
+			"newsAuthor": "钟源",
+			"newsStatus": "0",
+			"newsLook": "开放浏览",
+			"newsTop": "",
+			"newsTime": "2020-03-18 00:00:00"
 		}
 	]
 }

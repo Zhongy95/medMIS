@@ -42,7 +42,7 @@ public class SignController {
         System.out.println("id_num"+uservo.getIdNum());
 
         try{
-            this.userService.save(uservo);
+            this.userService.saveOrUpdate(uservo);
             return ResultObj.ADD_SUCCESS;
 
         }catch (Exception e) {

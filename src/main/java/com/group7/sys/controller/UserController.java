@@ -4,10 +4,12 @@ import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.group7.MedMISApplication;
 import com.group7.sys.common.*;
 import com.group7.sys.entity.Dept;
 import com.group7.sys.entity.Role;
 import com.group7.sys.entity.User;
+import com.group7.sys.exception.medMISException;
 import com.group7.sys.service.DeptService;
 import com.group7.sys.service.RoleService;
 import com.group7.sys.service.UserService;
@@ -16,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.One;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -113,6 +116,19 @@ public class UserController {
             System.out.println(user.toString());
         }
         return new DataGridView(list);
+    }
+
+
+    @RequestMapping("loadUser")
+    public User loadUser() throws medMISException {
+        try {
+            User user = (User) WebUtils.getSession().getAttribute("user");
+            User userNew = this.userService.getById(user.getUserId());
+            return userNew;
+        } catch (Exception e) {
+            throw new medMISException("读取信息失败", HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     /**

@@ -31,4 +31,12 @@ public class IndexController {
             return "index/deskManager";
         }
 
+        /**
+         * 跳转到工作台
+         */
+        @RequestMapping("toUserInfo")
+        public String toUserInfo(){
+            return "index/userInfo";
+        }
+
     }

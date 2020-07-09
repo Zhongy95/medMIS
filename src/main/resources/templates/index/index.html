@@ -322,7 +322,9 @@
     }
 
     function onlyjump(url){
-        var target1 = "\'"+url+"\'";
+        var target1 = "\""+url+"\"";
+        console.log(target1);
+
         $("[data-url ="+ target1+"]").trigger("click");
     }
 

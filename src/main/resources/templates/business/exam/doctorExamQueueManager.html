@@ -250,7 +250,7 @@
                             tableIns.reload({
                                 where: "",
                             });
-                            // window.top.onlyjump("/bus/doctor/toExamDocWriter");
+                            window.top.onlyjump("/bus/laboratorian/toExamDocWriter");
                         }
                         else if (res.code == 409)
                         {
@@ -270,10 +270,11 @@
             layer.confirm('你确定要呼叫下一位病人做检查吗？',{icon: 3,title:'提示'},function (index) {
                 $.post("/api/bus/examqueue/recordRegisterQueue",function (res) {
                     if (res.code==200){
+                        window.top.onlyjump("/bus/laboratorian/toExamDocWriter");
                         tableIns.reload({
                             where:"",
                         });
-                        window.top.onlyjump("/bus/doctor/toRecordWriter");
+
                     }
                     layer.msg(res.msg);
                 });
@@ -284,7 +285,7 @@
             $.post("/api/bus/examqueue/loadAllExamqueueDoctor", function () {
                 {
                     tableIns.reload({});
-                    layer.close(index);
+
                 }
                 ;
             })

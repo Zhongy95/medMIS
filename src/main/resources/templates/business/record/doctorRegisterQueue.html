@@ -334,7 +334,9 @@
         function callNext(data) {
             layer.confirm('你确定要呼叫下一位病人吗？',{icon: 3,title:'提示'},function (index) {
                 $.post("/api/bus/registerqueue/recordRegisterQueue",function (res) {
+
                     if (res.code==200){
+
                         tableIns.reload({
                             where:"",
                         });

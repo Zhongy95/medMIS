@@ -123,7 +123,8 @@ public class UserController {
     public User loadUser() throws medMISException {
         try {
             User user = (User) WebUtils.getSession().getAttribute("user");
-            return user;
+            User userNew = this.userService.getById(user.getUserId());
+            return userNew;
         } catch (Exception e) {
             throw new medMISException("读取信息失败", HttpStatus.BAD_REQUEST);
         }

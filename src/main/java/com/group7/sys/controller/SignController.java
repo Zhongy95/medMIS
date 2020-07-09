@@ -51,5 +51,21 @@ public class SignController {
         }
 
     }
+    @RequestMapping("update")
+    public ResultObj update(UserVo uservo){
+
+
+
+
+        try{
+            this.userService.updateById(uservo);
+            return ResultObj.ADD_SUCCESS;
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.ADD_ERROR;
+        }
+
+    }
 
 }

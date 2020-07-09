@@ -25,6 +25,13 @@
     </div>
 
     <div class="layui-form-item">
+        <label class="layui-form-label">诊号</label>
+        <div class="layui-input-inline">
+            <input type="text" name="userId" required lay-verify="required" placeholder="请输入标题"
+                   class="layui-input" readonly="readonly">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">账号名</label>
         <div class="layui-input-inline">
             <input type="text" name="loginName" required lay-verify="required" placeholder="请输入标题"
@@ -135,6 +142,8 @@
         function getInfo(){
             $.get("/api/sys/user/loadUser",function (result) {
                 $("#dataFrm")[0].reset();
+                form.val("dataFrm","");
+
                 form.val("dataFrm", result);
             })
         }
@@ -154,18 +163,19 @@
 
 
 
-            $.post("/api/signup/", data.field, function (rs) {
+            $.post("/api/signup/update", data.field, function (rs) {
                 //设置登录按钮 恢复可点击   在前端防止 重复点击
                 btn.text("更改").attr("disabled", false).removeClass("layui-disabled");
                 layer.msg(rs.msg);
                 console.log(rs);
                 if (rs.code != 200) {
                     layer.msg(rs.msg, {time: 1000});
+                    getInfo();
                 } else {
                     //跳转到templates/system/index/index.html页面
                     layer.msg(rs.msg, {time: 1000}, function () {
                         //location.href = "login";
-                        window.top.reload();
+                        getInfo();
                     });
                 }
             }).error(function (event) {
@@ -173,7 +183,7 @@
                     time: 1000
                 }, function () {
                     // location.href = "signup";
-                    window.top.reload();
+                    getInfo();
                 });
 
             });

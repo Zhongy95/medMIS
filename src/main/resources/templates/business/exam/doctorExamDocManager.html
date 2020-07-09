@@ -70,8 +70,8 @@
     </div>
     <div id="examdocRowBar" style="display: none;">
         <!--<button type="button" lay-event="pay" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-rmb"></span>支付</button>-->
-        <!--<button type="button" lay-event="register" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-ok"></span>预约</button>
-        --><button type="button" lay-event="show" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-about"></span>查看</button>
+        <button type="button" lay-event="pushMail" class="layui-btn layui-btn-sm layui-btn-normal"><span class="layui-icon layui-icon-email"></span>邮箱推送</button>
+        <button type="button" lay-event="show" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-about"></span>查看</button>
         <!--<button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
     -->
     </div>
@@ -157,14 +157,14 @@
                 {field: 'content', title: '检查结果', align: 'center', width: 200},
                 {field: 'patientName', title: '患者姓名', align: 'center', width: 150},
                 {field: 'laboratorianName', title: '检验医师', align: 'center', width: 150},
-                {field: 'createtime', title: '创建时间', align: 'center', width: 250},
-                {field: 'available', title: '可用状态', align: 'center', width: 150, templet: function (d) {
+                {field: 'createtime', title: '创建时间', align: 'center', width: 210},
+                {field: 'available', title: '可用状态', align: 'center', width: 100, templet: function (d) {
                         if(d.available == 0)
                             return "<font color='red'>不可用</font>";
                         else
                             return "<font color='blue'>可用</font>";
                     }},
-                {fixed: 'right', title: '操作', toolbar: '#examdocRowBar', align: 'center', width: 150}
+                { title: '操作', toolbar: '#examdocRowBar', align: 'center', width: 240}
             ] ],
             done:function (data, curr, count) {
                 if(data.data.length==0&&curr!=1){   //不是第一页时，如果当前返回的数据为0那么就返回上一页
@@ -223,8 +223,8 @@
                 case 'show':
                     showExamdoc(data);
                     break;
-                case 'register':
-                    //registerExamdoc(data);
+                case 'pushMail':
+                    pushMail(data);
                     break;
                 default:
                     break;
@@ -311,60 +311,12 @@
                 }
             });
         }
-
-        /*
-        //删除检查结果
-        function deleteExamdoc(data) {
-            layer.confirm('确认删除这条检查结果记录吗？',{icon: 3, title: '提示'},function (index) {
-                $.post("/api/bus/examdoc/deleteExamdoc",data,function (res) {
-                    if (res.code==200){
-                        console.log("删除结果条");
-                        //重新刷新表格
-                        tableIns.reload({
-                            where:"",
-                        });
-                    }
-                    layer.msg(res.msg);
-                });
+        function pushMail(data) {
+            layer.confirm('你确定推送编号为【'+data.examdocId+'】的检查报告给病人吗？',{icon: 3,title:'提示'},function (index) {
+                layer.msg("推送成功，当然这个功能还未完全开发");
                 layer.close(index);
             });
-
         }
-
-        //批量删除
-        function batchDeleteExamdoc() {
-            //得到选中行
-            var checkStatus = table.checkStatus('examdocTable');
-            var dataLength = checkStatus.data.length;
-            if (dataLength>0){
-                layer.confirm('确认删除这些检查结果记录吗？',{icon: 3,title: '提示'},function (index) {
-                    //获取选中行数据
-                    var data = checkStatus.data;
-                    var ids = "";
-                    $.each(data,function (index, item) {
-                        if (index==0){
-                            ids+="ids="+item.examdocId;
-                        }else {
-                            ids+="&ids="+item.examdocId;
-                        }
-                    });
-                    $.post("/api/bus/examdoc/batchDeleteExamdoc",ids,function (res) {
-                        if (res.code==200){
-                            //重新刷新表格
-                            tableIns.reload({
-                                where:"",
-                            });
-                        }
-                        layer.msg(res.msg);
-                    });
-                    layer.close(index);
-                });
-            }else {
-                layer.msg("请选中操作行")
-            }
-        }*/
-
-
     });
 
 </script>

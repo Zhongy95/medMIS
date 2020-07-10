@@ -53,10 +53,6 @@ public class SignController {
     }
     @RequestMapping("update")
     public ResultObj update(UserVo uservo){
-
-
-
-
         try{
             this.userService.updateById(uservo);
             return ResultObj.ADD_SUCCESS;
@@ -65,7 +61,17 @@ public class SignController {
             e.printStackTrace();
             return ResultObj.ADD_ERROR;
         }
+    }
+    @RequestMapping("delete")
+    public ResultObj delete(UserVo uservo){
+        try{
+            this.userService.removeById(uservo);
+            return ResultObj.DELETE_SUCCESS;
 
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.DELETE_ERROR;
+        }
     }
 
 }

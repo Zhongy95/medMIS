@@ -62,7 +62,7 @@
 
         <label class="layui-form-label">工作</label>
         <div class="layui-input-inline">
-            <input type="text" name="job" required lay-verify="required" placeholder="请输入标题" autocomplete="off"
+            <input type="text" name="job"  placeholder="请输入标题" autocomplete="off"
                    class="layui-input">
         </div>
 
@@ -106,7 +106,7 @@
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn" lay-submit lay-filter="sign">提交更改</button>
-<!--            <button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+            <button class="layui-btn layui-btn-danger" lay-submit lay-filter="delete" >注销账号</button>
 <!--            <button class="layui-btn layui-btn-normal" lay-filter="back" onclick="window.location.href='/login'">返回登录页-->
             </button>
         </div>
@@ -148,6 +148,35 @@
             })
         }
 
+        form.on("submit(delete)",function (data) {
+            var btn = $(this);
+            //设置登录按钮  为不可点击
+            btn.text("删除中...").attr("disabled", "disabled").addClass("layui-disabled");
+            console.log(data.field);
+            //将String转为Date
+            var strdate = data.field.birthday;
+            strdate = strdate.replace(/-/g, "/");
+            var Datef = new Date(strdate);
+            data.field.birthday = Datef;
+            $.post("/api/signup/delete", data.field, function (rs) {
+                //设置登录按钮 恢复可点击   在前端防止 重复点击
+                btn.text("删除").attr("disabled", false).removeClass("layui-disabled");
+                layer.msg(rs.msg);
+                //console.log(rs);
+                if (rs.code == 200) {
+                    layer.msg(rs.msg);
+                    window.top.location.href = "/login";
+                } else {
+                    //跳转到templates/system/index/index.html页面
+                    layer.msg(rs.msg, {time: 1000}, function () {
+                        //location.href = "login";
+                        getInfo();
+                    });
+                }
+            })
+        })
+
+
         //更改按钮
         form.on("submit(sign)", function (data) {
             var btn = $(this);
@@ -159,10 +188,6 @@
             strdate = strdate.replace(/-/g, "/");
             var Datef = new Date(strdate);
             data.field.birthday = Datef;
-
-
-
-
             $.post("/api/signup/update", data.field, function (rs) {
                 //设置登录按钮 恢复可点击   在前端防止 重复点击
                 btn.text("更改").attr("disabled", false).removeClass("layui-disabled");

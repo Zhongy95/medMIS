@@ -151,29 +151,32 @@
         form.on("submit(delete)",function (data) {
             var btn = $(this);
             //设置登录按钮  为不可点击
-            btn.text("删除中...").attr("disabled", "disabled").addClass("layui-disabled");
+            //btn.text("删除中...").attr("disabled", "disabled").addClass("layui-disabled");
             console.log(data.field);
             //将String转为Date
             var strdate = data.field.birthday;
             strdate = strdate.replace(/-/g, "/");
             var Datef = new Date(strdate);
             data.field.birthday = Datef;
-            $.post("/api/signup/delete", data.field, function (rs) {
-                //设置登录按钮 恢复可点击   在前端防止 重复点击
-                btn.text("删除").attr("disabled", false).removeClass("layui-disabled");
-                layer.msg(rs.msg);
-                //console.log(rs);
-                if (rs.code == 200) {
+            layer.confirm('你确定要删除掉自己的账号吗？',{icon: 3,title:'提示'},function (index) {
+                $.post("/api/signup/delete", data.field, function (rs) {
+                    //设置登录按钮 恢复可点击   在前端防止 重复点击
+                    //btn.text("删除").attr("disabled", false).removeClass("layui-disabled");
                     layer.msg(rs.msg);
-                    window.top.location.href = "/login";
-                } else {
-                    //跳转到templates/system/index/index.html页面
-                    layer.msg(rs.msg, {time: 1000}, function () {
-                        //location.href = "login";
-                        getInfo();
-                    });
-                }
-            })
+                    //console.log(rs);
+                    if (rs.code == 200) {
+                        layer.msg(rs.msg);
+                        window.top.location.href = "/login";
+                    } else {
+                        //跳转到templates/system/index/index.html页面
+                        layer.msg(rs.msg, {time: 1000}, function () {
+                            //location.href = "login";
+                            getInfo();
+                        });
+                    }
+                })
+                layer.close(index);
+            });
         })
 
 
@@ -188,6 +191,7 @@
             strdate = strdate.replace(/-/g, "/");
             var Datef = new Date(strdate);
             data.field.birthday = Datef;
+
             $.post("/api/signup/update", data.field, function (rs) {
                 //设置登录按钮 恢复可点击   在前端防止 重复点击
                 btn.text("更改").attr("disabled", false).removeClass("layui-disabled");

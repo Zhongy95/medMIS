@@ -59,6 +59,7 @@ public class MedqueueController {
         User patient = (User) WebUtils.getSession().getAttribute("user");
 
             QueryWrapper<Medqueue> queryWrapper = new QueryWrapper<>();
+            queryWrapper.ne("situation",QUEUE_AFTERRECORD);
             queryWrapper.orderByAsc("create_time");// 排序依据
             this.medqueueService.page(page, queryWrapper);
             Integer queuenumbernow = 0; //设置队列排序初始值为0
@@ -103,6 +104,7 @@ public class MedqueueController {
         User user = (User) WebUtils.getSession().getAttribute("user");
 
         QueryWrapper<Medqueue> queryWrapper = new QueryWrapper<>();
+        queryWrapper.ne("situation",QUEUE_AFTERRECORD);
         queryWrapper.orderByAsc("create_time");// 排序依据
         this.medqueueService.page(page, queryWrapper);
         Integer queuenumbernow = 0; //设置队列排序初始值为0

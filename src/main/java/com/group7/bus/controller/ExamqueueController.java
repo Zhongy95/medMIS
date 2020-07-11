@@ -109,6 +109,7 @@ public class ExamqueueController {
         List<Exam> examList = this.examService.list();
         for(Exam targetexam :examList){
             QueryWrapper<Examqueue> queryWrapper = new QueryWrapper<>();
+            queryWrapper.ne("situation",QUEUE_AFTERRECORD);
             queryWrapper.orderByAsc("create_time");// 排序依据
             this.examqueueService.page(page, queryWrapper);
             Integer queuenumbernow = 0; //设置队列排序初始值为0
@@ -174,9 +175,7 @@ public class ExamqueueController {
                 throw new medMISException("失效，无法添加", HttpStatus.FORBIDDEN);
             if(!examqueue.getSituation().equals(QUEUE_INQUEUE))
                 throw new medMISException("不在排队状态", HttpStatus.BAD_REQUEST);
-            examqueue.setSituation(QUEUE_INRECORD);
 
-            this.examqueueService.updateById(examqueue);
             //检测是否有待办的检查报告
             User laboratorian = (User) WebUtils.getSession().getAttribute("user");
             QueryWrapper<Examdoc> queryWrapper = new QueryWrapper<>();
@@ -185,6 +184,10 @@ public class ExamqueueController {
             List<Examdoc> examdocList =this.examdocService.list(queryWrapper);
             if(examdocList.size()!=0)
                 throw new medMISException("还有待检查项目未完成，无法检查新项目", HttpStatus.CONFLICT);
+
+            //若满足上述条件，变更队列元素状态
+            examqueue.setSituation(QUEUE_INRECORD);
+            this.examqueueService.updateById(examqueue);
             //新建检查报告，ifdone设置为未完成
             Examdoc examdoc =new Examdoc();
             examdoc.setPatientId(examqueue.getPatientId());

@@ -252,12 +252,14 @@
                             });
                             window.top.onlyjump("/bus/laboratorian/toExamDocWriter");
                         }
-                        else if (res.code == 409)
-                        {
-                            layer.msg("当前医生还有待检查事项")
-                        }
 
                         layer.msg(res.msg);
+                    }).error(function (xhr) {
+                        // console.log(xhr);
+                        if (xhr.status == 401)
+                        {
+                            layer.msg("当前医生还有待检查事项未完成或不在排队状态")
+                        }
                     });
                     layer.close(index);
                 });

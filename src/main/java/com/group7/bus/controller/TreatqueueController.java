@@ -69,6 +69,7 @@ public class TreatqueueController {
         for(Treatment targetTreatment :treatmentList){
             QueryWrapper<Treatqueue> queryWrapper = new QueryWrapper<>();
             queryWrapper.orderByAsc("create_time");// 排序依据
+            queryWrapper.ne("situation",QUEUE_AFTERRECORD);
             this.treatqueueService.page(page, queryWrapper);
             Integer queuenumbernow = 0; //设置队列排序初始值为0
             for(Treatqueue treatqueue:page.getRecords()){
@@ -114,6 +115,7 @@ public DataGridView loadAllTreatqueueDoctor(TreatqueueVo treatqueueVo) {
     for(Treatment targetTreatment :treatmentList){
         QueryWrapper<Treatqueue> queryWrapper = new QueryWrapper<>();
             queryWrapper.orderByAsc("create_time");// 排序依据
+        queryWrapper.ne("situation",QUEUE_AFTERRECORD);
         this.treatqueueService.page(page, queryWrapper);
         Integer queuenumbernow = 0; //设置队列排序初始值为0
         for(Treatqueue treatqueue:page.getRecords()){
@@ -176,10 +178,9 @@ public DataGridView loadAllTreatqueueDoctor(TreatqueueVo treatqueueVo) {
                 throw new medMISException("失效，无法添加", HttpStatus.FORBIDDEN);
             if(!treatqueue.getSituation().equals(QUEUE_INQUEUE))
                 throw new medMISException("不在队首", HttpStatus.BAD_REQUEST);
-            treatqueue.setSituation(QUEUE_INRECORD);
-            this.treatqueueService.saveOrUpdate(treatqueue);
 
-//            //检测是否有待办的检查报告
+
+            //检测是否有待办的检查报告
             User nurse = (User) WebUtils.getSession().getAttribute("user");
             QueryWrapper<Treatdoc> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("nurse_id",nurse.getUserId());
@@ -187,6 +188,9 @@ public DataGridView loadAllTreatqueueDoctor(TreatqueueVo treatqueueVo) {
             List<Treatdoc> treatdocList =this.treatdocService.list(queryWrapper);
             if(treatdocList.size()!=0)
                 throw new medMISException("还有待检查项目未完成，无法检查新项目", HttpStatus.CONFLICT);
+            //若满足上述条件，则改变队列元素状态
+            treatqueue.setSituation(QUEUE_INRECORD);
+            this.treatqueueService.saveOrUpdate(treatqueue);
             //新建治疗报告，ifdone设置为未完成
             Treatdoc treatdoc =new Treatdoc();
             treatdoc.setPatientId(treatqueue.getPatientId());
